@@ -1,35 +1,51 @@
-SECURITY ANALYSIS
-
-# Säkerhetsanalysmall för Spring Boot-projekt
+# SECURITY ANALYSIS - Timber & Stone Airbnb
 
 ## 1. Projektöversikt
 
 - Beskriv kort vad er applikation gör
+  En AirBnb sida för användare att lägga ut annonser och hyra ut/hyra bostäder.
 
 - Lista huvudfunktionaliteter
+  CRUD - user, rentals, reviews, bookings
+  Boka boenden efter datum
+  Genomföra "betalning"
+  Meddela andra användare
+  Se historik
+  Söka och filtrera annonser
+  Anonymisera användare för att behålla historik.
+  Skapa/visa tillgänglighet för boenden
+  Kategorier för annonstyper
+  Bekvämligheter
 
 - Identifiera vilka användare/roller som finns i systemet
+  Utloggad
+  Bas-user
+  Host-user
+  Admin
 
 ## 2. Känslig Data
 
 ### 2.1 Identifiera känslig information
-
 Kryssa i det som stämmer för er, fyll på med fler om det behövs.
 
-- [ ] Personuppgifter
-- [ ] Inloggningsuppgifter
+- [x] Personuppgifter
+- [x] Inloggningsuppgifter
 - [ ] Betalningsinformation
-- [ ] Annan känslig affärsdata
+- [x] Annan känslig affärsdata
 
 ### 2.2 Dataskyddsåtgärder
 
 Beskriv hur du skyddar den känsliga informationen:
 
 - Kryptering (vilken data krypteras och hur?)
+  Lösenord med hash och salt
+  JWT kryptering (JSON Web Token)
 
 - Säker datalagring
+  Authentication, role-based-authorization
 
 - Säker dataöverföring
+  JWT, Cookies
 
 ## 3. Autentisering & Auktorisering
 
@@ -37,38 +53,39 @@ Beskriv hur du skyddar den känsliga informationen:
 
 Kryssa i det som finns med/det ni har hanterar eller ska hantera i er applikation
 
-- [ ] Lösenordskrav (längd, komplexitet)
-- [ ] Hantering av misslyckade inloggningsförsök
+- [x] Lösenordskrav (längd, komplexitet)
+- [x] Hantering av misslyckade inloggningsförsök
 - [ ] Session hantering
-- [ ] JWT/Token säkerhet
+- [x] JWT/Token säkerhet
 
 ### 3.2 Behörighetskontroll
 
 Kryssa i det som finns med/det ni har hanterat eller ska hantera i er applikation
 
-- [ ] Olika användarnivåer/roller
-- [ ] Åtkomstkontroll för endpoints
-- [ ] Validering av användarrättigheter
+- [x] Olika användarnivåer/roller
+- [x] Åtkomstkontroll för endpoints
+- [x] Validering av användarrättigheter
 
 ## 4. API Säkerhet
 
 ### 4.1 Input Validering
 
-Kryssa i det som finns med/det ni har hanterar eller ska hantera i er applikation. Kryssa i även om vissa är disabled men skriv inom parentes disabled
+Kryssa i det som finns med/det ni har hanterar eller ska hantera i er applikation. 
+Kryssa i även om vissa är disabled men skriv inom parentes disabled
 
-- [ ] Validering av alla användarinput
-- [ ] Skydd mot SQL Injection
-- [ ] Skydd mot XSS
-- [ ] Skydd mot CSRF
+- [x] Validering av alla användarinput
+- [x] Skydd mot NoSQL Injection
+- [x] Skydd mot XSS
+- [x] Skydd mot CSRF (disabled i dev)
 
 ### 4.2 API Endpoints
 
 Kryssa i det som finns med/det ni har hanterat eller ska hantera i er applikation
 
-- [ ] HTTPS användning
+- [x] HTTPS användning (disabled i dev)
 - [ ] Rate limiting
-- [ ] CORS konfiguration
-- [ ] Error handling (inga känsliga felmeddelanden)
+- [x] CORS konfiguration (disabled i dev)
+- [x] Error handling (inga känsliga felmeddelanden) (disabled i dev)
 
 ## 5. Implementerade Säkerhetsåtgärder
 
@@ -81,6 +98,35 @@ Lista konkreta säkerhetsimplementeringar:
 @EnableWebSecurity
 public class SecurityConfig {
     // Din säkerhetskonfiguration här
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
+
+     public SecurityFilterChain securityFilter(HttpSecurity http) throws Exception {
+        http
+                // CORS config
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // CSRF, disable in dev
+                // OBS should not be disabled in production
+                .csrf(csrf -> csrf.disable())
+                // define url-based rules
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/host/**").hasRole("HOST")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasAnyRole("USER", "HOST", "ADMIN")
+                        .requestMatchers("/auth/**").permitAll()
+                        // user needs to be logged for any other requests
+                        .anyRequest().authenticated()
+                )
+
+        // disable session due to jwt statelessness
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // add jwt filter before standard filter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 }
 ```
 
