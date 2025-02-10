@@ -46,7 +46,7 @@ public class User {
     //private Address address; // add Address ENUM klass
 
 
-
+    @NotNull(message = "isActive cannot be null")
     private Boolean isActive;
 
 
@@ -58,14 +58,16 @@ public class User {
 
     @NotEmpty(message = "Profile photo cant be empty")
     @NotNull(message = "Profile photo cant be null")
+    @Size(max = 300)
     private String profilePhoto; // ifall inget photo uppladdas vid skapande av konto så väljs ett default photo
 
+    @Max(value = 10, message = "you can max have 10 favorite rentals")
     //private List<Rental> favouriteRentals;
 
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character")
     private String password;
 
-    @NotNull(message = "Role cannot be null")
+    @NotNull(message = "Roles cannot be null")
     private Set<Role> roles;
 
 
@@ -123,11 +125,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public Boolean getActive() {
+    public @NotNull(message = "isActive cannot be null") Boolean getActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(@NotNull(message = "isActive cannot be null") Boolean active) {
         isActive = active;
     }
 
@@ -147,27 +149,27 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public @NotEmpty(message = "Profile photo cant be empty") @NotNull(message = "Profile photo cant be null") String getProfilePhoto() {
+    public @NotEmpty(message = "Profile photo cant be empty") @NotNull(message = "Profile photo cant be null") @Size(max = 300) String getProfilePhoto() {
         return profilePhoto;
     }
 
-    public void setProfilePhoto(@NotEmpty(message = "Profile photo cant be empty") @NotNull(message = "Profile photo cant be null") String profilePhoto) {
+    public void setProfilePhoto(@NotEmpty(message = "Profile photo cant be empty") @NotNull(message = "Profile photo cant be null") @Size(max = 300) String profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 
-    public @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character") String getPassword() {
+    public @Max(value = 10, message = "you can max have 10 favorite rentals") @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character") String getPassword() {
         return password;
     }
 
-    public void setPassword(@Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character") String password) {
+    public void setPassword(@Max(value = 10, message = "you can max have 10 favorite rentals") @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character") String password) {
         this.password = password;
     }
 
-    public @NotNull(message = "Role cannot be null") Set<Role> getRoles() {
+    public @NotNull(message = "Roles cannot be null") Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@NotNull(message = "Role cannot be null") Set<Role> roles) {
+    public void setRoles(@NotNull(message = "Roles cannot be null") Set<Role> roles) {
         this.roles = roles;
     }
 }
