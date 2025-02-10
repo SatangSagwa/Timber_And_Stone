@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://satangsagwa:thvs0KCdGHhVQSFW@timberandstonecluster.tvw5s.mongodb.net/timberAndStone?retryWrites=true&w=majority&appName=TimberAndStoneCluster
+
+jwt:
+  secret: dittHemligaNyckelVärde
+  expirationMs: 86400000
