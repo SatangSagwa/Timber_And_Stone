@@ -35,7 +35,6 @@ import java.util.Set;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
@@ -47,7 +46,6 @@ public class AuthController {
         this.userDetailsService = userDetailsService;
         this.userService = userService;
     }
-
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
