@@ -30,8 +30,8 @@ public class Rental {
     @Size(min = 1, max = 1000000, message = "pricePerNight has to be between 1-1.000.000")
     private double pricePerNight;
 
-    //@NotNull(message = "Rating can not be null")
-    //private Rating rating;
+    @NotNull(message = "Rating can not be null")
+    private Rating rating;
 
     @DBRef
     @NotNull(message = "Host can not be null")
@@ -43,8 +43,8 @@ public class Rental {
     @NotNull(message = "Category can not be null")
     private Category category;
 
-    //@NotNull(message = "Amenities can not be null")
-    //private List<Amenity> amenities;
+    @NotNull(message = "Amenities can not be null")
+    private List<Amenity> amenities;
 
     @NotNull(message = "Capacity can not be null")
     private int capacity;
@@ -66,12 +66,21 @@ public class Rental {
     @NotNull(message = "createdAt can not be null")
     private LocalDate updatedAt;
 
+
+
+//--------------------------------------------- Constructor ------------------------------------------------------------
+
     public Rental() {
     }
+
+
+//--------------------------------------------- Getter & Setters -------------------------------------------------------
+
 
     public String getId() {
         return id;
     }
+
 
     public @NotNull(message = "Title can not be null") @NotEmpty(message = "Title can not be empty") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String getTitle() {
         return title;
@@ -99,16 +108,13 @@ public class Rental {
         this.pricePerNight = pricePerNight;
     }
 
-    /*
-    public Rating getRating() {
+    public @NotNull(message = "Rating can not be null") Rating getRating() {
         return rating;
     }
 
-    public void setRating(Rating rating) {
+    public void setRating(@NotNull(message = "Rating can not be null") Rating rating) {
         this.rating = rating;
     }
-
-     */
 
     public @NotNull(message = "Host can not be null") User getHost() {
         return host;
@@ -134,7 +140,6 @@ public class Rental {
         this.category = category;
     }
 
-    /*
     public @NotNull(message = "Amenities can not be null") List<Amenity> getAmenities() {
         return amenities;
     }
@@ -142,7 +147,6 @@ public class Rental {
     public void setAmenities(@NotNull(message = "Amenities can not be null") List<Amenity> amenities) {
         this.amenities = amenities;
     }
-     */
 
     @NotNull(message = "Capacity can not be null")
     public int getCapacity() {
