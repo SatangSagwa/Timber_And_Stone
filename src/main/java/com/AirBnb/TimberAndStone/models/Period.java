@@ -6,9 +6,9 @@ import java.time.LocalDate;
 
 public class Period {
 
-    @NotNull
-    private LocalDate start;
+    @NotNull(message = "startDate cant be null")
+    private LocalDate startDate;
 
-    @NotNull
-    private LocalDate end;
+    @NotNull(message = "endDate cant be null")
+    private LocalDate endDate;
 }
