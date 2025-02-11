@@ -42,8 +42,8 @@ public class User {
     @Size(max = 30)
     private String phoneNumber;
 
-    //@NotNull(message = "Address cannot be null")
-    //private Address address; // add Address ENUM klass
+    @NotNull(message = "Address cannot be null")
+    private Address address;
 
 
     @NotNull(message = "isActive cannot be null")

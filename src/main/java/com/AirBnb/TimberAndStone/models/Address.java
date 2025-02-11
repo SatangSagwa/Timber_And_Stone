@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class Adress {
+public class Address {
     private final long maxLatitude = 90L;
     private final long minLatitude = -90L;
 
@@ -45,7 +45,7 @@ public class Adress {
 
     //--------------------------------------------- Constructor ------------------------------------------------------------
 
-    public Adress() {
+    public Address() {
     }
 
     //--------------------------------------------- Getter & Setters -------------------------------------------------------
