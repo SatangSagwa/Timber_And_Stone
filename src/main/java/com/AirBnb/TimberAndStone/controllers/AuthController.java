@@ -4,10 +4,6 @@ import com.AirBnb.TimberAndStone.dto.AuthRequest;
 import com.AirBnb.TimberAndStone.dto.AuthResponse;
 import com.AirBnb.TimberAndStone.dto.RegisterRequest;
 import com.AirBnb.TimberAndStone.dto.RegisterResponse;
-import com.AirBnb.TimberAndStone.models.Address;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.models.Role;
-import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.services.UserService;
 import com.AirBnb.TimberAndStone.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,10 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Set;
-
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -49,6 +41,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
+        /*
         // check if username already exists
         if (userService.existsByUsername(registerRequest.getUsername())) {
             return ResponseEntity
@@ -62,8 +55,6 @@ public class AuthController {
         user.setFirstName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
         user.setPhoneNumber(registerRequest.getPhoneNumber());
-        //user.setAddress(registerRequest.getAddress());
-        //user.setProfilePhoto(registerRequest.getProfilePhoto());
         user.setPassword(registerRequest.getPassword());
 
         //Set created and updated at to now.
@@ -102,14 +93,16 @@ public class AuthController {
             user.setRoles(registerRequest.getRoles());
         }
 
-        // register the user using UserService
-        userService.registerUser(user);
         // create response object
-        RegisterResponse response = new RegisterResponse(
+        RegisterResponse response1 = new RegisterResponse(
                 "User registered successfully",
                 user.getUsername(),
                 user.getRoles()
         );
+         */
+
+        // register the user using UserService
+        RegisterResponse response = userService.registerUser(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
