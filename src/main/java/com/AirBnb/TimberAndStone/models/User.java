@@ -85,6 +85,14 @@ public class User {
     }
 
 
+    public @NotNull(message = "Address cannot be null") Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(@NotNull(message = "Address cannot be null") Address address) {
+        this.address = address;
+    }
+
     public @Email(message = "Incorrect email format") @NotNull @NotEmpty String getEmail() {
         return email;
     }
