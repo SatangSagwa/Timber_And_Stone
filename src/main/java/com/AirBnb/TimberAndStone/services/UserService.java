@@ -1,6 +1,7 @@
 package com.AirBnb.TimberAndStone.services;
 
 
+import com.AirBnb.TimberAndStone.dto.ActivateDeactivateResponse;
 import com.AirBnb.TimberAndStone.models.Role;
 import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
@@ -67,5 +68,22 @@ public class UserService {
             }
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with email " + email + " not found.");
+    }
+
+    //Activates deactivated users, deactivates activated users.
+    public ActivateDeactivateResponse activateDeactivateUser(String id) {
+        User user = getUserById(id);
+
+        //If user is active, set to false and return deactivated
+        if(user.getActive()) {
+            user.setActive(false);
+            userRepository.save(user);
+            return new ActivateDeactivateResponse("User has been deactivated", user.getUsername(), user.getActive());
+        }
+
+        //Set active to true and return activated
+        user.setActive(true);
+        userRepository.save(user);
+        return new ActivateDeactivateResponse("User has been activated", user.getUsername(), user.getActive());
     }
 }
