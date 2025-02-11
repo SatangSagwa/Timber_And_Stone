@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Document(collection = "messages")
@@ -32,7 +33,7 @@ public class Message {
     private MessageStatus messageStatus;
 
     @NotNull(message = "CreatedAt cannot be null")
-    private Date createdAt;
+    private LocalDate createdAt;
 
 
 //--------------------------------------------- Constructor ------------------------------------------------------------
