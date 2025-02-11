@@ -82,11 +82,11 @@ public class Message {
         this.messageStatus = messageStatus;
     }
 
-    public @NotNull(message = "CreatedAt cannot be null") Date getCreatedAt() {
+    public @NotNull(message = "CreatedAt cannot be null") LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull(message = "CreatedAt cannot be null") Date createdAt) {
+    public void setCreatedAt(@NotNull(message = "CreatedAt cannot be null") LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 }
