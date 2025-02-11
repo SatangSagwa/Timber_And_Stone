@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Document(collection = "messages")
 public class Message {
@@ -33,7 +33,7 @@ public class Message {
     private MessageStatus messageStatus;
 
     @NotNull(message = "CreatedAt cannot be null")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
 
 //--------------------------------------------- Constructor ------------------------------------------------------------
@@ -82,11 +82,11 @@ public class Message {
         this.messageStatus = messageStatus;
     }
 
-    public @NotNull(message = "CreatedAt cannot be null") LocalDate getCreatedAt() {
+    public @NotNull(message = "CreatedAt cannot be null") LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull(message = "CreatedAt cannot be null") LocalDate createdAt) {
+    public void setCreatedAt(@NotNull(message = "CreatedAt cannot be null") LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 }
