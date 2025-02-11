@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Document(collection = "users")
@@ -51,14 +51,14 @@ public class User {
 
 
     @NotNull(message = "CreatedAt cannot be null")
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @NotNull(message = "UpdatedAt cannot be null")
-    private Date updatedAt;
+    private LocalDate updatedAt;
 
     @NotEmpty(message = "Profile photo cant be empty")
     @NotNull(message = "Profile photo cant be null")
-    @Size(max = 300)
+    @Max(value = 300)
     private String profilePhoto; // ifall inget photo uppladdas vid skapande av konto så väljs ett default photo
 
     @Max(value = 10, message = "you can max have 10 favorite rentals")
@@ -141,19 +141,19 @@ public class User {
         isActive = active;
     }
 
-    public @NotNull(message = "CreatedAt cannot be null") Date getCreatedAt() {
+    public @NotNull(message = "CreatedAt cannot be null") LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull(message = "CreatedAt cannot be null") Date createdAt) {
+    public void setCreatedAt(@NotNull(message = "CreatedAt cannot be null") LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public @NotNull(message = "UpdatedAt cannot be null") Date getUpdatedAt() {
+    public @NotNull(message = "UpdatedAt cannot be null") LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(@NotNull(message = "UpdatedAt cannot be null") Date updatedAt) {
+    public void setUpdatedAt(@NotNull(message = "UpdatedAt cannot be null") LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 
