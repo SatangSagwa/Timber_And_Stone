@@ -58,4 +58,14 @@ public class UserService {
 
         return user;
     }
+
+    public User getUserByEmail(String email) {
+        List<User> users = getAllUsers();
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with email " + email + " not found.");
+    }
 }
