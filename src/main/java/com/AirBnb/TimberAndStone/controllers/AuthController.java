@@ -4,6 +4,8 @@ import com.AirBnb.TimberAndStone.dto.AuthRequest;
 import com.AirBnb.TimberAndStone.dto.AuthResponse;
 import com.AirBnb.TimberAndStone.dto.RegisterRequest;
 import com.AirBnb.TimberAndStone.dto.RegisterResponse;
+import com.AirBnb.TimberAndStone.models.Address;
+import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.models.Role;
 import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.services.UserService;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Set;
 
 @RestController
@@ -55,14 +59,51 @@ public class AuthController {
         }
         // map the authRequest to a User entity
         User user = new User();
+        user.setEmail(registerRequest.getEmail());
         user.setUsername(registerRequest.getUsername());
+        user.setFirstName(registerRequest.getFirstName());
+        user.setLastName(registerRequest.getLastName());
+        user.setPhoneNumber(registerRequest.getPhoneNumber());
+        //user.setAddress(registerRequest.getAddress());
+        //user.setProfilePhoto(registerRequest.getProfilePhoto());
         user.setPassword(registerRequest.getPassword());
+
+        //Set created and updated at to now.
+        user.setCreatedAt(LocalDate.now());
+        user.setUpdatedAt(LocalDate.now());
+
+        //Set active to true when account is created.
+        user.setActive(true);
+
+        //Sets favorites to new empty array
+        user.setFavouriteRentals(new ArrayList<Rental>());
+
+        if(registerRequest.getProfilePhoto() == null || registerRequest.getProfilePhoto().isEmpty()) {
+            user.setProfilePhoto("defaultprofile.jpg");
+        } else {
+            user.setProfilePhoto(registerRequest.getProfilePhoto());
+        }
+
+        // create an address
+        Address address = new Address();
+        address.setCountry(registerRequest.getCountry());
+        address.setCity(registerRequest.getCity());
+        address.setPostalCode(registerRequest.getPostalCode());
+        address.setStreetName(registerRequest.getStreetName());
+        address.setStreetNumber(registerRequest.getStreetNumber());
+        address.setLatitude(registerRequest.getLatitude());
+        address.setLongitude(registerRequest.getLongitude());
+
+        // set users address to created address
+        user.setAddress(address);
+
         // assign roles
         if (registerRequest.getRoles() == null || registerRequest.getRoles().isEmpty()) {
             user.setRoles(Set.of(Role.USER));
         } else {
             user.setRoles(registerRequest.getRoles());
         }
+
         // register the user using UserService
         userService.registerUser(user);
         // create response object
