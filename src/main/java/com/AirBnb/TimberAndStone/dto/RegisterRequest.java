@@ -38,9 +38,6 @@ public class RegisterRequest {
     @Size(max = 30)
     private String phoneNumber;
 
-    //@NotNull(message = "Address cannot be null")
-    //private Address address;
-
     @NotNull(message = "Country can not be null")
     @NotEmpty(message = "Country can not be empty")
     private String country;
@@ -69,7 +66,6 @@ public class RegisterRequest {
     private Double longitude;
 
     @NotEmpty(message = "Profile photo cant be empty")
-    //@Max(value = 300)
     private String profilePhoto; // ifall inget photo uppladdas vid skapande av konto så väljs ett default photo
 
     private Set<Role> roles;
