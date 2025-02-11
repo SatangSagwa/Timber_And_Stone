@@ -69,6 +69,10 @@ public class Rental {
     public Rental() {
     }
 
+    public String getId() {
+        return id;
+    }
+
     public @NotNull(message = "Title can not be null") @NotEmpty(message = "Title can not be empty") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String getTitle() {
         return title;
     }
