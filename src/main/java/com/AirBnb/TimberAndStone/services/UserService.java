@@ -25,18 +25,16 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
 
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserService userService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userService = userService;
     }
 
     public RegisterResponse registerUser(RegisterRequest registerRequest) {
         // check if username already exists
-        if (userService.existsByUsername(registerRequest.getUsername())) {
+        if (existsByUsername(registerRequest.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
         }
 

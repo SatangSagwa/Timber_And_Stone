@@ -41,67 +41,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        /*
-        // check if username already exists
-        if (userService.existsByUsername(registerRequest.getUsername())) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body("Username already exists");
-        }
-        // map the authRequest to a User entity
-        User user = new User();
-        user.setEmail(registerRequest.getEmail());
-        user.setUsername(registerRequest.getUsername());
-        user.setFirstName(registerRequest.getFirstName());
-        user.setLastName(registerRequest.getLastName());
-        user.setPhoneNumber(registerRequest.getPhoneNumber());
-        user.setPassword(registerRequest.getPassword());
-
-        //Set created and updated at to now.
-        user.setCreatedAt(LocalDate.now());
-        user.setUpdatedAt(LocalDate.now());
-
-        //Set active to true when account is created.
-        user.setActive(true);
-
-        //Sets favorites to new empty array
-        user.setFavouriteRentals(new ArrayList<Rental>());
-
-        if(registerRequest.getProfilePhoto() == null || registerRequest.getProfilePhoto().isEmpty()) {
-            user.setProfilePhoto("defaultprofile.jpg");
-        } else {
-            user.setProfilePhoto(registerRequest.getProfilePhoto());
-        }
-
-        // create an address
-        Address address = new Address();
-        address.setCountry(registerRequest.getCountry());
-        address.setCity(registerRequest.getCity());
-        address.setPostalCode(registerRequest.getPostalCode());
-        address.setStreetName(registerRequest.getStreetName());
-        address.setStreetNumber(registerRequest.getStreetNumber());
-        address.setLatitude(registerRequest.getLatitude());
-        address.setLongitude(registerRequest.getLongitude());
-
-        // set users address to created address
-        user.setAddress(address);
-
-        // assign roles
-        if (registerRequest.getRoles() == null || registerRequest.getRoles().isEmpty()) {
-            user.setRoles(Set.of(Role.USER));
-        } else {
-            user.setRoles(registerRequest.getRoles());
-        }
-
-        // create response object
-        RegisterResponse response1 = new RegisterResponse(
-                "User registered successfully",
-                user.getUsername(),
-                user.getRoles()
-        );
-         */
-
-        // register the user using UserService
         RegisterResponse response = userService.registerUser(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -147,11 +86,5 @@ public class AuthController {
                     .body("Incorrect username or password");
         }
     }
-
-
-
-
-
-
 
 }
