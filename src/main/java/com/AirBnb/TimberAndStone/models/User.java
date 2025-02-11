@@ -58,7 +58,7 @@ public class User {
 
     @NotEmpty(message = "Profile photo cant be empty")
     @NotNull(message = "Profile photo cant be null")
-    @Size(max = 300)
+    @Max(value = 300)
     private String profilePhoto; // ifall inget photo uppladdas vid skapande av konto så väljs ett default photo
 
     @Max(value = 10, message = "you can max have 10 favorite rentals")
