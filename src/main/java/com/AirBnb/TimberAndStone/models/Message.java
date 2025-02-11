@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -15,9 +16,11 @@ public class Message {
     private String id;
 
     @NotNull(message = "toUser cant be null")
+    @DBRef
     private User toUser;
 
     @NotNull(message = "fromUser cant be null")
+    @DBRef
     private User fromUser;
 
     @NotNull(message = "Message cant be null")
