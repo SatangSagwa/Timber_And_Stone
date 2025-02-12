@@ -4,8 +4,6 @@ import com.AirBnb.TimberAndStone.dto.AuthRequest;
 import com.AirBnb.TimberAndStone.dto.AuthResponse;
 import com.AirBnb.TimberAndStone.dto.RegisterRequest;
 import com.AirBnb.TimberAndStone.dto.RegisterResponse;
-import com.AirBnb.TimberAndStone.models.Role;
-import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.services.UserService;
 import com.AirBnb.TimberAndStone.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,12 +24,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
-
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
@@ -44,33 +39,9 @@ public class AuthController {
         this.userService = userService;
     }
 
-
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        // check if username already exists
-        if (userService.existsByUsername(registerRequest.getUsername())) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body("Username already exists");
-        }
-        // map the authRequest to a User entity
-        User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setPassword(registerRequest.getPassword());
-        // assign roles
-        if (registerRequest.getRoles() == null || registerRequest.getRoles().isEmpty()) {
-            user.setRoles(Set.of(Role.USER));
-        } else {
-            user.setRoles(registerRequest.getRoles());
-        }
-        // register the user using UserService
-        userService.registerUser(user);
-        // create response object
-        RegisterResponse response = new RegisterResponse(
-                "User registered successfully",
-                user.getUsername(),
-                user.getRoles()
-        );
+        RegisterResponse response = userService.registerUser(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -115,11 +86,5 @@ public class AuthController {
                     .body("Incorrect username or password");
         }
     }
-
-
-
-
-
-
 
 }

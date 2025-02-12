@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Document(collection = "users")
@@ -62,7 +63,7 @@ public class User {
     private String profilePhoto; // ifall inget photo uppladdas vid skapande av konto så väljs ett default photo
 
     @Max(value = 10, message = "you can max have 10 favorite rentals")
-    //private List<Rental> favouriteRentals;
+    private List<Rental> favouriteRentals;
 
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character")
     private String password;
@@ -84,6 +85,13 @@ public class User {
         return id;
     }
 
+    public @Max(value = 10, message = "you can max have 10 favorite rentals") List<Rental> getFavouriteRentals() {
+        return favouriteRentals;
+    }
+
+    public void setFavouriteRentals(@Max(value = 10, message = "you can max have 10 favorite rentals") List<Rental> favouriteRentals) {
+        this.favouriteRentals = favouriteRentals;
+    }
 
     public @NotNull(message = "Address cannot be null") Address getAddress() {
         return address;

@@ -5,12 +5,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class Address {
-    private final long maxLatitude = 90L;
-    private final long minLatitude = -90L;
 
-    private final long maxLongitude = 180L;
-    private final long minLongitude = -180L;
+public class Address {
 
     @NotNull(message = "Country can not be null")
     @NotEmpty(message = "Country can not be empty")
@@ -34,13 +30,13 @@ public class Address {
 
     //-- Latitude and longitude in decimal degrees format (ex. 41.40338, 2.17403)
     @NotNull(message = "Latitude can not be null")
-    @Min(value = minLatitude, message = "Latitude has to be between -90 & +90")
-    @Max(value = maxLatitude, message = "Latitude has to be between -90 & +90")
+    @Min(value = -90L, message = "Latitude has to be between -90 & +90")
+    @Max(value = 90L, message = "Latitude has to be between -90 & +90")
     private Double latitude;
 
     @NotNull(message = "Longitude can not be null")
-    @Min(value = minLongitude, message = "Latitude has to be between -180 & +180")
-    @Max(value = maxLongitude, message = "Latitude has to be between -180 & +180")
+    @Min(value = -180L, message = "Latitude has to be between -180 & +180")
+    @Max(value = 180L, message = "Latitude has to be between -180 & +180")
     private Double longitude;
 
     //--------------------------------------------- Constructor ------------------------------------------------------------
@@ -90,19 +86,19 @@ public class Address {
         this.streetNumber = streetNumber;
     }
 
-    public @NotNull(message = "Latitude can not be null") @Min(value = minLatitude, message = "Latitude has to be between -90 & +90") @Max(value = maxLatitude, message = "Latitude has to be between -90 & +90") Double getLatitude() {
+    public @NotNull(message = "Latitude can not be null") @Min(value = -90L, message = "Latitude has to be between -90 & +90") @Max(value = 90L, message = "Latitude has to be between -90 & +90") Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(@NotNull(message = "Latitude can not be null") @Min(value = minLatitude, message = "Latitude has to be between -90 & +90") @Max(value = maxLatitude, message = "Latitude has to be between -90 & +90") Double latitude) {
+    public void setLatitude(@NotNull(message = "Latitude can not be null") @Min(value = -90L, message = "Latitude has to be between -90 & +90") @Max(value = 90L, message = "Latitude has to be between -90 & +90") Double latitude) {
         this.latitude = latitude;
     }
 
-    public @NotNull(message = "Longitude can not be null") @Min(value = minLongitude, message = "Latitude has to be between -180 & +180") @Max(value = maxLongitude, message = "Latitude has to be between -180 & +180") Double getLongitude() {
+    public @NotNull(message = "Longitude can not be null") @Min(value = -180L, message = "Latitude has to be between -180 & +180") @Max(value = 180L, message = "Latitude has to be between -180 & +180") Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(@NotNull(message = "Longitude can not be null") @Min(value = minLongitude, message = "Latitude has to be between -180 & +180") @Max(value = maxLongitude, message = "Latitude has to be between -180 & +180") Double longitude) {
+    public void setLongitude(@NotNull(message = "Longitude can not be null") @Min(value = -180L, message = "Latitude has to be between -180 & +180") @Max(value = 180L, message = "Latitude has to be between -180 & +180") Double longitude) {
         this.longitude = longitude;
     }
 }
