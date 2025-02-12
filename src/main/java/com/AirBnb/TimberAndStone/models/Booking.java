@@ -34,9 +34,8 @@ public class Booking {
     @NotNull(message = "isPaid can not be null")
     private Boolean isPaid;
 
-    //UNCOMMENT WHEN ADDED:
-    //@NotNull(message = "Booking status can not be null")
-    //private BookingStatus bookingStatus;
+    @NotNull(message = "Booking status can not be null")
+    private BookingStatus bookingStatus;
 
     @NotNull(message = "Note can not be null")
     @Size(max = 300, message = "Note can not exceed 300 characters.")
@@ -101,8 +100,7 @@ public class Booking {
         isPaid = paid;
     }
 
-    /*
-    UNCOMMENT WHEN ENUM IS ADDED
+
     public BookingStatus getBookingStatus() {
         return bookingStatus;
     }
@@ -110,8 +108,6 @@ public class Booking {
     public void setBookingStatus(BookingStatus bookingStatus) {
         this.bookingStatus = bookingStatus;
     }
-
-     */
 
     public @NotNull(message = "Note can not be null") String getNote() {
         return note;
