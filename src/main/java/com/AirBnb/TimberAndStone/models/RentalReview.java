@@ -18,11 +18,11 @@ public class RentalReview {
 
     @DBRef
     @NotNull(message="User can not be null")
-    private User user;
+    private User fromUser;
 
     @DBRef
     @NotNull(message="Rental can not be null")
-    private Rental rental;
+    private Rental toRental;
 
     @NotNull
     @Min(value=1, message="Rating can not be below 1")
