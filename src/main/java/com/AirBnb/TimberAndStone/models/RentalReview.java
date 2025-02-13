@@ -45,16 +45,12 @@ public class RentalReview {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public @NotNull(message = "User can not be null") User getUser() {
-        return user;
+        return fromUser;
     }
 
     public void setUser(@NotNull(message = "User can not be null") User user) {
-        this.user = user;
+        this.fromUser = user;
     }
 
     public Rental getRental() {
