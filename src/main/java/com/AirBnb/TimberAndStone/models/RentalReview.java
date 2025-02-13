@@ -45,20 +45,21 @@ public class RentalReview {
         return id;
     }
 
-    public @NotNull(message = "User can not be null") User getUser() {
+
+    public @NotNull(message = "User can not be null") User getFromUser() {
         return fromUser;
     }
 
-    public void setUser(@NotNull(message = "User can not be null") User user) {
-        this.fromUser = user;
+    public void setFromUser(@NotNull(message = "User can not be null") User fromUser) {
+        this.fromUser = fromUser;
     }
 
-    public Rental getRental() {
+    public @NotNull(message = "Rental can not be null") Rental getToRental() {
         return toRental;
     }
 
-    public void setRental(Rental rental) {
-        this.toRental = rental;
+    public void setToRental(@NotNull(message = "Rental can not be null") Rental toRental) {
+        this.toRental = toRental;
     }
 
     @NotNull
@@ -95,6 +96,4 @@ public class RentalReview {
     public void setUpdatedAt(@NotNull(message = "updatedAt can not be null") LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-
 }
