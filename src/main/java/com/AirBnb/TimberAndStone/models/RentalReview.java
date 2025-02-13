@@ -54,11 +54,11 @@ public class RentalReview {
     }
 
     public Rental getRental() {
-        return rental;
+        return toRental;
     }
 
     public void setRental(Rental rental) {
-        this.rental = rental;
+        this.toRental = rental;
     }
 
     @NotNull
