@@ -43,10 +43,6 @@ public class UserReview {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public @NotNull(message = "fromHost can not be null") User getFromHost() {
         return fromHost;
     }
