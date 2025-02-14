@@ -1,11 +1,10 @@
 package com.AirBnb.TimberAndStone.services;
 
+import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -32,20 +31,20 @@ public class RentalService {
 
 
     public Rental getRentalById(String id) {
-        Rental rental = rentalRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found"));
-        return rental;
+        return  rentalRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Rental not found"));
 
     }
 
     public List<Rental> getRentalsByCategory(Category category) {
-    return rentalRepository.findByCategory(category);
+    return rentalRepository.findByCategory(category)
+            .orElseThrow(()-> new IllegalArgumentException("No category with that name exists"));
     }
 
     // kolla igenom vad som faktiskt bör ligga i patch och se hur det fungarar med @annotation createdat and updatedAt
     public Rental patchRentalById(String id, Rental rental) {
         Rental existingRental = rentalRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Rental not found"));
 
         if (rental.getTitle() != null) {
             existingRental.setTitle(rental.getTitle());
@@ -94,7 +93,7 @@ public class RentalService {
 
     public void deleteRental(String id) {
         Rental rental = rentalRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
         rentalRepository.delete(rental);
     }
 
