@@ -28,7 +28,7 @@ public class Rental {
 
     @NotNull(message = "Price per night can not be null")
     @Size(min = 1, max = 1000000, message = "pricePerNight has to be between 1-1.000.000")
-    private double pricePerNight;
+    private Double pricePerNight;
 
     @NotNull(message = "Rating can not be null")
     private Rating rating;
@@ -47,7 +47,7 @@ public class Rental {
     private List<Amenity> amenities;
 
     @NotNull(message = "Capacity can not be null")
-    private int capacity;
+    private Integer capacity;
 
     @NotNull(message = "Periods can not be null")
     private List<Period> availablePeriods;
@@ -81,7 +81,6 @@ public class Rental {
         return id;
     }
 
-
     public @NotNull(message = "Title can not be null") @NotEmpty(message = "Title can not be empty") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String getTitle() {
         return title;
     }
@@ -98,13 +97,11 @@ public class Rental {
         this.photos = photos;
     }
 
-    @NotNull(message = "Price per night can not be null")
-    @Size(min = 1, max = 1000000, message = "pricePerNight has to be between 1-1.000.000")
-    public double getPricePerNight() {
+    public @NotNull(message = "Price per night can not be null") @Size(min = 1, max = 1000000, message = "pricePerNight has to be between 1-1.000.000") Double getPricePerNight() {
         return pricePerNight;
     }
 
-    public void setPricePerNight(@NotNull(message = "Price per night can not be null") @Size(min = 1, max = 1000000, message = "pricePerNight has to be between 1-1.000.000") double pricePerNight) {
+    public void setPricePerNight(@NotNull(message = "Price per night can not be null") @Size(min = 1, max = 1000000, message = "pricePerNight has to be between 1-1.000.000") Double pricePerNight) {
         this.pricePerNight = pricePerNight;
     }
 
@@ -148,12 +145,11 @@ public class Rental {
         this.amenities = amenities;
     }
 
-    @NotNull(message = "Capacity can not be null")
-    public int getCapacity() {
+    public @NotNull(message = "Capacity can not be null") Integer getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(@NotNull(message = "Capacity can not be null") int capacity) {
+    public void setCapacity(@NotNull(message = "Capacity can not be null") Integer capacity) {
         this.capacity = capacity;
     }
 
