@@ -1,6 +1,5 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.controllers.RentalController;
 import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
@@ -13,14 +12,11 @@ import java.util.List;
 @Service
 public class RentalService {
 
-    private final RentalRepository rentalRepository;
-    private final RentalController rentalController;
+   private final RentalRepository rentalRepository;
 
-    public RentalService(RentalRepository rentalRepository, RentalController rentalController) {
+    public RentalService(RentalRepository rentalRepository) {
         this.rentalRepository = rentalRepository;
-        this.rentalController = rentalController;
     }
-
 
 
     public Rental createRental(Rental rental) {

@@ -1,10 +1,9 @@
 package com.AirBnb.TimberAndStone.models;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -23,11 +22,12 @@ public class Rental {
     private String title;
 
     @NotNull(message = "Photos can not be null")
-    @Max(value = 10, message = "You can add max 10 photos")
+    @Size(max = 10, message = "You can add max 10 photos")
     private List<String> photos;
 
     @NotNull(message = "Price per night can not be null")
-    @Size(min = 1, max = 1000000, message = "pricePerNight has to be between 1-1.000.000")
+    @Min(value = 1, message = "PricePerNight have to be minimum 1")
+    @Max(value = 1000000, message = "PricePerNight have to be max 1 000 000")
     private Double pricePerNight;
 
     @NotNull(message = "Rating can not be null")
@@ -60,10 +60,12 @@ public class Rental {
     @NotNull(message = "Policy can not be null")
     private String policy;
 
-    @NotNull(message = "createdAt can not be null")
+
+    @CreatedDate
     private LocalDate createdAt;
 
-    @NotNull(message = "createdAt can not be null")
+
+    @LastModifiedDate
     private LocalDate updatedAt;
 
 
@@ -89,19 +91,19 @@ public class Rental {
         this.title = title;
     }
 
-    public @NotNull(message = "Photos can not be null") @Max(value = 10, message = "You can add max 10 photos") List<String> getPhotos() {
+    public @NotNull(message = "Photos can not be null") @Size(max = 10, message = "You can add max 10 photos") List<String> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(@NotNull(message = "Photos can not be null") @Max(value = 10, message = "You can add max 10 photos") List<String> photos) {
+    public void setPhotos(@NotNull(message = "Photos can not be null") @Size(max = 10, message = "You can add max 10 photos") List<String> photos) {
         this.photos = photos;
     }
 
-    public @NotNull(message = "Price per night can not be null") @Size(min = 1, max = 1000000, message = "pricePerNight has to be between 1-1.000.000") Double getPricePerNight() {
+    public @NotNull(message = "Price per night can not be null") @Min(value = 1, message = "PricePerNight have to be minimum 1") @Max(value = 1000000, message = "PricePerNight have to be max 1 000 000") Double getPricePerNight() {
         return pricePerNight;
     }
 
-    public void setPricePerNight(@NotNull(message = "Price per night can not be null") @Size(min = 1, max = 1000000, message = "pricePerNight has to be between 1-1.000.000") Double pricePerNight) {
+    public void setPricePerNight(@NotNull(message = "Price per night can not be null") @Min(value = 1, message = "PricePerNight have to be minimum 1") @Max(value = 1000000, message = "PricePerNight have to be max 1 000 000") Double pricePerNight) {
         this.pricePerNight = pricePerNight;
     }
 
@@ -177,19 +179,19 @@ public class Rental {
         this.policy = policy;
     }
 
-    public @NotNull(message = "createdAt can not be null") LocalDate getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull(message = "createdAt can not be null") LocalDate createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public @NotNull(message = "createdAt can not be null") LocalDate getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(@NotNull(message = "createdAt can not be null") LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
