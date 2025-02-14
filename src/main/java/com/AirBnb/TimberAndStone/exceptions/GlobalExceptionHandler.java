@@ -42,14 +42,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
     }
 
+
+
+    // https://chatgpt.com/share/67afa18c-6c9c-800b-8210-a0ee475d4e62
+    // https://chatgpt.com/share/67afa170-7498-800b-a88c-831dff26b325
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-
         String errorMessages = ex.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                 .collect(Collectors.joining(", "));
-
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
     }
 }
