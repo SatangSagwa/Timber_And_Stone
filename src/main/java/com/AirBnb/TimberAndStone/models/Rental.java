@@ -7,7 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "rentals")
@@ -62,12 +62,11 @@ public class Rental {
 
 
     @CreatedDate
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
 
     @LastModifiedDate
-    private LocalDate updatedAt;
-
+    private LocalDateTime updatedAt;
 
 
 //--------------------------------------------- Constructor ------------------------------------------------------------
@@ -179,19 +178,19 @@ public class Rental {
         this.policy = policy;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

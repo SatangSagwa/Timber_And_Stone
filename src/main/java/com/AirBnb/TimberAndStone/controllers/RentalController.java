@@ -47,8 +47,8 @@ public class RentalController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Rental> patchRental(@PathVariable String id, @RequestBody Rental rental) {
-        return ResponseEntity.ok(rentalService.patchRental(id, rental));
+    public ResponseEntity<Rental> patchRentalById(@PathVariable String id, @RequestBody Rental rental) {
+        return ResponseEntity.ok(rentalService.patchRentalById(id, rental));
     }
 
     @DeleteMapping("/{id}")

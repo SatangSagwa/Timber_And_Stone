@@ -43,7 +43,7 @@ public class RentalService {
     }
 
     // kolla igenom vad som faktiskt bör ligga i patch och se hur det fungarar med @annotation createdat and updatedAt
-    public Rental patchRental(String id, Rental rental) {
+    public Rental patchRentalById(String id, Rental rental) {
         Rental existingRental = rentalRepository.findById(id)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found"));
 
