@@ -37,8 +37,7 @@ public class RentalService {
     }
 
     public List<Rental> getRentalsByCategory(Category category) {
-    return rentalRepository.findByCategory(category)
-            .orElseThrow(()-> new IllegalArgumentException("No category with that name exists"));
+    return rentalRepository.findByCategory(category);
     }
 
     // kolla igenom vad som faktiskt bör ligga i patch och se hur det fungarar med @annotation createdat and updatedAt
