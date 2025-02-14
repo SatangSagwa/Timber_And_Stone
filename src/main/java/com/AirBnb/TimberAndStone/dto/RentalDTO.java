@@ -1,9 +1,6 @@
 package com.AirBnb.TimberAndStone.dto;
 
-import com.AirBnb.TimberAndStone.models.Address;
-import com.AirBnb.TimberAndStone.models.Amenity;
-import com.AirBnb.TimberAndStone.models.Category;
-import com.AirBnb.TimberAndStone.models.Period;
+import com.AirBnb.TimberAndStone.models.*;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
@@ -48,8 +45,6 @@ public class RentalDTO {
     private String policy;
 
 
-
-
 //--------------------------------------------- Constructors ------------------------------------------------------------
 
     public RentalDTO(String title, List<String> photos, Double pricePerNight, Address address, Category category, List<Amenity> amenities, Integer capacity, List<Period> availablePeriods, String description, String policy) {
@@ -69,7 +64,7 @@ public class RentalDTO {
     }
 
 
-    //--------------------------------------------- Getter & Setters -------------------------------------------------------
+    //--------------------------------------------- Getters ------------------------------------------------------------
 
 
     public @NotNull(message = "Title can not be null") @NotEmpty(message = "Title can not be empty") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String getTitle() {
@@ -111,4 +106,5 @@ public class RentalDTO {
     public @NotNull(message = "Policy can not be null") String getPolicy() {
         return policy;
     }
+
 }

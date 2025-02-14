@@ -2,45 +2,25 @@ package com.AirBnb.TimberAndStone.dto;
 
 public class RentalResponse {
 
-    private String title;
-
     private String message;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private String title;
 
 
 //--------------------------------------------- Constructors ------------------------------------------------------------
 
-    public RentalResponse(String title, String message) {
-        this.title = title;
+
+    public RentalResponse(String message, String title) {
         this.message = message;
+        this.title = title;
     }
 
     public RentalResponse() {
     }
 
+
+
     //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getMessage() {
         return message;
@@ -48,5 +28,13 @@ public class RentalResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

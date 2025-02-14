@@ -1,5 +1,7 @@
 package com.AirBnb.TimberAndStone.controllers;
 
+import com.AirBnb.TimberAndStone.dto.RentalDTO;
+import com.AirBnb.TimberAndStone.dto.RentalResponse;
 import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.services.RentalService;
@@ -23,9 +25,9 @@ public class RentalController {
 
 
     @PostMapping
-    public ResponseEntity<Rental> createRental(@Valid @RequestBody Rental rental) {
-        Rental createdRental = rentalService.createRental(rental);
-        return new ResponseEntity<>(createdRental, HttpStatus.CREATED);
+    public ResponseEntity<?> createRental(@Valid @RequestBody RentalDTO rentalDTO) {
+        RentalResponse rentalResponse = rentalService.createRental(rentalDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(rentalResponse);
     }
 
     @GetMapping
