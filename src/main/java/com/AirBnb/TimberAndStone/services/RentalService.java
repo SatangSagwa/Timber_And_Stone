@@ -43,6 +43,7 @@ public class RentalService {
                         .orElseThrow(() -> new IllegalArgumentException("Rental not found"));
 
 
+
         Rental rental = new Rental();
         Rating rating = new Rating();
 
@@ -52,7 +53,7 @@ public class RentalService {
         rental.setRating(rating);
         rental.setHost(user);
 
-        // DTON
+            // DTON
         rental.setTitle(rentalDTO.getTitle());
         rental.setPhotos(rentalDTO.getPhotos());
         rental.setPricePerNight(rentalDTO.getPricePerNight());
@@ -63,6 +64,7 @@ public class RentalService {
         rental.setAvailablePeriods(rentalDTO.getAvailablePeriods());
         rental.setDescription(rentalDTO.getDescription());
         rental.setPolicy(rentalDTO.getPolicy());
+
 
 
         rentalRepository.save(rental);
