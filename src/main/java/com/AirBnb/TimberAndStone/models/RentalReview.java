@@ -41,10 +41,12 @@ public class RentalReview {
     public RentalReview() {
     }
 
+
+
+
     public String getId() {
         return id;
     }
-
 
     public @NotNull(message = "User can not be null") User getFromUser() {
         return fromUser;
