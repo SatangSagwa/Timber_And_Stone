@@ -1,6 +1,10 @@
 package com.AirBnb.TimberAndStone.dto;
 
-import com.AirBnb.TimberAndStone.models.*;
+import com.AirBnb.TimberAndStone.models.Address;
+import com.AirBnb.TimberAndStone.models.Amenity;
+import com.AirBnb.TimberAndStone.models.Category;
+import com.AirBnb.TimberAndStone.models.Period;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
@@ -22,18 +26,21 @@ public class RentalDTO {
     private Double pricePerNight;
 
     @NotNull(message = "Address can not be null")
+    @Valid
     private Address address;
 
     @NotNull(message = "Category can not be null")
     private Category category;
 
     @NotNull(message = "Amenities can not be null")
+    @Valid
     private List<Amenity> amenities;
 
     @NotNull(message = "Capacity can not be null")
     private Integer capacity;
 
     @NotNull(message = "Periods can not be null")
+    @Valid
     private List<Period> availablePeriods;
 
     @NotNull(message = "Description can not be null")
@@ -47,6 +54,10 @@ public class RentalDTO {
 
 //--------------------------------------------- Constructors ------------------------------------------------------------
 
+
+    public RentalDTO() {
+    }
+
     public RentalDTO(String title, List<String> photos, Double pricePerNight, Address address, Category category, List<Amenity> amenities, Integer capacity, List<Period> availablePeriods, String description, String policy) {
         this.title = title;
         this.photos = photos;
@@ -59,10 +70,6 @@ public class RentalDTO {
         this.description = description;
         this.policy = policy;
     }
-
-    public RentalDTO() {
-    }
-
 
     //--------------------------------------------- Getters ------------------------------------------------------------
 
@@ -79,7 +86,7 @@ public class RentalDTO {
         return pricePerNight;
     }
 
-    public @NotNull(message = "Address can not be null") Address getAddress() {
+    public @NotNull(message = "Address can not be null") @Valid Address getAddress() {
         return address;
     }
 
@@ -87,7 +94,7 @@ public class RentalDTO {
         return category;
     }
 
-    public @NotNull(message = "Amenities can not be null") List<Amenity> getAmenities() {
+    public @NotNull(message = "Amenities can not be null") @Valid List<Amenity> getAmenities() {
         return amenities;
     }
 
@@ -95,7 +102,7 @@ public class RentalDTO {
         return capacity;
     }
 
-    public @NotNull(message = "Periods can not be null") List<Period> getAvailablePeriods() {
+    public @NotNull(message = "Periods can not be null") @Valid List<Period> getAvailablePeriods() {
         return availablePeriods;
     }
 

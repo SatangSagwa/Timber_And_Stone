@@ -47,21 +47,21 @@ public class RentalService {
         Rental rental = new Rental();
         Rating rating = new Rating();
 
+        // Fields we set ourself
         rating.setAverageRating(0.0);
         rating.setNumberOfRatings(0);
-
         rental.setRating(rating);
         rental.setHost(user);
 
-            // DTON
+        // DTON
+        rental.setAddress(rentalDTO.getAddress());
+        rental.setAvailablePeriods(rentalDTO.getAvailablePeriods());
+        rental.setAmenities(rentalDTO.getAmenities());
         rental.setTitle(rentalDTO.getTitle());
         rental.setPhotos(rentalDTO.getPhotos());
         rental.setPricePerNight(rentalDTO.getPricePerNight());
-        rental.setAddress(rentalDTO.getAddress());
         rental.setCategory(rentalDTO.getCategory());
-        rental.setAmenities(rentalDTO.getAmenities());
         rental.setCapacity(rentalDTO.getCapacity());
-        rental.setAvailablePeriods(rentalDTO.getAvailablePeriods());
         rental.setDescription(rentalDTO.getDescription());
         rental.setPolicy(rentalDTO.getPolicy());
 

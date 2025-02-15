@@ -1,16 +1,17 @@
 package com.AirBnb.TimberAndStone.models;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class Amenity {
 
     @NotNull(message = "AmenityTitle cant be null")
     private AmenityTitle amenityTitle;
 
-    @NotEmpty(message = "Description cant be empty")
-    @Max(value = 500 )
+    @NotNull(message = "Description can not be null")
+    @NotEmpty(message = "Description can not be empty")
+    @Size(min = 1, max = 500, message = "Description has to be between 1-500 characters")
     private String description;
 
 //--------------------------------------------- Constructor ------------------------------------------------------------
@@ -30,11 +31,11 @@ public class Amenity {
         this.amenityTitle = amenityTitle;
     }
 
-    public @NotEmpty(message = "Description cant be empty") @Max(value = 500) String getDescription() {
+    public @NotNull(message = "Description can not be null") @NotEmpty(message = "Description can not be empty") @Size(min = 1, max = 500, message = "Description has to be between 1-500 characters") String getDescription() {
         return description;
     }
 
-    public void setDescription(@NotEmpty(message = "Description cant be empty") @Max(value = 500) String description) {
+    public void setDescription(@NotNull(message = "Description can not be null") @NotEmpty(message = "Description can not be empty") @Size(min = 1, max = 500, message = "Description has to be between 1-500 characters") String description) {
         this.description = description;
     }
 }
