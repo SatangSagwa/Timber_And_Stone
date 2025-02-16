@@ -3,7 +3,11 @@ package com.AirBnb.TimberAndStone.services;
 import com.AirBnb.TimberAndStone.models.UserReview;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 public class UserReviewService {
@@ -28,6 +32,16 @@ public class UserReviewService {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
         return userReviewRepository.save(userReview);
+    }
+
+    public List<UserReview> getAllUserReviews() {
+        return userReviewRepository.findAll();
+
+    }
+    public UserReview getUserReviewById(String id) {
+        UserReview userReview = userReviewRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Userreview not found"));
+        return userReview;
     }
 
 }
