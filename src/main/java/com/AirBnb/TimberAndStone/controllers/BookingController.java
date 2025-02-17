@@ -1,7 +1,8 @@
 package com.AirBnb.TimberAndStone.controllers;
 
+import com.AirBnb.TimberAndStone.dto.AllBookingsResponse;
 import com.AirBnb.TimberAndStone.dto.BookingRequest;
-import com.AirBnb.TimberAndStone.dto.BookingResponse;
+import com.AirBnb.TimberAndStone.dto.PostBookingResponse;
 import com.AirBnb.TimberAndStone.services.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,14 +22,14 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<BookingResponse> createBooking(@Valid @RequestBody BookingRequest bookingRequest) {
-        BookingResponse bookingResponse = bookingService.createBooking(bookingRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookingResponse);
+    public ResponseEntity<PostBookingResponse> createBooking(@Valid @RequestBody BookingRequest bookingRequest) {
+        PostBookingResponse postBookingResponse = bookingService.createBooking(bookingRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(postBookingResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<BookingResponse>> getBookings() {
-        List<BookingResponse> bookings = bookingService.getAllBookings();
+    public ResponseEntity<List<AllBookingsResponse>> getBookings() {
+        List<AllBookingsResponse> bookings = bookingService.getAllBookings();
         return ResponseEntity.status(HttpStatus.OK).body(bookings);
     }
 }

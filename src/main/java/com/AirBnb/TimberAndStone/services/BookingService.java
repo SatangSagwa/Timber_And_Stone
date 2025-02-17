@@ -1,7 +1,8 @@
 package com.AirBnb.TimberAndStone.services;
 
+import com.AirBnb.TimberAndStone.dto.AllBookingsResponse;
 import com.AirBnb.TimberAndStone.dto.BookingRequest;
-import com.AirBnb.TimberAndStone.dto.BookingResponse;
+import com.AirBnb.TimberAndStone.dto.PostBookingResponse;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
@@ -30,7 +31,7 @@ public class BookingService {
         this.rentalService = rentalService;
     }
 
-    public BookingResponse createBooking(BookingRequest bookingRequest) {
+    public PostBookingResponse createBooking(BookingRequest bookingRequest) {
         Booking booking = new Booking();
 
         //Set user to authorized user.
@@ -61,7 +62,7 @@ public class BookingService {
         booking.setUpdatedAt(LocalDate.now());
         bookingRepository.save(booking);
 
-        return new BookingResponse("Rental has been booked successfully",
+        return new PostBookingResponse("Rental has been booked successfully",
                 booking.getRental().getTitle(),
                 booking.getPeriod(),
                 booking.getTotalPrice(),
@@ -69,21 +70,13 @@ public class BookingService {
                 booking.getBookingStatus());
     }
 
-    public List<BookingResponse> getAllBookings() {
+    public List<AllBookingsResponse> getAllBookings() {
         //Finds all bookings, converts to DTO and returns list.
         List<Booking> bookings = bookingRepository.findAll();
-        List<BookingResponse> bookingResponses = new ArrayList<>();
+        List<AllBookingsResponse> response = new ArrayList<>();
 
-        for (Booking booking : bookings) {
-            BookingResponse bookingsResponse = new BookingResponse(
-                    booking.getRental().getTitle(),
-                    booking.getUser().getUsername(),
-                    booking.getPeriod(),
-                    booking.getTotalPrice(),
-                    booking.getPaid(),
-                    booking.getBookingStatus());
-            bookingResponses.add(bookingsResponse);
-        }
-        return bookingResponses;
+
+
+        return response;
     }
 }
