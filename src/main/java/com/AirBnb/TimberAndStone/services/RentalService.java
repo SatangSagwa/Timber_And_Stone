@@ -1,6 +1,7 @@
 package com.AirBnb.TimberAndStone.services;
 
 import com.AirBnb.TimberAndStone.dto.RentalDTO;
+import com.AirBnb.TimberAndStone.dto.RentalFindByMinAvgRatingAndMinNumberOfRatingResponse;
 import com.AirBnb.TimberAndStone.dto.RentalFindByPricePerNightRangeResponse;
 import com.AirBnb.TimberAndStone.dto.RentalResponse;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
@@ -31,6 +32,7 @@ public class RentalService {
         this.userRepository = userRepository;
     }
 
+// --------------------------------- Methods ---------------------------------------------------------------------------
 
     public RentalResponse createRental(RentalDTO rentalDTO) {
 
@@ -73,12 +75,9 @@ public class RentalService {
         return new RentalResponse("New Rental has been created", rental.getTitle()) ;
     }
 
-
-
     public List<Rental> getAllRentals () {
         return rentalRepository.findAll();
     }
-
 
     public Rental getRentalById(String id) {
         return  rentalRepository.findById(id)
@@ -156,11 +155,23 @@ public class RentalService {
 
 
 
+    public List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse> getRentalsByMinAvgRatingAndMinNumberOfRating(Double minAvgRating, Integer minNumberOfRatings) {
+        List<Rental> rentals = rentalRepository.findByRatingAverageRatingGreaterThanEqualAndRatingNumberOfRatingsGreaterThanEqual(minAvgRating, minNumberOfRatings);
+
+        return rentals.stream()
+                .map(this::convertToDTOTwo)
+                .collect(Collectors.toList());
+    }
+
+
+
+
+
+
 
 
 
     // -------------------------- Help Methods -------------------------------------------------------------------------
-
 
     private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
         RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();
@@ -169,6 +180,15 @@ public class RentalService {
         return response;
     }
 
+    private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToDTOTwo(Rental rental) {
+        RentalFindByMinAvgRatingAndMinNumberOfRatingResponse response = new RentalFindByMinAvgRatingAndMinNumberOfRatingResponse();
+
+        response.setTitle(rental.getTitle());
+        response.setAverageRating(rental.getRating().getAverageRating());
+        response.setNumberOfRatings(rental.getRating().getNumberOfRatings());
 
 
+        return response;
+
+    }
 }
