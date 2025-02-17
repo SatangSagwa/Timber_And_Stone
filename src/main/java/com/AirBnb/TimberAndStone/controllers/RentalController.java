@@ -1,6 +1,7 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 import com.AirBnb.TimberAndStone.dto.RentalDTO;
+import com.AirBnb.TimberAndStone.dto.RentalFindByPricePerNightRangeResponse;
 import com.AirBnb.TimberAndStone.dto.RentalResponse;
 import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Rental;
@@ -49,8 +50,8 @@ public class RentalController {
     }
 
     @GetMapping("/pricepernight")
-    public ResponseEntity<List<Rental>> getRentalsByPricePerNightRange(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
-        List<Rental> rentals = rentalService.getRentalsByPricePerNightRange(minPrice, maxPrice);
+    public ResponseEntity<List<RentalFindByPricePerNightRangeResponse>> getRentalsByPricePerNightRange(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
+        List<RentalFindByPricePerNightRangeResponse> rentals = rentalService.getRentalsByPricePerNightRange(minPrice, maxPrice);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 

@@ -1,6 +1,7 @@
 package com.AirBnb.TimberAndStone.services;
 
 import com.AirBnb.TimberAndStone.dto.RentalDTO;
+import com.AirBnb.TimberAndStone.dto.RentalFindByPricePerNightRangeResponse;
 import com.AirBnb.TimberAndStone.dto.RentalResponse;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RentalService {
@@ -88,8 +90,12 @@ public class RentalService {
     return rentalRepository.findByCategory(category);
     }
 
-    public List<Rental> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
-        return rentalRepository.findByPricePerNightBetween(minPrice, maxPrice);
+    public List<RentalFindByPricePerNightRangeResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
+        List<Rental> rentals = rentalRepository.findByPricePerNightBetween(minPrice, maxPrice);
+
+        return rentals.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     // kolla igenom vad som faktiskt bör ligga i patch och se hur det fungarar med @annotation createdat and updatedAt
@@ -149,6 +155,19 @@ public class RentalService {
     }
 
 
+
+
+
+
+    // -------------------------- Help Methods -------------------------------------------------------------------------
+
+
+    private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
+        RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();
+        response.setTitle(rental.getTitle());
+        response.setPricePerNight(rental.getPricePerNight());
+        return response;
+    }
 
 
 
