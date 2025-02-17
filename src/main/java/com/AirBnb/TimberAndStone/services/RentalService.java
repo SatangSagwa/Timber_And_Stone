@@ -185,7 +185,7 @@ public class RentalService {
 
         response.setTitle(rental.getTitle());
         response.setAverageRating(rental.getRating().getAverageRating());
-        response.setNumberOfRating(rental.getRating().getNumberOfRatings());
+        response.setNumberOfRatings(rental.getRating().getNumberOfRatings());
 
 
         return response;

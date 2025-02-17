@@ -4,7 +4,7 @@ public class RentalFindByMinAvgRatingAndMinNumberOfRatingResponse {
 
     private String title;
     private Double averageRating;
-    private Integer numberOfRating;
+    private Integer numberOfRatings;
 
 
 
@@ -13,13 +13,13 @@ public class RentalFindByMinAvgRatingAndMinNumberOfRatingResponse {
     public RentalFindByMinAvgRatingAndMinNumberOfRatingResponse() {
     }
 
-    public RentalFindByMinAvgRatingAndMinNumberOfRatingResponse(String title, Double averageRating, Integer numberOfRating) {
+    public RentalFindByMinAvgRatingAndMinNumberOfRatingResponse(String title, Double averageRating, Integer numberOfRatings) {
         this.title = title;
         this.averageRating = averageRating;
-        this.numberOfRating = numberOfRating;
+        this.numberOfRatings = numberOfRatings;
     }
 
-//--------------------------------------------- Getter & Setters -------------------------------------------------------
+    //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
 
     public String getTitle() {
@@ -38,12 +38,12 @@ public class RentalFindByMinAvgRatingAndMinNumberOfRatingResponse {
         this.averageRating = averageRating;
     }
 
-    public Integer getNumberOfRating() {
-        return numberOfRating;
+    public Integer getNumberOfRatings() {
+        return numberOfRatings;
     }
 
-    public void setNumberOfRating(Integer numberOfRating) {
-        this.numberOfRating = numberOfRating;
+    public void setNumberOfRatings(Integer numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
     }
 }
 
