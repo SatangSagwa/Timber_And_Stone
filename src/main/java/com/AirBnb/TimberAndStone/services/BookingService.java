@@ -82,8 +82,13 @@ public class BookingService {
         return convertToBookingResponse(booking);
     }
 
-    public List<BookingResponse> getBookingByUserId(String id){
+    public List<BookingResponse> getBookingsByUserId(String id){
         List<Booking> bookings = bookingRepository.findByUserId(id);
+
+        if(bookings.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No bookings found");
+        }
+
         return bookings.stream()
                 .map(this::convertToBookingResponse)
                 .collect(Collectors.toList());
@@ -92,6 +97,23 @@ public class BookingService {
     public List<BookingResponse> getMyBookings() {
         User user = userService.getAuthenticated();
         List<Booking> bookings = bookingRepository.findByUserId(user.getId());
+
+        if(bookings.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No bookings found");
+        }
+
+        return bookings.stream()
+                .map(this::convertToBookingResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<BookingResponse> getBookingsByRentalId(String id) {
+        List<Booking> bookings = bookingRepository.findByRentalId(id);
+
+        if(bookings.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No bookings found");
+        }
+
         return bookings.stream()
                 .map(this::convertToBookingResponse)
                 .collect(Collectors.toList());

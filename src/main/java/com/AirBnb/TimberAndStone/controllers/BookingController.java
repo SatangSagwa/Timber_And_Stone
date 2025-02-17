@@ -44,7 +44,7 @@ public class BookingController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<List<BookingResponse>> getBookingByUserId(@PathVariable String id) {
-        List<BookingResponse> booking = bookingService.getBookingByUserId(id);
+        List<BookingResponse> booking = bookingService.getBookingsByUserId(id);
         return ResponseEntity.status(HttpStatus.OK).body(booking);
     }
 
@@ -53,4 +53,11 @@ public class BookingController {
         List<BookingResponse> bookings = bookingService.getMyBookings();
         return ResponseEntity.status(HttpStatus.OK).body(bookings);
     }
+
+    @GetMapping("/rental/{id}")
+    public ResponseEntity<List<BookingResponse>> getBookingByRentalId(@PathVariable String id) {
+        List<BookingResponse> bookings = bookingService.getBookingsByRentalId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(bookings);
+    }
+
 }
