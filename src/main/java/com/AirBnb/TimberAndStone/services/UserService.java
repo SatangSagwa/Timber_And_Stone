@@ -4,16 +4,16 @@ package com.AirBnb.TimberAndStone.services;
 import com.AirBnb.TimberAndStone.dto.ActivateDeactivateResponse;
 import com.AirBnb.TimberAndStone.dto.RegisterRequest;
 import com.AirBnb.TimberAndStone.dto.RegisterResponse;
+import com.AirBnb.TimberAndStone.exceptions.ConflictException;
+import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.models.Address;
 import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.models.Role;
 import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,7 +26,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -35,7 +34,7 @@ public class UserService {
     public RegisterResponse registerUser(RegisterRequest registerRequest) {
         // check if username already exists
         if (existsByUsername(registerRequest.getUsername())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
+            throw new ConflictException("Username already exists");
         }
 
         // map the authRequest to a User entity
@@ -113,7 +112,7 @@ public class UserService {
 
     public User getUserById(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         return user;
     }
@@ -125,7 +124,7 @@ public class UserService {
                 return user;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with email " + email + " not found.");
+        throw new ResourceNotFoundException("User with email " + email + " not found.");
     }
 
     //Activates deactivated users, deactivates activated users.
