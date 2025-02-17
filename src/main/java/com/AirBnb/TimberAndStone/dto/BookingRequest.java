@@ -1,6 +1,7 @@
 package com.AirBnb.TimberAndStone.dto;
 
 import com.AirBnb.TimberAndStone.models.Rental;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -11,6 +12,10 @@ public class BookingRequest {
     @DBRef
     @NotNull(message = "Rental can not be null")
     private Rental rental;
+
+    @NotNull(message = "Number of guests can not be null")
+    @Min(value = 1, message = "You have to book for at least one guest!")
+    private Integer numberOfGuests;
 
     @NotNull(message = "startDate cant be null.")
     private LocalDate startDate;
@@ -40,5 +45,9 @@ public class BookingRequest {
 
     public @NotNull(message = "Note can not be null") @Size(max = 300, message = "Note can not exceed 300 characters.") String getNote() {
         return note;
+    }
+
+    public @NotNull(message = "Number of guests can not be null") @Min(value = 1, message = "You have to book for at least one guest!") Integer getNumberOfGuests() {
+        return numberOfGuests;
     }
 }

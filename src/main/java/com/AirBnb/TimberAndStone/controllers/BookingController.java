@@ -2,6 +2,7 @@ package com.AirBnb.TimberAndStone.controllers;
 
 import com.AirBnb.TimberAndStone.dto.AllBookingsResponse;
 import com.AirBnb.TimberAndStone.dto.BookingRequest;
+import com.AirBnb.TimberAndStone.dto.BookingResponse;
 import com.AirBnb.TimberAndStone.dto.PostBookingResponse;
 import com.AirBnb.TimberAndStone.services.BookingService;
 import jakarta.validation.Valid;
@@ -27,9 +28,17 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(postBookingResponse);
     }
 
+
     @GetMapping
     public ResponseEntity<List<AllBookingsResponse>> getBookings() {
         List<AllBookingsResponse> bookings = bookingService.getAllBookings();
         return ResponseEntity.status(HttpStatus.OK).body(bookings);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BookingResponse> getBookingById(@PathVariable String id) {
+        BookingResponse booking = bookingService.getBookingById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(booking);
+    }
+
 }

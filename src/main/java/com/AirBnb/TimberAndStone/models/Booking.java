@@ -1,5 +1,6 @@
 package com.AirBnb.TimberAndStone.models;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -7,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Document(collection = "bookings")
 public class Booking {
@@ -15,19 +16,29 @@ public class Booking {
     @Id
     private String id;
 
+    @NotNull(message = "Booking number can not be null")
+    private String bookingNumber;
+
     @DBRef
     @NotNull(message = "User can not be null")
+    @Valid
     private User user;
+
+    @NotNull(message = "Number of guests can not be null")
+    @Min(value = 1, message = "You have to book for at least one guest!")
+    private Integer numberOfGuests;
 
     @DBRef
     @NotNull(message = "Rental can not be null")
+    @Valid
     private Rental rental;
 
     @NotNull(message = "Period can not be null")
+    @Valid
     private Period period;
 
     @NotNull(message = "totalPrice can not be null")
-    @Min(value = 1, message = "Price has to be at least $1")
+    @Min(value = 1, message = "Price has to be at least 1")
     //No max since it is dependent on the length of the period and the Rental.pricePerNight.
     private Double totalPrice;
 
@@ -35,6 +46,7 @@ public class Booking {
     private Boolean isPaid;
 
     @NotNull(message = "Booking status can not be null")
+    @Valid
     private BookingStatus bookingStatus;
 
     @NotNull(message = "Note can not be null")
@@ -43,10 +55,10 @@ public class Booking {
     private String note;
 
     @NotNull
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @NotNull
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
 
 //--------------------------------------------- Constructor ------------------------------------------------------------
@@ -56,39 +68,56 @@ public class Booking {
 
 //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
+
     public String getId() {
         return id;
     }
 
-    public @NotNull(message = "User can not be null") User getUser() {
+    public @NotNull(message = "Booking number can not be null") String getBookingNumber() {
+        return bookingNumber;
+    }
+
+    public void setBookingNumber(@NotNull(message = "Booking number can not be null") String bookingNumber) {
+        this.bookingNumber = bookingNumber;
+    }
+
+    public @NotNull(message = "User can not be null") @Valid User getUser() {
         return user;
     }
 
-    public void setUser(@NotNull(message = "User can not be null") User user) {
+    public void setUser(@NotNull(message = "User can not be null") @Valid User user) {
         this.user = user;
     }
 
-    public @NotNull(message = "Rental can not be null") Rental getRental() {
+    public @NotNull(message = "Number of guests can not be null") @Min(value = 1, message = "You have to book for at least one guest!") Integer getNumberOfGuests() {
+        return numberOfGuests;
+    }
+
+    public void setNumberOfGuests(@NotNull(message = "Number of guests can not be null") @Min(value = 1, message = "You have to book for at least one guest!") Integer numberOfGuests) {
+        this.numberOfGuests = numberOfGuests;
+    }
+
+    public @NotNull(message = "Rental can not be null") @Valid Rental getRental() {
         return rental;
     }
 
-    public void setRental(@NotNull(message = "Rental can not be null") Rental rental) {
+    public void setRental(@NotNull(message = "Rental can not be null") @Valid Rental rental) {
         this.rental = rental;
     }
 
-    public @NotNull(message = "Period can not be null") Period getPeriod() {
+    public @NotNull(message = "Period can not be null") @Valid Period getPeriod() {
         return period;
     }
 
-    public void setPeriod(@NotNull(message = "Period can not be null") Period period) {
+    public void setPeriod(@NotNull(message = "Period can not be null") @Valid Period period) {
         this.period = period;
     }
 
-    public @NotNull(message = "totalPrice can not be null") @Min(value = 1, message = "Price had to be at least $1") Double getTotalPrice() {
+    public @NotNull(message = "totalPrice can not be null") @Min(value = 1, message = "Price has to be at least 1") Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(@NotNull(message = "totalPrice can not be null") @Min(value = 1, message = "Price had to be at least $1") Double totalPrice) {
+    public void setTotalPrice(@NotNull(message = "totalPrice can not be null") @Min(value = 1, message = "Price has to be at least 1") Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -100,36 +129,35 @@ public class Booking {
         isPaid = paid;
     }
 
-
-    public BookingStatus getBookingStatus() {
+    public @NotNull(message = "Booking status can not be null") @Valid BookingStatus getBookingStatus() {
         return bookingStatus;
     }
 
-    public void setBookingStatus(BookingStatus bookingStatus) {
+    public void setBookingStatus(@NotNull(message = "Booking status can not be null") @Valid BookingStatus bookingStatus) {
         this.bookingStatus = bookingStatus;
     }
 
-    public @NotNull(message = "Note can not be null") String getNote() {
+    public @NotNull(message = "Note can not be null") @Size(max = 300, message = "Note can not exceed 300 characters.") String getNote() {
         return note;
     }
 
-    public void setNote(@NotNull(message = "Note can not be null") String note) {
+    public void setNote(@NotNull(message = "Note can not be null") @Size(max = 300, message = "Note can not exceed 300 characters.") String note) {
         this.note = note;
     }
 
-    public @NotNull LocalDate getCreatedAt() {
+    public @NotNull LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull LocalDate createdAt) {
+    public void setCreatedAt(@NotNull LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public @NotNull LocalDate getUpdatedAt() {
+    public @NotNull LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(@NotNull LocalDate updatedAt) {
+    public void setUpdatedAt(@NotNull LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

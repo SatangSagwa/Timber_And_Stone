@@ -2,17 +2,21 @@ package com.AirBnb.TimberAndStone.services;
 
 import com.AirBnb.TimberAndStone.dto.AllBookingsResponse;
 import com.AirBnb.TimberAndStone.dto.BookingRequest;
+import com.AirBnb.TimberAndStone.dto.BookingResponse;
 import com.AirBnb.TimberAndStone.dto.PostBookingResponse;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,13 +57,17 @@ public class BookingService {
         period.setEndDate(bookingRequest.getEndDate());
         booking.setPeriod(period);
         booking.setNote(bookingRequest.getNote());
+        booking.setNumberOfGuests(bookingRequest.getNumberOfGuests());
 
         //Autovalues
         booking.setTotalPrice(periodService.getAmountOfDays(period) * rental.getPricePerNight());
         booking.setPaid(false);
         booking.setBookingStatus(BookingStatus.PENDING);
-        booking.setCreatedAt(LocalDate.now());
-        booking.setUpdatedAt(LocalDate.now());
+        booking.setCreatedAt(LocalDateTime.now());
+        booking.setUpdatedAt(LocalDateTime.now());
+
+        booking.setBookingNumber(generateBookingNumber());
+
         bookingRepository.save(booking);
 
         return new PostBookingResponse("Rental has been booked successfully",
@@ -70,15 +78,36 @@ public class BookingService {
                 booking.getBookingStatus());
     }
 
+
     public List<AllBookingsResponse> getAllBookings() {
         //Finds all bookings, converts to DTO and returns list.
         List<Booking> bookings = bookingRepository.findAll();
         return bookings.stream()
-                .map(this::convertToDTO)
+                .map(this::convertToAllBookingsResponse)
                 .collect(Collectors.toList());
     }
 
-    private AllBookingsResponse convertToDTO(Booking booking) {
+    public BookingResponse getBookingById(String id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        return convertToBookingResponse(booking);
+    }
+
+    private BookingResponse convertToBookingResponse(Booking booking) {
+        return new BookingResponse(
+                booking.getBookingNumber(),
+                booking.getRental().getTitle(),
+                booking.getUser().getUsername(),
+                booking.getNumberOfGuests(),
+                booking.getPeriod(),
+                booking.getTotalPrice(),
+                booking.getBookingStatus(),
+                booking.getNote(),
+                booking.getCreatedAt()
+        );
+    }
+
+    private AllBookingsResponse convertToAllBookingsResponse(Booking booking) {
         return new AllBookingsResponse(
                 booking.getRental().getTitle(),
                 booking.getUser().getUsername(),
@@ -86,5 +115,16 @@ public class BookingService {
                 booking.getTotalPrice(),
                 booking.getBookingStatus()
         );
+    }
+
+
+
+    //https://www.baeldung.com/java-uuid-unique-long-generation
+    //https://www.baeldung.com/java-secure-random
+    //Can have more validation later, for ex. checking uniqueness in combination with rental/user.
+    private String generateBookingNumber() {
+        SecureRandom secureRandom = new SecureRandom();
+        Integer randomPositiveLong = Math.abs(secureRandom.nextInt());
+        return randomPositiveLong.toString();
     }
 }
