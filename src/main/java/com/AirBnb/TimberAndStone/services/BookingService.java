@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BookingService {
@@ -65,5 +67,23 @@ public class BookingService {
                 booking.getTotalPrice(),
                 booking.getNote(),
                 booking.getBookingStatus());
+    }
+
+    public List<BookingResponse> getAllBookings() {
+        //Finds all bookings, converts to DTO and returns list.
+        List<Booking> bookings = bookingRepository.findAll();
+        List<BookingResponse> bookingResponses = new ArrayList<>();
+
+        for (Booking booking : bookings) {
+            BookingResponse bookingsResponse = new BookingResponse(
+                    booking.getRental().getTitle(),
+                    booking.getUser().getUsername(),
+                    booking.getPeriod(),
+                    booking.getTotalPrice(),
+                    booking.getPaid(),
+                    booking.getBookingStatus());
+            bookingResponses.add(bookingsResponse);
+        }
+        return bookingResponses;
     }
 }

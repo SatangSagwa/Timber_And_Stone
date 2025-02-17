@@ -6,10 +6,12 @@ import com.AirBnb.TimberAndStone.models.Period;
 public class BookingResponse {
     private String message;
     private String rentalTitle;
+    private String user;
     private Period period;
     private Double totalPrice;
     private String note;
     private BookingStatus status;
+    private Boolean isPaid;
 
     public BookingResponse() {
     }
@@ -20,6 +22,15 @@ public class BookingResponse {
         this.period = period;
         this.totalPrice = totalPrice;
         this.note = note;
+        this.status = status;
+    }
+
+    public BookingResponse(String rentalTitle, String user, Period period, Double totalPrice, Boolean isPaid, BookingStatus status) {
+        this.rentalTitle = rentalTitle;
+        this.user = user;
+        this.period = period;
+        this.totalPrice = totalPrice;
+        this.isPaid = isPaid;
         this.status = status;
     }
 
