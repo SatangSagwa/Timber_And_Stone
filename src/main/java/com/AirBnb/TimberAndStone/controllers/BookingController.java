@@ -35,10 +35,22 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(bookings);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponse> getBookingById(@PathVariable String id) {
         BookingResponse booking = bookingService.getBookingById(id);
         return ResponseEntity.status(HttpStatus.OK).body(booking);
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<BookingResponse>> getBookingByUserId(@PathVariable String id) {
+        List<BookingResponse> booking = bookingService.getBookingByUserId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(booking);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<BookingResponse>> getMyBookings() {
+        List<BookingResponse> bookings = bookingService.getMyBookings();
+        return ResponseEntity.status(HttpStatus.OK).body(bookings);
+    }
 }

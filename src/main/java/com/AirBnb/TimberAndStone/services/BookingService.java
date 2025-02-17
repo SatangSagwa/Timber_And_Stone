@@ -4,14 +4,9 @@ import com.AirBnb.TimberAndStone.dto.AllBookingsResponse;
 import com.AirBnb.TimberAndStone.dto.BookingRequest;
 import com.AirBnb.TimberAndStone.dto.BookingResponse;
 import com.AirBnb.TimberAndStone.dto.PostBookingResponse;
-import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -39,13 +34,7 @@ public class BookingService {
         Booking booking = new Booking();
 
         //Set user to authorized user.
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-            throw new UnauthorizedException("User is not authenticated");
-        }
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername());
-        booking.setUser(user);
+        booking.setUser(userService.getAuthenticated());
 
         //Find and set rental
         Rental rental = rentalService.getRentalById(bookingRequest.getRental().getId());
@@ -93,6 +82,21 @@ public class BookingService {
         return convertToBookingResponse(booking);
     }
 
+    public List<BookingResponse> getBookingByUserId(String id){
+        List<Booking> bookings = bookingRepository.findByUserId(id);
+        return bookings.stream()
+                .map(this::convertToBookingResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<BookingResponse> getMyBookings() {
+        User user = userService.getAuthenticated();
+        List<Booking> bookings = bookingRepository.findByUserId(user.getId());
+        return bookings.stream()
+                .map(this::convertToBookingResponse)
+                .collect(Collectors.toList());
+    }
+
     private BookingResponse convertToBookingResponse(Booking booking) {
         return new BookingResponse(
                 booking.getBookingNumber(),
@@ -116,8 +120,6 @@ public class BookingService {
                 booking.getBookingStatus()
         );
     }
-
-
 
     //https://www.baeldung.com/java-uuid-unique-long-generation
     //https://www.baeldung.com/java-secure-random
