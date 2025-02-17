@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -73,10 +73,18 @@ public class BookingService {
     public List<AllBookingsResponse> getAllBookings() {
         //Finds all bookings, converts to DTO and returns list.
         List<Booking> bookings = bookingRepository.findAll();
-        List<AllBookingsResponse> response = new ArrayList<>();
+        return bookings.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
-
-
-        return response;
+    private AllBookingsResponse convertToDTO(Booking booking) {
+        return new AllBookingsResponse(
+                booking.getRental().getTitle(),
+                booking.getUser().getUsername(),
+                booking.getPeriod(),
+                booking.getTotalPrice(),
+                booking.getBookingStatus()
+        );
     }
 }
