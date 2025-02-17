@@ -88,6 +88,10 @@ public class RentalService {
     return rentalRepository.findByCategory(category);
     }
 
+    public List<Rental> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
+        return rentalRepository.findByPricePerNightBetween(minPrice, maxPrice);
+    }
+
     // kolla igenom vad som faktiskt bör ligga i patch och se hur det fungarar med @annotation createdat and updatedAt
     public Rental patchRentalById(String id, Rental rental) {
         Rental existingRental = rentalRepository.findById(id)

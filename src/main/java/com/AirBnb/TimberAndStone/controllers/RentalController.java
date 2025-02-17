@@ -48,6 +48,12 @@ public class RentalController {
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
+    @GetMapping("/pricepernight")
+    public ResponseEntity<List<Rental>> getRentalsByPricePerNightRange(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
+        List<Rental> rentals = rentalService.getRentalsByPricePerNightRange(minPrice, maxPrice);
+        return new ResponseEntity<>(rentals, HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<Rental> patchRentalById(@PathVariable String id, @RequestBody Rental rental) {
         return ResponseEntity.ok(rentalService.patchRentalById(id, rental));
@@ -58,6 +64,11 @@ public class RentalController {
         rentalService.deleteRental(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+
+
+
 
 }
 
