@@ -1,6 +1,7 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 import com.AirBnb.TimberAndStone.dto.RentalDTO;
+import com.AirBnb.TimberAndStone.dto.RentalFindByMinAvgRatingAndMinNumberOfRatingResponse;
 import com.AirBnb.TimberAndStone.dto.RentalResponse;
 import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Rental;
@@ -47,10 +48,14 @@ public class RentalController {
         List <Rental> rentals = rentalService.getRentalsByCategory(category);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
-
+    @GetMapping("/rating")
+    public ResponseEntity<List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse>> getRentalsByMinAvgRatingAndMinNumberOfRating(@RequestParam Double minAvgRating, @RequestParam Integer minNumberOfRatings) {
+        List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse> rentals = rentalService.getRentalsByMinAvgRatingAndMinNumberOfRating(minAvgRating, minNumberOfRatings);
+        return new ResponseEntity<>(rentals, HttpStatus.OK);
+    }
     @PatchMapping("/{id}")
     public ResponseEntity<Rental> patchRentalById(@PathVariable String id, @RequestBody Rental rental) {
-        return ResponseEntity.ok(rentalService.patchRentalById(id, rental));
+        return new ResponseEntity<>(rentalService.patchRentalById(id, rental), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

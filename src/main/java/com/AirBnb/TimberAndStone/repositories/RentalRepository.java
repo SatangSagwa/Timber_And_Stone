@@ -8,4 +8,8 @@ import java.util.List;
 
 public interface RentalRepository extends MongoRepository<Rental, String> {
     List<Rental> findByCategory(Category category);
+
+
+    // https://chatgpt.com/share/67b33e5b-0968-800b-bb00-ba09744d98fb
+    List<Rental> findByRatingAverageRatingGreaterThanEqualAndRatingNumberOfRatingsGreaterThanEqual(Double minAverageRating, Integer minNumberOfRatings);
 }
