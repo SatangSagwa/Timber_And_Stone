@@ -2,6 +2,7 @@ package com.AirBnb.TimberAndStone.services;
 
 import com.AirBnb.TimberAndStone.dto.RentalDTO;
 import com.AirBnb.TimberAndStone.dto.RentalFindByMinAvgRatingAndMinNumberOfRatingResponse;
+import com.AirBnb.TimberAndStone.dto.RentalFindByPricePerNightRangeResponse;
 import com.AirBnb.TimberAndStone.dto.RentalResponse;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
@@ -90,6 +91,14 @@ public class RentalService {
     return rentalRepository.findByCategory(category);
     }
 
+    public List<RentalFindByPricePerNightRangeResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
+        List<Rental> rentals = rentalRepository.findByPricePerNightBetween(minPrice, maxPrice);
+
+        return rentals.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     // kolla igenom vad som faktiskt bör ligga i patch och se hur det fungarar med @annotation createdat and updatedAt
     public Rental patchRentalById(String id, Rental rental) {
         Rental existingRental = rentalRepository.findById(id)
@@ -152,13 +161,13 @@ public class RentalService {
         List<Rental> rentals = rentalRepository.findByRatingAverageRatingGreaterThanEqualAndRatingNumberOfRatingsGreaterThanEqual(minAvgRating, minNumberOfRatings);
 
         return rentals.stream()
-                .map(this::convertToDTO)
+                .map(this::convertToDTOTwo)
                 .collect(Collectors.toList());
     }
 
 
 
-    private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToDTO(Rental rental) {
+    private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToDTOTwo(Rental rental) {
         RentalFindByMinAvgRatingAndMinNumberOfRatingResponse response = new RentalFindByMinAvgRatingAndMinNumberOfRatingResponse();
 
         response.setTitle(rental.getTitle());
@@ -171,6 +180,19 @@ public class RentalService {
     }
 
 
+
+
+
+
+    // -------------------------- Help Methods -------------------------------------------------------------------------
+
+
+    private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
+        RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();
+        response.setTitle(rental.getTitle());
+        response.setPricePerNight(rental.getPricePerNight());
+        return response;
+    }
 
 
 

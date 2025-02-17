@@ -2,6 +2,7 @@ package com.AirBnb.TimberAndStone.controllers;
 
 import com.AirBnb.TimberAndStone.dto.RentalDTO;
 import com.AirBnb.TimberAndStone.dto.RentalFindByMinAvgRatingAndMinNumberOfRatingResponse;
+import com.AirBnb.TimberAndStone.dto.RentalFindByPricePerNightRangeResponse;
 import com.AirBnb.TimberAndStone.dto.RentalResponse;
 import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Rental;
@@ -53,6 +54,13 @@ public class RentalController {
         List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse> rentals = rentalService.getRentalsByMinAvgRatingAndMinNumberOfRating(minAvgRating, minNumberOfRatings);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
+
+    @GetMapping("/pricepernight")
+    public ResponseEntity<List<RentalFindByPricePerNightRangeResponse>> getRentalsByPricePerNightRange(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
+        List<RentalFindByPricePerNightRangeResponse> rentals = rentalService.getRentalsByPricePerNightRange(minPrice, maxPrice);
+        return new ResponseEntity<>(rentals, HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<Rental> patchRentalById(@PathVariable String id, @RequestBody Rental rental) {
         return new ResponseEntity<>(rentalService.patchRentalById(id, rental), HttpStatus.OK);
@@ -63,6 +71,11 @@ public class RentalController {
         rentalService.deleteRental(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+
+
+
 
 }
 
