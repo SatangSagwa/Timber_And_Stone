@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RentalRepository extends MongoRepository<Rental, String> {
     List<Rental> findByCategory(Category category);
+    List<Rental> findByPricePerNightBetween(Double minPrice, Double maxPrice);
 }
