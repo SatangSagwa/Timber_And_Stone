@@ -32,6 +32,7 @@ public class RentalService {
         this.userRepository = userRepository;
     }
 
+// --------------------------------- Methods ---------------------------------------------------------------------------
 
     public RentalResponse createRental(RentalDTO rentalDTO) {
 
@@ -74,12 +75,9 @@ public class RentalService {
         return new RentalResponse("New Rental has been created", rental.getTitle()) ;
     }
 
-
-
     public List<Rental> getAllRentals () {
         return rentalRepository.findAll();
     }
-
 
     public Rental getRentalById(String id) {
         return  rentalRepository.findById(id)
@@ -167,6 +165,21 @@ public class RentalService {
 
 
 
+
+
+
+
+
+
+    // -------------------------- Help Methods -------------------------------------------------------------------------
+
+    private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
+        RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();
+        response.setTitle(rental.getTitle());
+        response.setPricePerNight(rental.getPricePerNight());
+        return response;
+    }
+
     private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToDTOTwo(Rental rental) {
         RentalFindByMinAvgRatingAndMinNumberOfRatingResponse response = new RentalFindByMinAvgRatingAndMinNumberOfRatingResponse();
 
@@ -178,22 +191,4 @@ public class RentalService {
         return response;
 
     }
-
-
-
-
-
-
-    // -------------------------- Help Methods -------------------------------------------------------------------------
-
-
-    private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
-        RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();
-        response.setTitle(rental.getTitle());
-        response.setPricePerNight(rental.getPricePerNight());
-        return response;
-    }
-
-
-
 }
