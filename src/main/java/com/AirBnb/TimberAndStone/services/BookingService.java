@@ -1,9 +1,6 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.dto.AllBookingsResponse;
-import com.AirBnb.TimberAndStone.dto.BookingRequest;
-import com.AirBnb.TimberAndStone.dto.BookingResponse;
-import com.AirBnb.TimberAndStone.dto.PostBookingResponse;
+import com.AirBnb.TimberAndStone.dto.*;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import org.springframework.http.HttpStatus;
@@ -67,7 +64,6 @@ public class BookingService {
                 booking.getBookingStatus());
     }
 
-
     public List<AllBookingsResponse> getAllBookings() {
         //Finds all bookings, converts to DTO and returns list.
         List<Booking> bookings = bookingRepository.findAll();
@@ -119,6 +115,34 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
+    public PatchBookingResponse patchBooking(String id, PatchBookingRequest request) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+
+        User currentUser = userService.getAuthenticated();
+
+        if (!currentUser.getId().equals(booking.getUser().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to change this booking!");
+        }
+
+
+        if(request.getNumberOfGuests() != null) {
+            booking.setNumberOfGuests(request.getNumberOfGuests());
+        }
+
+        if(request.getNote() != null) {
+            booking.setNote(request.getNote());
+        }
+
+        if(request.getStartDate() != null && request.getEndDate() != null) {
+            Period period = new Period(request.getStartDate(), request.getEndDate());
+            booking.setPeriod(period);
+            booking.setTotalPrice(periodService.getAmountOfDays(period) * booking.getRental().getPricePerNight());
+        }
+        bookingRepository.save(booking);
+        return convertToPatchBookingResponse(booking);
+    }
+
     private BookingResponse convertToBookingResponse(Booking booking) {
         return new BookingResponse(
                 booking.getBookingNumber(),
@@ -140,6 +164,21 @@ public class BookingService {
                 booking.getPeriod(),
                 booking.getTotalPrice(),
                 booking.getBookingStatus()
+        );
+    }
+
+    private PatchBookingResponse convertToPatchBookingResponse(Booking booking) {
+        return new PatchBookingResponse(
+                "Booking has been updated successfully!",
+                booking.getRental().getTitle(),
+                booking.getBookingNumber(),
+                booking.getUser().getUsername(),
+                booking.getNumberOfGuests(),
+                booking.getPeriod(),
+                booking.getTotalPrice(),
+                booking.getPaid(),
+                booking.getBookingStatus(),
+                booking.getNote()
         );
     }
 

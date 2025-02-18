@@ -1,9 +1,6 @@
 package com.AirBnb.TimberAndStone.controllers;
 
-import com.AirBnb.TimberAndStone.dto.AllBookingsResponse;
-import com.AirBnb.TimberAndStone.dto.BookingRequest;
-import com.AirBnb.TimberAndStone.dto.BookingResponse;
-import com.AirBnb.TimberAndStone.dto.PostBookingResponse;
+import com.AirBnb.TimberAndStone.dto.*;
 import com.AirBnb.TimberAndStone.services.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -60,4 +57,9 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(bookings);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<PatchBookingResponse> patchBooking(@PathVariable String id, @RequestBody PatchBookingRequest request) {
+        PatchBookingResponse response = bookingService.patchBooking(id, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
