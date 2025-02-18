@@ -31,11 +31,11 @@ Issue #3
 POST   /api/users          - Create user
 
 ## Acceptance kriteria
-All listed endpoints are implemented and tested
-The API returns JSON response
-Basic validation has been implemented
-The code is following our code standard
-The API has been manually tested
+- [ ] All listed endpoints are implemented and tested
+- [ ] The API returns JSON response
+- [ ] Basic validation has been implemented
+- [ ] The code is following our code standard
+- [ ] The API has been manually tested
 
 ## Technical details
 Framework: Spring Boot
