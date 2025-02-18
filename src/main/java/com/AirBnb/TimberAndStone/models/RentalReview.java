@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Document(collection = "rentalreviews")
 public class RentalReview {
@@ -33,10 +33,10 @@ public class RentalReview {
     private String review;
 
     @NotNull(message="createdAt can not be null")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @NotNull(message="updatedAt can not be null")
-    private LocalDateTime updatedAt;
+    private LocalDate updatedAt;
 
     public RentalReview() {
     }
@@ -83,19 +83,19 @@ public class RentalReview {
         this.review = review;
     }
 
-    public @NotNull(message = "createdAt can not be null") LocalDateTime getCreatedAt() {
+    public @NotNull(message = "createdAt can not be null") LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull(message = "createdAt can not be null") LocalDateTime createdAt) {
+    public void setCreatedAt(@NotNull(message = "createdAt can not be null") LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public @NotNull(message = "updatedAt can not be null") LocalDateTime getUpdatedAt() {
+    public @NotNull(message = "updatedAt can not be null") LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(@NotNull(message = "updatedAt can not be null") LocalDateTime updatedAt) {
+    public void setUpdatedAt(@NotNull(message = "updatedAt can not be null") LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
