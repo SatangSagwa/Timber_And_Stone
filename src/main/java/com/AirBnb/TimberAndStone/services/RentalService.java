@@ -1,15 +1,10 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.dto.RentalDTO;
-import com.AirBnb.TimberAndStone.dto.RentalFindByMinAvgRatingAndMinNumberOfRatingResponse;
-import com.AirBnb.TimberAndStone.dto.RentalFindByPricePerNightRangeResponse;
-import com.AirBnb.TimberAndStone.dto.RentalResponse;
+import com.AirBnb.TimberAndStone.dto.*;
+import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.Category;
-import com.AirBnb.TimberAndStone.models.Rating;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.models.User;
+import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -18,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -154,7 +150,6 @@ public class RentalService {
     }
 
 
-
     public List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse> getRentalsByMinAvgRatingAndMinNumberOfRating(Double minAvgRating, Integer minNumberOfRatings) {
         List<Rental> rentals = rentalRepository.findByRatingAverageRatingGreaterThanEqualAndRatingNumberOfRatingsGreaterThanEqual(minAvgRating, minNumberOfRatings);
 
@@ -162,6 +157,33 @@ public class RentalService {
                 .map(this::convertToDTOTwo)
                 .collect(Collectors.toList());
     }
+
+
+    // https://chatgpt.com/share/67b4a4fb-a588-800b-9894-16722dd3a37d
+    public List<RentalFindByAvailabilityPeriodResponse> getRentalsByAvailabilityPeriod(LocalDate startDate, LocalDate endDate) {
+        List<Rental> rentals = getAllRentals();
+        if (startDate.isAfter(endDate) || startDate.isEqual(endDate) || endDate.isBefore(startDate) || endDate.isEqual(startDate)) {
+            throw new ConflictException("startDate and endDate have to be in order (startDate - endDate)");
+        }
+        List<Rental> matchingRentals = rentals.stream()
+                .filter(rental -> rental.getAvailablePeriods().stream()
+                        .anyMatch(period -> isPeriodMatching(period, startDate, endDate))
+                )
+                .collect(Collectors.toList());
+        return matchingRentals.stream()
+                .map(rental -> {
+                    List<Period> matchingPeriods = rental.getAvailablePeriods().stream()
+                            .filter(period -> isPeriodMatching(period, startDate, endDate))
+                            .collect(Collectors.toList());
+                    RentalFindByAvailabilityPeriodResponse response = convertToDTOThree(rental);
+                    response.setPeriods(matchingPeriods);
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
 
 
 
@@ -182,13 +204,30 @@ public class RentalService {
 
     private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToDTOTwo(Rental rental) {
         RentalFindByMinAvgRatingAndMinNumberOfRatingResponse response = new RentalFindByMinAvgRatingAndMinNumberOfRatingResponse();
-
         response.setTitle(rental.getTitle());
         response.setAverageRating(rental.getRating().getAverageRating());
         response.setNumberOfRatings(rental.getRating().getNumberOfRatings());
-
-
         return response;
 
     }
+
+    private RentalFindByAvailabilityPeriodResponse convertToDTOThree(Rental rental) {
+        RentalFindByAvailabilityPeriodResponse response = new RentalFindByAvailabilityPeriodResponse();
+        response.setTitle(rental.getTitle());
+        response.setPeriods(rental.getAvailablePeriods());
+        return response;
+    }
+
+
+    // https://chatgpt.com/share/67b4a4fb-a588-800b-9894-16722dd3a37d
+    private boolean isPeriodMatching(Period period, LocalDate startDate, LocalDate endDate) {
+        boolean overlap = (startDate.isEqual(period.getStartDate()) || startDate.isAfter(period.getStartDate())) &&
+                (endDate.isEqual(period.getEndDate()) || endDate.isBefore(period.getEndDate()));
+        return overlap;
+    }
+
+
+
+
 }
+

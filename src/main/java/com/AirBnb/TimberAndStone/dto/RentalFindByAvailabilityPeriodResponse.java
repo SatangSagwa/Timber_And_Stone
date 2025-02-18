@@ -1,11 +1,13 @@
 package com.AirBnb.TimberAndStone.dto;
 
-import java.time.Period;
+import com.AirBnb.TimberAndStone.models.Period;
+
 import java.util.List;
 
 public class RentalFindByAvailabilityPeriodResponse {
     private String title;
     private List<Period> periods;
+
 
 
 
