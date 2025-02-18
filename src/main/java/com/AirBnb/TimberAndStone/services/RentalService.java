@@ -170,7 +170,7 @@ public class RentalService {
 
         //Filters matching rentals
         rentals = rentals.stream()
-                .filter(rental -> rental.getCapacity().equals(capacity))
+                .filter(rental -> rental.getCapacity() >= (capacity))
                 .toList();
 
         //Converts all rentals to DTO and returns
