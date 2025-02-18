@@ -24,28 +24,56 @@ public class GetRentalsResponse {
         this.averageRating = averageRating;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
     }
 
+    public Integer getCapacity() {
+        return capacity;
+    }
+
     public void setCapacity(Integer capacity) {
         this.capacity = capacity;
+    }
+
+    public Double getPricePerNight() {
+        return pricePerNight;
     }
 
     public void setPricePerNight(Double pricePerNight) {
         this.pricePerNight = pricePerNight;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
     public void setCountry(String country) {
         this.country = country;
     }
 
+    public String getCity() {
+        return city;
+    }
+
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
     }
 
     public void setAverageRating(Double averageRating) {

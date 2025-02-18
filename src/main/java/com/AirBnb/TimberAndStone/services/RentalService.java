@@ -158,19 +158,21 @@ public class RentalService {
                 .collect(Collectors.toList());
     }
 
-    public List<Rental> getRentalsByCapacity(Integer capacity) {
+    public List<GetRentalsResponse> getRentalsByCapacity(Integer capacity) {
+
+        if(capacity < 1) {
+            throw new IllegalArgumentException("Capacity must be greater than 0");
+        }
+
         List<Rental> rentals = getAllRentals();
 
-        return rentals.stream()
+        rentals = rentals.stream()
                 .filter(rental -> rental.getCapacity().equals(capacity))
                 .toList();
 
-        /*
         return rentals.stream()
                 .map(this::convertToGetRentalsResponse)
                 .collect(Collectors.toList());
-
-         */
     }
 
 

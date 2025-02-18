@@ -59,8 +59,8 @@ public class RentalController {
     }
 
     @GetMapping("/capacity/{capacity}")
-    public ResponseEntity<List<Rental>> getRentalsByCapacity(@PathVariable Integer capacity) {
-        List<Rental> response = rentalService.getRentalsByCapacity(capacity);
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByCapacity(@PathVariable Integer capacity) {
+        List<GetRentalsResponse> response = rentalService.getRentalsByCapacity(capacity);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
