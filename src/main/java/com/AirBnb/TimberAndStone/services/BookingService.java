@@ -3,6 +3,8 @@ package com.AirBnb.TimberAndStone.services;
 import com.AirBnb.TimberAndStone.dto.*;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
+import com.AirBnb.TimberAndStone.repositories.RentalRepository;
+import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,12 +21,16 @@ public class BookingService {
     private final UserService userService;
     private final PeriodService periodService;
     private final RentalService rentalService;
+    private final UserRepository userRepository;
+    private final RentalRepository rentalRepository;
 
-    public BookingService(BookingRepository bookingRepository, PeriodService periodService, UserService userService, RentalService rentalService) {
+    public BookingService(BookingRepository bookingRepository, PeriodService periodService, UserService userService, RentalService rentalService, UserRepository userRepository, RentalRepository rentalRepository) {
         this.bookingRepository = bookingRepository;
         this.periodService = periodService;
         this.userService = userService;
         this.rentalService = rentalService;
+        this.userRepository = userRepository;
+        this.rentalRepository = rentalRepository;
     }
 
     public PostBookingResponse createBooking(BookingRequest bookingRequest) {
@@ -43,6 +49,7 @@ public class BookingService {
         period.setEndDate(bookingRequest.getEndDate());
         booking.setPeriod(period);
         booking.setNote(bookingRequest.getNote());
+        validateNumberOfGuests(booking.getRental(), bookingRequest.getNumberOfGuests());
         booking.setNumberOfGuests(bookingRequest.getNumberOfGuests());
 
         //Autovalues
@@ -51,7 +58,6 @@ public class BookingService {
         booking.setBookingStatus(BookingStatus.PENDING);
         booking.setCreatedAt(LocalDateTime.now());
         booking.setUpdatedAt(LocalDateTime.now());
-
         booking.setBookingNumber(generateBookingNumber());
 
         bookingRepository.save(booking);
@@ -79,11 +85,10 @@ public class BookingService {
     }
 
     public List<BookingResponse> getBookingsByUserId(String id){
-        List<Booking> bookings = bookingRepository.findByUserId(id);
+        userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        if(bookings.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No bookings found");
-        }
+        List<Booking> bookings = bookingRepository.findByUserId(id);
 
         return bookings.stream()
                 .map(this::convertToBookingResponse)
@@ -104,11 +109,10 @@ public class BookingService {
     }
 
     public List<BookingResponse> getBookingsByRentalId(String id) {
-        List<Booking> bookings = bookingRepository.findByRentalId(id);
+        rentalRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found"));
 
-        if(bookings.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No bookings found");
-        }
+        List<Booking> bookings = bookingRepository.findByRentalId(id);
 
         return bookings.stream()
                 .map(this::convertToBookingResponse)
@@ -125,8 +129,8 @@ public class BookingService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to change this booking!");
         }
 
-
         if(request.getNumberOfGuests() != null) {
+            validateNumberOfGuests(booking.getRental(), request.getNumberOfGuests());
             booking.setNumberOfGuests(request.getNumberOfGuests());
         }
 
@@ -141,6 +145,28 @@ public class BookingService {
         }
         bookingRepository.save(booking);
         return convertToPatchBookingResponse(booking);
+    }
+
+    public void deleteBooking(String id) {
+        //Find by id
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+
+        //Get user and check if this is the users booking, else throw ex.
+        User currentUser = userService.getAuthenticated();
+        if (!currentUser.getId().equals(booking.getUser().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to change this booking!");
+        }
+
+        bookingRepository.delete(booking);
+    }
+
+    private void validateNumberOfGuests(Rental rental, int numberOfGuests) {
+        if (numberOfGuests < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of guests must be greater than 0");
+        } else if (numberOfGuests > rental.getCapacity()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This rental allows max " + rental.getCapacity() + " guests!");
+        }
     }
 
     private BookingResponse convertToBookingResponse(Booking booking) {

@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -54,10 +56,10 @@ public class Booking {
     //Can be empty, in case the customer has no notes fo the host.
     private String note;
 
-    @NotNull
+    @CreatedDate
     private LocalDateTime createdAt;
 
-    @NotNull
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
 

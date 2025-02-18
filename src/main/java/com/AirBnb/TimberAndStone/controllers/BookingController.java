@@ -62,4 +62,10 @@ public class BookingController {
         PatchBookingResponse response = bookingService.patchBooking(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBooking(@PathVariable String id) {
+        bookingService.deleteBooking(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
