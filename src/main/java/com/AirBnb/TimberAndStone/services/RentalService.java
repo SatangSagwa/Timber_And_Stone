@@ -1,9 +1,6 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.dto.RentalDTO;
-import com.AirBnb.TimberAndStone.dto.RentalFindByMinAvgRatingAndMinNumberOfRatingResponse;
-import com.AirBnb.TimberAndStone.dto.RentalFindByPricePerNightRangeResponse;
-import com.AirBnb.TimberAndStone.dto.RentalResponse;
+import com.AirBnb.TimberAndStone.dto.*;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.Category;
@@ -153,8 +150,6 @@ public class RentalService {
         rentalRepository.delete(rental);
     }
 
-
-
     public List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse> getRentalsByMinAvgRatingAndMinNumberOfRating(Double minAvgRating, Integer minNumberOfRatings) {
         List<Rental> rentals = rentalRepository.findByRatingAverageRatingGreaterThanEqualAndRatingNumberOfRatingsGreaterThanEqual(minAvgRating, minNumberOfRatings);
 
@@ -163,8 +158,20 @@ public class RentalService {
                 .collect(Collectors.toList());
     }
 
+    public List<Rental> getRentalsByCapacity(Integer capacity) {
+        List<Rental> rentals = getAllRentals();
 
+        return rentals.stream()
+                .filter(rental -> rental.getCapacity().equals(capacity))
+                .toList();
 
+        /*
+        return rentals.stream()
+                .map(this::convertToGetRentalsResponse)
+                .collect(Collectors.toList());
+
+         */
+    }
 
 
 
@@ -190,5 +197,16 @@ public class RentalService {
 
         return response;
 
+    }
+
+    private GetRentalsResponse convertToGetRentalsResponse(Rental rental) {
+        return new GetRentalsResponse(
+                rental.getTitle(),
+                rental.getCategory(),
+                rental.getCapacity(),
+                rental.getPricePerNight(),
+                rental.getAddress().getCountry(),
+                rental.getAddress().getCity(),
+                rental.getRating().getAverageRating());
     }
 }

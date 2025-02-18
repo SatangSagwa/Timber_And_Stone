@@ -1,9 +1,6 @@
 package com.AirBnb.TimberAndStone.controllers;
 
-import com.AirBnb.TimberAndStone.dto.RentalDTO;
-import com.AirBnb.TimberAndStone.dto.RentalFindByMinAvgRatingAndMinNumberOfRatingResponse;
-import com.AirBnb.TimberAndStone.dto.RentalFindByPricePerNightRangeResponse;
-import com.AirBnb.TimberAndStone.dto.RentalResponse;
+import com.AirBnb.TimberAndStone.dto.*;
 import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.services.RentalService;
@@ -59,6 +56,12 @@ public class RentalController {
     public ResponseEntity<List<RentalFindByPricePerNightRangeResponse>> getRentalsByPricePerNightRange(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
         List<RentalFindByPricePerNightRangeResponse> rentals = rentalService.getRentalsByPricePerNightRange(minPrice, maxPrice);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
+    }
+
+    @GetMapping("/capacity/{capacity}")
+    public ResponseEntity<List<Rental>> getRentalsByCapacity(@PathVariable Integer capacity) {
+        List<Rental> response = rentalService.getRentalsByCapacity(capacity);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
