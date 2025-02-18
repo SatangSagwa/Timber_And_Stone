@@ -14,7 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -166,18 +168,50 @@ public class RentalService {
 
         List<Rental> rentals = getAllRentals();
 
+        //Filters matching rentals
         rentals = rentals.stream()
                 .filter(rental -> rental.getCapacity().equals(capacity))
                 .toList();
 
+        //Converts all rentals to DTO and returns
         return rentals.stream()
                 .map(this::convertToGetRentalsResponse)
                 .collect(Collectors.toList());
     }
 
+    public List<GetRentalsResponse> getRentalsByTitle(String title) {
 
+        //Trim whitespace from title
+        String trimmedtitle = StringUtils.trimAllWhitespace(title);
 
+        //Trim all whitespace from rentals titles
+        List<Rental> trimmedRentals = getAllRentals();
+        for(Rental rental : trimmedRentals) {
+            rental.setTitle(StringUtils.trimAllWhitespace(rental.getTitle()));
+        }
 
+        //Filter matching rentals to trimmedRentals
+        List<Rental> rentals = getAllRentals();
+        trimmedRentals = trimmedRentals.stream()
+                .filter(rental -> rental.getTitle().equalsIgnoreCase(trimmedtitle))
+                .toList();
+
+        //New list for holding matching rentals
+        List<Rental> matchingRentals = new ArrayList<>();
+
+        //For each rental.id, compare to trimmedRental.id and add to matchingRentals.
+        for (Rental rental : rentals) {
+            for (Rental trimmedRental : trimmedRentals) {
+                if(rental.getId().equals(trimmedRental.getId())) {
+                    matchingRentals.add(rental);
+                }
+            }
+        }
+        //Converts to DTO and returns
+        return matchingRentals.stream()
+                .map(this::convertToGetRentalsResponse)
+                .collect(Collectors.toList());
+    }
 
 
     // -------------------------- Help Methods -------------------------------------------------------------------------
