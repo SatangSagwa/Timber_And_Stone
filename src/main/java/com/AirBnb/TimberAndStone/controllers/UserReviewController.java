@@ -6,10 +6,10 @@ import com.AirBnb.TimberAndStone.services.UserReviewService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/userreviews")
@@ -26,7 +26,7 @@ public class UserReviewController {
         return new ResponseEntity<>(createdUserReview, HttpStatus.CREATED);
     }
     // Get all userReviews
-    /*@GetMapping
+    @GetMapping
     public ResponseEntity<List<UserReview>> getAllUserReviews() {
         List<UserReview> userReviews = userReviewService.getAllUserReviews();
         return new ResponseEntity<>(userReviews, HttpStatus.OK);
@@ -38,30 +38,16 @@ public class UserReviewController {
         return new ResponseEntity<>(userReview, HttpStatus.OK);
     }
 
-    // Get userReview by toUser
-    @GetMapping("/userreviews/{toUser}")
-    public ResponseEntity<List<UserReview>> getUserReviewBytoUser(@Valid @PathVariable User toUser) {
-        List<UserReview> userReviews = userReviewService.getUserReviewBytoUser(toUser);
-        return new ResponseEntity<>(userReviews, HttpStatus.OK);
-    }
-    // Get userReview by fromHost
-    @GetMapping("/userreviews/{fromHost}")
-    public ResponseEntity<List<UserReview>> getUserReviewByfromHost(@Valid @PathVariable User fromHost) {
-        List<UserReview> userReviews = userReviewService.getUserReviewByFromHost(fromHost);
-        return new ResponseEntity<>(userReviews, HttpStatus.OK);
-
-    }
-
     @PatchMapping("/{id}")
     public ResponseEntity<UserReview> updateUserReview(@Valid @PathVariable String id, @RequestBody UserReview userReview) {
        UserReview existingUserReview = userReviewService.getUserReviewById(id);
        existingUserReview.setToUser(userReview.getToUser());
        existingUserReview.setFromHost(userReview.getFromHost());
        existingUserReview.setRating(userReview.getRating());
-       existingUserReview.setUpdatedAt(LocalDateTime.now());
+       existingUserReview.setUpdatedAt(LocalDate.now());
        return new ResponseEntity<>(existingUserReview, HttpStatus.OK);
 
-    }*/
+    }
 
 }
 

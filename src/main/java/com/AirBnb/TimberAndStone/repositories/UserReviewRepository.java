@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface UserReviewRepository extends MongoRepository<UserReview, String> {
     List<UserReview> getUserReviewBytoUser(User toUser);
-    List<UserReview> getUserReviewByFromHost(User fromHost);
 
 }

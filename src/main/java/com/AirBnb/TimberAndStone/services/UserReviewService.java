@@ -1,9 +1,15 @@
 package com.AirBnb.TimberAndStone.services;
 
+import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.models.UserReview;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class UserReviewService {
@@ -27,11 +33,17 @@ public class UserReviewService {
         if(userReview.getRating() < 1 || userReview.getRating() > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
+        userReview.setFromHost(userReview.getFromHost());
+        userReview.setToUser(userReview.getToUser());
+        userReview.setRating(userReview.getRating());
+        userReview.setReview(userReview.getReview());
+        userReview.setCreatedAt(LocalDate.now());
+        userReview.setUpdatedAt(LocalDate.now());
 
         return userReviewRepository.save(userReview);
     }
 
-    /*public List<UserReview> getAllUserReviews() {
+    public List<UserReview> getAllUserReviews() {
         return userReviewRepository.findAll();
 
     }
@@ -43,10 +55,5 @@ public class UserReviewService {
     public List<UserReview> getUserReviewBytoUser(User toUser) {
         List<UserReview> userReview = userReviewRepository.getUserReviewBytoUser(toUser);
         return userReviewRepository.getUserReviewBytoUser(toUser);
-
     }
-    public List<UserReview> getUserReviewByFromHost(User fromHost) {
-        List<UserReview> userReview = userReviewRepository.getUserReviewByFromHost(fromHost);
-        return userReviewRepository.getUserReviewByFromHost(fromHost);
-    }*/
 }
