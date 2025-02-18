@@ -3,22 +3,18 @@ package com.AirBnb.TimberAndStone.services;
 import com.AirBnb.TimberAndStone.models.UserReview;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 public class UserReviewService {
     private final UserReviewRepository userReviewRepository;
     private final UserRepository userRepository;
-    // does not exist yet
-    //private final RentalRepository rentalRepository;
+
+
     public UserReviewService(UserReviewRepository userReviewRepository, UserRepository userRepository) {
         this.userReviewRepository = userReviewRepository;
         this.userRepository = userRepository;
-        //this.rentalRepository = rentalRepository;
+
     }
     public UserReview createUserReview(UserReview userReview) {
         // check for fromHost, toUser and rating
@@ -31,10 +27,11 @@ public class UserReviewService {
         if(userReview.getRating() < 1 || userReview.getRating() > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
+
         return userReviewRepository.save(userReview);
     }
 
-    public List<UserReview> getAllUserReviews() {
+    /*public List<UserReview> getAllUserReviews() {
         return userReviewRepository.findAll();
 
     }
@@ -43,5 +40,13 @@ public class UserReviewService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Userreview not found"));
         return userReview;
     }
+    public List<UserReview> getUserReviewBytoUser(User toUser) {
+        List<UserReview> userReview = userReviewRepository.getUserReviewBytoUser(toUser);
+        return userReviewRepository.getUserReviewBytoUser(toUser);
 
+    }
+    public List<UserReview> getUserReviewByFromHost(User fromHost) {
+        List<UserReview> userReview = userReviewRepository.getUserReviewByFromHost(fromHost);
+        return userReviewRepository.getUserReviewByFromHost(fromHost);
+    }*/
 }

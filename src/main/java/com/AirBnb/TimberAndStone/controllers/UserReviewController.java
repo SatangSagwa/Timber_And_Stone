@@ -6,12 +6,13 @@ import com.AirBnb.TimberAndStone.services.UserReviewService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/userreviews")
+@RequestMapping("/userreviews")
 public class UserReviewController {
 
     private final UserReviewService userReviewService;
@@ -24,20 +25,43 @@ public class UserReviewController {
         UserReview createdUserReview = userReviewService.createUserReview(userReview);
         return new ResponseEntity<>(createdUserReview, HttpStatus.CREATED);
     }
-    // Get all userReviews. Do we want this?
-    @GetMapping
+    // Get all userReviews
+    /*@GetMapping
     public ResponseEntity<List<UserReview>> getAllUserReviews() {
         List<UserReview> userReviews = userReviewService.getAllUserReviews();
         return new ResponseEntity<>(userReviews, HttpStatus.OK);
     }
     // Get userReview by id
     @GetMapping("/{id}")
-    public ResponseEntity<UserReview> getUserReviewById(@PathVariable String id) {
+    public ResponseEntity<UserReview> getUserReviewById(@Valid @PathVariable String id) {
         UserReview userReview = userReviewService.getUserReviewById(id);
         return new ResponseEntity<>(userReview, HttpStatus.OK);
     }
 
+    // Get userReview by toUser
+    @GetMapping("/userreviews/{toUser}")
+    public ResponseEntity<List<UserReview>> getUserReviewBytoUser(@Valid @PathVariable User toUser) {
+        List<UserReview> userReviews = userReviewService.getUserReviewBytoUser(toUser);
+        return new ResponseEntity<>(userReviews, HttpStatus.OK);
+    }
+    // Get userReview by fromHost
+    @GetMapping("/userreviews/{fromHost}")
+    public ResponseEntity<List<UserReview>> getUserReviewByfromHost(@Valid @PathVariable User fromHost) {
+        List<UserReview> userReviews = userReviewService.getUserReviewByFromHost(fromHost);
+        return new ResponseEntity<>(userReviews, HttpStatus.OK);
 
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserReview> updateUserReview(@Valid @PathVariable String id, @RequestBody UserReview userReview) {
+       UserReview existingUserReview = userReviewService.getUserReviewById(id);
+       existingUserReview.setToUser(userReview.getToUser());
+       existingUserReview.setFromHost(userReview.getFromHost());
+       existingUserReview.setRating(userReview.getRating());
+       existingUserReview.setUpdatedAt(LocalDateTime.now());
+       return new ResponseEntity<>(existingUserReview, HttpStatus.OK);
+
+    }*/
 
 }
 
