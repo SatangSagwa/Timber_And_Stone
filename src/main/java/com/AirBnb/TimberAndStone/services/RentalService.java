@@ -194,13 +194,9 @@ public class RentalService {
                 )
                 .collect(Collectors.toList());
 
-
-
-
         return matchingRentals.stream()
                 .map(this::convertToDTOSeven)
                 .collect(Collectors.toList());
-
     }
 
 
@@ -277,9 +273,12 @@ public class RentalService {
                     }
                 }
         }
-
         System.out.println("--------------------------------------------------------");
         return match;
     }
+
+
+
+
 }
 
