@@ -15,6 +15,11 @@ public class Period {
     public Period() {
     }
 
+    public Period(LocalDate startDate, LocalDate endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public @NotNull(message = "startDate cant be null.") LocalDate getStartDate() {
         return startDate;
     }
