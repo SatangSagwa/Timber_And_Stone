@@ -30,7 +30,7 @@ public class RentalService {
 
 // --------------------------------- Methods ---------------------------------------------------------------------------
 
-    public RentalResponse createRental(RentalDTO rentalDTO) throws NoSuchFieldException, IllegalAccessException {
+    public RentalResponse createRental(RentalDTO rentalDTO) {
 
         // Detta under sätter host som den som är inloggad
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -62,21 +62,7 @@ public class RentalService {
         rental.setCategory(rentalDTO.getCategory());
         rental.setCapacity(rentalDTO.getCapacity());
         rental.setDescription(rentalDTO.getDescription());
-
-
-        //If policy is not null...
-        if(rentalDTO.getPolicy() != null) {
-            //If empty, set to default txt.
-            if(rentalDTO.getPolicy().trim().isEmpty()) {
-                rental.setPolicy("Default policy txt");
-                //Else, set to dto value
-            } else {
-                rental.setPolicy(rentalDTO.getPolicy());
-            }
-        } else {
-            //If policy is null
-            rental.setPolicy("Default policy txt");
-        }
+        rental.setPolicy(getValidatedPolicy(rentalDTO.getPolicy()));
 
 
         rentalRepository.save(rental);
@@ -200,6 +186,23 @@ public class RentalService {
 
 
     // -------------------------- Help Methods -------------------------------------------------------------------------
+
+    private String getValidatedPolicy (String policy) {
+        //If policy is not null...
+        if(policy != null) {
+            //If empty, return default txt.
+            if(policy.trim().isEmpty()) {
+                return "Default policy txt";
+                //Else, return dto value
+            } else {
+                return policy;
+            }
+
+        } else {
+            //If policy is null
+            return "Default policy txt";
+        }
+    }
 
     private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
         RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();

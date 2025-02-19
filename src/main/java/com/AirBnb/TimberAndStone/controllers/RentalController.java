@@ -25,7 +25,7 @@ public class RentalController {
 
 
     @PostMapping
-    public ResponseEntity<?> createRental(@Valid @RequestBody RentalDTO rentalDTO) throws NoSuchFieldException, IllegalAccessException {
+    public ResponseEntity<?> createRental(@Valid @RequestBody RentalDTO rentalDTO) {
         RentalResponse rentalResponse = rentalService.createRental(rentalDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(rentalResponse);
     }
