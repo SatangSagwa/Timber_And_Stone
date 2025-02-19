@@ -2,6 +2,7 @@ package com.AirBnb.TimberAndStone.services;
 
 
 import com.AirBnb.TimberAndStone.dto.ActivateDeactivateResponse;
+import com.AirBnb.TimberAndStone.dto.ContactResponse;
 import com.AirBnb.TimberAndStone.dto.RegisterRequest;
 import com.AirBnb.TimberAndStone.dto.RegisterResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
@@ -125,6 +126,11 @@ public class UserService {
             }
         }
         throw new ResourceNotFoundException("User with email " + email + " not found.");
+    }
+
+    public ContactResponse getUserContacts(String id) {
+        User user = getUserById(id);
+        return new ContactResponse("Contact Info:", user.getUsername(), user.getPhoneNumber(), user.getEmail());
     }
 
     //Activates deactivated users, deactivates activated users.
