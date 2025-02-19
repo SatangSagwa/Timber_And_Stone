@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -55,6 +56,12 @@ public class RentalController {
     @GetMapping("/pricepernight")
     public ResponseEntity<List<RentalFindByPricePerNightRangeResponse>> getRentalsByPricePerNightRange(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
         List<RentalFindByPricePerNightRangeResponse> rentals = rentalService.getRentalsByPricePerNightRange(minPrice, maxPrice);
+        return new ResponseEntity<>(rentals, HttpStatus.OK);
+    }
+
+    @GetMapping("/availability")
+    public ResponseEntity<List<RentalFindByAvailabilityPeriodResponse>> getRentalsByAvailabilityPeriod(@Valid @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+        List<RentalFindByAvailabilityPeriodResponse> rentals = rentalService.getRentalsByAvailabilityPeriod(startDate, endDate);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
