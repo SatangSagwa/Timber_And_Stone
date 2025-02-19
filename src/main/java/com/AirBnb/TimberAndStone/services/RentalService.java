@@ -134,7 +134,7 @@ public class RentalService {
             existingRental.setDescription(rental.getDescription());
         }
         if (rental.getPolicy() != null) {
-            existingRental.setPolicy(rental.getPolicy());
+            existingRental.setPolicy(getValidatedPolicy(rental.getPolicy()));
         }
         if (rental.getCreatedAt() != null) {
             existingRental.setCreatedAt(rental.getCreatedAt());
