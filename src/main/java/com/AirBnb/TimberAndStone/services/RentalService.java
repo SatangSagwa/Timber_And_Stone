@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 @Service
 public class RentalService {
 
-   private final RentalRepository rentalRepository;
-   private final UserRepository userRepository;
+    private final RentalRepository rentalRepository;
+    private final UserRepository userRepository;
 
     public RentalService(RentalRepository rentalRepository, UserRepository userRepository) {
         this.rentalRepository = rentalRepository;
@@ -40,8 +40,7 @@ public class RentalService {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername())
-                        .orElseThrow(() -> new IllegalArgumentException("Rental not found"));
-
+                .orElseThrow(() -> new IllegalArgumentException("Rental not found"));
 
 
         Rental rental = new Rental();
@@ -66,18 +65,17 @@ public class RentalService {
         rental.setPolicy(rentalDTO.getPolicy());
 
 
-
         rentalRepository.save(rental);
-        return new RentalResponse("New Rental has been created", rental.getTitle()) ;
+        return new RentalResponse("New Rental has been created", rental.getTitle());
     }
 
-    public List<Rental> getAllRentals () {
+    public List<Rental> getAllRentals() {
         return rentalRepository.findAll();
     }
 
     public Rental getRentalById(String id) {
-        return  rentalRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Rental not found"));
+        return rentalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
 
     }
 
@@ -100,7 +98,7 @@ public class RentalService {
     // kolla igenom vad som faktiskt bör ligga i patch och se hur det fungarar med @annotation createdat and updatedAt
     public Rental patchRentalById(String id, Rental rental) {
         Rental existingRental = rentalRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Rental not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
 
         if (rental.getTitle() != null) {
             existingRental.setTitle(rental.getTitle());
@@ -187,16 +185,6 @@ public class RentalService {
     }
 
 
-
-
-
-
-
-
-
-
-
-
     // -------------------------- Help Methods -------------------------------------------------------------------------
 
     private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
@@ -212,8 +200,8 @@ public class RentalService {
         response.setAverageRating(rental.getRating().getAverageRating());
         response.setNumberOfRatings(rental.getRating().getNumberOfRatings());
         return response;
-      }
     }
+
 
     private RentalFindByAvailabilityPeriodResponse convertToDTOThree(Rental rental) {
         RentalFindByAvailabilityPeriodResponse response = new RentalFindByAvailabilityPeriodResponse();
