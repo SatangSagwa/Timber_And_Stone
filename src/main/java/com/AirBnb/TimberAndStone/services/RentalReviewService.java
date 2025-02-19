@@ -1,15 +1,15 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.dto.RentalResponse;
 import com.AirBnb.TimberAndStone.dto.RentalReviewDTO;
 import com.AirBnb.TimberAndStone.dto.RentalReviewResponse;
-import com.AirBnb.TimberAndStone.models.Rental;
+import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.models.RentalReview;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class RentalReviewService {
     private final RentalReviewRepository rentalReviewRepository;
@@ -32,6 +32,15 @@ public class RentalReviewService {
         rentalReview.setUpdatedAt(LocalDate.now());
 
         rentalReviewRepository.save(rentalReview);
+        return new RentalReviewResponse();
+    }
+    public List<RentalReview> getAllRentalReviews () {
+        return rentalReviewRepository.findAll();
+    }
+    public RentalReview getRentalReviewById(String id) {
+        return rentalReviewRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Rental review not found"));
+
     }
 
 }
