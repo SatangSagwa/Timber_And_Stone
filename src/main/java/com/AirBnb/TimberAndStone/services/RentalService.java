@@ -30,7 +30,7 @@ public class RentalService {
 
 // --------------------------------- Methods ---------------------------------------------------------------------------
 
-    public RentalResponse createRental(RentalDTO rentalDTO) {
+    public RentalResponse createRental(RentalDTO rentalDTO) throws NoSuchFieldException, IllegalAccessException {
 
         // Detta under sätter host som den som är inloggad
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -62,7 +62,21 @@ public class RentalService {
         rental.setCategory(rentalDTO.getCategory());
         rental.setCapacity(rentalDTO.getCapacity());
         rental.setDescription(rentalDTO.getDescription());
-        rental.setPolicy(rentalDTO.getPolicy());
+
+
+        //If policy is not null...
+        if(rentalDTO.getPolicy() != null) {
+            //If empty, set to default txt.
+            if(rentalDTO.getPolicy().trim().isEmpty()) {
+                rental.setPolicy("Default policy txt");
+                //Else, set to dto value
+            } else {
+                rental.setPolicy(rentalDTO.getPolicy());
+            }
+        } else {
+            //If policy is null
+            rental.setPolicy("Default policy txt");
+        }
 
 
         rentalRepository.save(rental);
