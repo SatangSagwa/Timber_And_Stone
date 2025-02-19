@@ -1,20 +1,22 @@
 package com.AirBnb.TimberAndStone.dto;
 
-public class RentalFindByPricePerNightRangeResponse {
+import com.AirBnb.TimberAndStone.models.Category;
+
+public class RentalFindByCategoryResponse {
 
     private String title;
-    private Double pricePerNight;
-
+    private Category category;
 
     //--------------------------------------------- Constructors ------------------------------------------------------------
 
-    public RentalFindByPricePerNightRangeResponse() {
+    public RentalFindByCategoryResponse() {
     }
 
-    public RentalFindByPricePerNightRangeResponse(String title, Double pricePerNight) {
+    public RentalFindByCategoryResponse(String title, Category category) {
         this.title = title;
-        this.pricePerNight = pricePerNight;
+        this.category = category;
     }
+
     //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
 
@@ -26,11 +28,11 @@ public class RentalFindByPricePerNightRangeResponse {
         this.title = title;
     }
 
-    public Double getPricePerNight() {
-        return pricePerNight;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setPricePerNight(Double pricePerNight) {
-        this.pricePerNight = pricePerNight;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

@@ -1,9 +1,6 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.dto.RentalDTO;
-import com.AirBnb.TimberAndStone.dto.RentalFindByMinAvgRatingAndMinNumberOfRatingResponse;
-import com.AirBnb.TimberAndStone.dto.RentalFindByPricePerNightRangeResponse;
-import com.AirBnb.TimberAndStone.dto.RentalResponse;
+import com.AirBnb.TimberAndStone.dto.*;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.Category;
@@ -85,8 +82,12 @@ public class RentalService {
 
     }
 
-    public List<Rental> getRentalsByCategory(Category category) {
-    return rentalRepository.findByCategory(category);
+    public List<RentalFindByCategoryResponse> getRentalsByCategory(Category category) {
+        List<Rental> rentals = rentalRepository.findByCategory(category);
+
+        return rentals.stream()
+                .map(this::convertToDTOFour)
+                .collect(Collectors.toList());
     }
 
     public List<RentalFindByPricePerNightRangeResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
@@ -182,13 +183,19 @@ public class RentalService {
 
     private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToDTOTwo(Rental rental) {
         RentalFindByMinAvgRatingAndMinNumberOfRatingResponse response = new RentalFindByMinAvgRatingAndMinNumberOfRatingResponse();
-
         response.setTitle(rental.getTitle());
         response.setAverageRating(rental.getRating().getAverageRating());
         response.setNumberOfRatings(rental.getRating().getNumberOfRatings());
-
-
         return response;
-
     }
+
+
+    private RentalFindByCategoryResponse convertToDTOFour(Rental rental) {
+        RentalFindByCategoryResponse response = new RentalFindByCategoryResponse();
+        response.setTitle(rental.getTitle());
+        response.setCategory(rental.getCategory());
+        return response;
+    }
+
+
 }
