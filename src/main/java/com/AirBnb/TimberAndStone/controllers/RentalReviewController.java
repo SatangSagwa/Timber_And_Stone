@@ -36,16 +36,10 @@ public class RentalReviewController {
         RentalReview rentalReview = rentalReviewService.getRentalReviewById(id);
         return ResponseEntity.ok(rentalReview);
     }
-    /*@PatchMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<RentalReview> updateRentalReviewById(@PathVariable String id, @RequestBody RentalReview rentalReview) {
-        RentalReview existingRentalReview = rentalReviewService.getRentalReviewById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental review not found"));
-        existingRentalReview.setToRental(rentalReview.getToRental());
-        existingRentalReview.setFromUser(rentalReview.getFromUser());
-        existingRentalReview.setRating(rentalReview.getRating());
-        existingRentalReview.setReview(rentalReview.getReview());
-        existingRentalReview.setUpdatedAt()rentalReview.getUpdatedAt();
-        return ResponseEntity.ok(rentalReviewService.getRentalReviewById(id, ))
-    }*/
+        return new ResponseEntity<>(rentalReviewService.getRentalReviewById(id), HttpStatus.OK);
+    }
 
     }
 

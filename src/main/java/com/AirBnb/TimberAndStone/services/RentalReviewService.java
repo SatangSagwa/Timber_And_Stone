@@ -15,15 +15,18 @@ public class RentalReviewService {
     private final RentalReviewRepository rentalReviewRepository;
     private final RentalRepository rentalRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public RentalReviewService(RentalReviewRepository rentalReviewRepository, RentalRepository rentalRepository, UserRepository userRepository) {
+    public RentalReviewService(RentalReviewRepository rentalReviewRepository, RentalRepository rentalRepository, UserRepository userRepository, UserService userService) {
         this.rentalReviewRepository = rentalReviewRepository;
         this.rentalRepository = rentalRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
     public RentalReviewResponse createRentalReview(RentalReviewDTO rentalReviewDTO) {
 
         RentalReview rentalReview = new RentalReview();
+
         rentalReview.setFromUser(rentalReviewDTO.getFromUser());
         rentalReview.setToRental(rentalReviewDTO.getToRental());
         rentalReview.setRating(rentalReviewDTO.getRating());

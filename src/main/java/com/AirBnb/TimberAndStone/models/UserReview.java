@@ -4,11 +4,14 @@ package com.AirBnb.TimberAndStone.models;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Document(collection="userreviews")
 public class UserReview {
@@ -29,11 +32,14 @@ public class UserReview {
     @Max(value=5, message="Rating can not be above 5")
     private int rating;
 
-    @NotNull(message="createdAt can not be null")
-    private LocalDateTime createdAt;
+    @Size(min=1, max=500, message="Review has to be between 1-500 characters")
+    private String review;
 
-    @NotNull(message="updatedAt can not be null")
-    private LocalDateTime updatedAt;
+    @CreatedDate
+    private LocalDate createdAt;
+
+    @LastModifiedDate
+    private LocalDate updatedAt;
 
 
     public UserReview() {
@@ -70,19 +76,29 @@ public class UserReview {
         this.rating = rating;
     }
 
-    public @NotNull(message = "createdAt can not be null") LocalDateTime getCreatedAt() {
+    public @Size(min = 1, max = 500, message = "Review has to be between 1-500 characters") String getReview() {
+        return review;
+    }
+
+    public void setReview(@Size(min = 1, max = 500, message = "Review has to be between 1-500 characters") String review) {
+        this.review = review;
+    }
+
+    public @CreatedDate LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull(message = "createdAt can not be null") LocalDateTime createdAt) {
+    public void setCreatedAt (LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public @NotNull(message = "updatedAt can not be null") LocalDateTime getUpdatedAt() {
+    public @LastModifiedDate LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(@NotNull(message = "updatedAt can not be null") LocalDateTime updatedAt) {
+    public void setUpdatedAt (LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+
 }
