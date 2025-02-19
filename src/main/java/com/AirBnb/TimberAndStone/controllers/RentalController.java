@@ -43,8 +43,8 @@ public class RentalController {
     }
 
     @GetMapping("category/{category}")
-    public ResponseEntity<List<Rental>> getRentalsByCategory(@Valid @PathVariable Category category) {
-        List <Rental> rentals = rentalService.getRentalsByCategory(category);
+    public ResponseEntity<List<RentalFindByCategoryResponse>> getRentalsByCategory(@Valid @PathVariable Category category) {
+        List <RentalFindByCategoryResponse> rentals = rentalService.getRentalsByCategory(category);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
     @GetMapping("/rating")

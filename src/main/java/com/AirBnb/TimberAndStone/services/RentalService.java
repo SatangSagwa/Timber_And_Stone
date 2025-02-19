@@ -81,8 +81,12 @@ public class RentalService {
 
     }
 
-    public List<Rental> getRentalsByCategory(Category category) {
-    return rentalRepository.findByCategory(category);
+    public List<RentalFindByCategoryResponse> getRentalsByCategory(Category category) {
+        List<Rental> rentals = rentalRepository.findByCategory(category);
+
+        return rentals.stream()
+                .map(this::convertToDTOFour)
+                .collect(Collectors.toList());
     }
 
     public List<RentalFindByPricePerNightRangeResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
@@ -208,7 +212,7 @@ public class RentalService {
         response.setAverageRating(rental.getRating().getAverageRating());
         response.setNumberOfRatings(rental.getRating().getNumberOfRatings());
         return response;
-
+      }
     }
 
     private RentalFindByAvailabilityPeriodResponse convertToDTOThree(Rental rental) {
@@ -227,7 +231,12 @@ public class RentalService {
     }
 
 
-
+    private RentalFindByCategoryResponse convertToDTOFour(Rental rental) {
+        RentalFindByCategoryResponse response = new RentalFindByCategoryResponse();
+        response.setTitle(rental.getTitle());
+        response.setCategory(rental.getCategory());
+        return response;
+    }
 
 }
 
