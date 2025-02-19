@@ -193,4 +193,5 @@ public class Rental {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }

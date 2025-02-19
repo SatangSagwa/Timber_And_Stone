@@ -47,6 +47,7 @@ public class RentalController {
         List <RentalFindByCategoryResponse> rentals = rentalService.getRentalsByCategory(category);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
+
     @GetMapping("/rating")
     public ResponseEntity<List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse>> getRentalsByMinAvgRatingAndMinNumberOfRating(@RequestParam Double minAvgRating, @RequestParam Integer minNumberOfRatings) {
         List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse> rentals = rentalService.getRentalsByMinAvgRatingAndMinNumberOfRating(minAvgRating, minNumberOfRatings);
@@ -74,6 +75,13 @@ public class RentalController {
     public ResponseEntity<Void> deleteRental(@PathVariable String id) {
         rentalService.deleteRental(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+    @GetMapping("/amenities")
+    public ResponseEntity<List<RentalAmenitiesDTOResponse>>getRentalsByAmenities(@Valid @RequestBody RentalAmenitiesDTO rentalAmenitiesDTO) {
+       List<RentalAmenitiesDTOResponse> rentals = rentalService.getRentalsByAmenities(rentalAmenitiesDTO);
+        return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
 
