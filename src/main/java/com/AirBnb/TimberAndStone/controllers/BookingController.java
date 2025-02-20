@@ -69,6 +69,12 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PatchMapping("/confirm/{id}")
+    public ResponseEntity<PatchBookingResponse> payAndConfirmBooking(@PathVariable String id) {
+        PatchBookingResponse response = bookingService.payAndConfirm(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBooking(@PathVariable String id) {
         bookingService.deleteBooking(id);

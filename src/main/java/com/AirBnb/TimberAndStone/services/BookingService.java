@@ -185,6 +185,43 @@ public class BookingService {
                 booking.getNote());
     }
 
+    public PatchBookingResponse payAndConfirm(String id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+
+        User currentUser = userService.getAuthenticated();
+
+        //Check if current user is the host of this rental.
+        if (!currentUser.getId().equals(booking.getUser().getId())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You do not have permission to approve this booking!");
+        }
+
+        BookingStatus status = booking.getBookingStatus();
+
+        if (status.equals(BookingStatus.PENDING)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking has to be approved first!");
+        } else if (status.equals(BookingStatus.CANCELLED)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already cancelled and can not be approved");
+        } else if (status.equals(BookingStatus.CONFIRMED) && booking.getPaid()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already confirmed and paid!");
+        }
+
+        booking.setBookingStatus(BookingStatus.CONFIRMED);
+        booking.setPaid(true);
+        bookingRepository.save(booking);
+        return new PatchBookingResponse(
+                "The booking has been confirmed and paid!",
+                booking.getRental().getTitle(),
+                booking.getBookingNumber(),
+                booking.getUser().getUsername(),
+                booking.getNumberOfGuests(),
+                booking.getPeriod(),
+                booking.getTotalPrice(),
+                booking.getPaid(),
+                booking.getBookingStatus(),
+                booking.getNote());
+    }
+
     public void deleteBooking(String id) {
         //Find by id
         Booking booking = bookingRepository.findById(id)
@@ -198,6 +235,8 @@ public class BookingService {
 
         bookingRepository.delete(booking);
     }
+
+    //------------------------------------------HELP METHODS----------------------------------------------------
 
     private void validateNumberOfGuests(Rental rental, int numberOfGuests) {
         if (numberOfGuests < 1) {
