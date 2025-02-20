@@ -77,6 +77,19 @@ public class RentalController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/country/{country}")
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByCountry(@PathVariable String country) {
+        List<GetRentalsResponse> response = rentalService.getRentalsDTOByCountry(country);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/address/{country}/{city}")
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByCountryAndCity(@PathVariable String country, @PathVariable String city) {
+        List<GetRentalsResponse> response = rentalService.getRentalsDTOByCountryAndCity(country, city);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<Rental> patchRentalById(@PathVariable String id, @RequestBody Rental rental) {
         return new ResponseEntity<>(rentalService.patchRentalById(id, rental), HttpStatus.OK);
