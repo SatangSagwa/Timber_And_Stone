@@ -28,9 +28,9 @@ public class RentalReviewDTO {
     public RentalReviewDTO() {
     }
 
-    public RentalReviewDTO(User user, Rental rental, int rating, String review) {
-        this.fromUser = user;
-        this.toRental = rental;
+    public RentalReviewDTO(User fromUser, Rental toRental, int rating, String review) {
+        this.fromUser = fromUser;
+        this.toRental = toRental;
         this.rating = rating;
         this.review = review;
     }

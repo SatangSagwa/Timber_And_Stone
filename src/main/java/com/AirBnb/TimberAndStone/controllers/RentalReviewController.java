@@ -38,8 +38,8 @@ public class RentalReviewController {
     }
     @PatchMapping("/{id}")
     public ResponseEntity<RentalReview> updateRentalReviewById(@PathVariable String id, @RequestBody RentalReview rentalReview) {
-        return new ResponseEntity<>(rentalReviewService.getRentalReviewById(id), HttpStatus.OK);
-    }
+            return new ResponseEntity<>(rentalReviewService.updateRentalReviewById(id, rentalReview), HttpStatus.OK);
+        }
 
     }
 

@@ -7,12 +7,12 @@ import com.AirBnb.TimberAndStone.models.RentalReview;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Component
+@Service
 
 public class RentalReviewService {
     private final RentalReviewRepository rentalReviewRepository;
@@ -28,19 +28,7 @@ public class RentalReviewService {
     }
     public RentalReviewResponse createRentalReview(RentalReviewDTO rentalReviewDTO) {
 
-        if(rentalReviewDTO.getFromUser() == null || rentalReviewDTO.getFromUser().equals("")) {
-            throw new IllegalArgumentException("fromHost cannot be null or empty");
-        }
-        if(rentalReviewDTO.getToRental() == null || rentalReviewDTO.getToRental().equals("")) {
-            throw new IllegalArgumentException("toUser cannot be null or empty");
-        }
-        if(rentalReviewDTO.getRating() < 1 || rentalReviewDTO.getRating() > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5");
-        }
-
         RentalReview rentalReview = new RentalReview();
-
-        rentalReview.setFromUser(userService.getAuthenticated());
 
         rentalReview.setFromUser(rentalReviewDTO.getFromUser());
         rentalReview.setToRental(rentalReviewDTO.getToRental());
@@ -60,5 +48,18 @@ public class RentalReviewService {
                 .orElseThrow(()-> new ResourceNotFoundException("Rental review not found"));
 
     }
+    public RentalReview updateRentalReviewById(String id, RentalReview rentalReview) {
+        RentalReview existingRentalReview = rentalReviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental review not found"));
 
+        if (rentalReview.getReview() != null) {
+            existingRentalReview.setReview(rentalReview.getReview());
+        }
+
+        return rentalReviewRepository.save(existingRentalReview);
+    }
 }
+
+
+
+
