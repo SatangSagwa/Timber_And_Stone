@@ -62,7 +62,7 @@ public class RentalService {
         rental.setCategory(rentalDTO.getCategory());
         rental.setCapacity(rentalDTO.getCapacity());
         rental.setDescription(rentalDTO.getDescription());
-        rental.setPolicy(rentalDTO.getPolicy());
+        rental.setPolicy(getValidatedPolicy(rentalDTO.getPolicy()));
 
 
         rentalRepository.save(rental);
@@ -134,7 +134,7 @@ public class RentalService {
             existingRental.setDescription(rental.getDescription());
         }
         if (rental.getPolicy() != null) {
-            existingRental.setPolicy(rental.getPolicy());
+            existingRental.setPolicy(getValidatedPolicy(rental.getPolicy()));
         }
         if (rental.getCreatedAt() != null) {
             existingRental.setCreatedAt(rental.getCreatedAt());
@@ -186,6 +186,23 @@ public class RentalService {
 
 
     // -------------------------- Help Methods -------------------------------------------------------------------------
+
+    private String getValidatedPolicy (String policy) {
+        //If policy is not null...
+        if(policy != null) {
+            //If empty, return default txt.
+            if(policy.trim().isEmpty()) {
+                return "Default policy txt";
+                //Else, return dto value
+            } else {
+                return policy;
+            }
+
+        } else {
+            //If policy is null
+            return "Default policy txt";
+        }
+    }
 
     private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
         RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();
