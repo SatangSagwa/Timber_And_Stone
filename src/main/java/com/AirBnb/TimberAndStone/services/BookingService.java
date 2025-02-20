@@ -144,7 +144,45 @@ public class BookingService {
             booking.setTotalPrice(periodService.getAmountOfDays(period) * booking.getRental().getPricePerNight());
         }
         bookingRepository.save(booking);
-        return convertToPatchBookingResponse(booking);
+        return convertToPatchBookingResponse("The booking has been updated successfully", booking);
+    }
+
+    public PatchBookingResponse approveBooking(String id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+
+        User currentUser = userService.getAuthenticated();
+
+        //Check if current user is the host of this rental.
+        if (!currentUser.getId().equals(booking.getRental().getHost().getId())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You do not have permission to approve this booking!");
+        }
+
+        BookingStatus status = booking.getBookingStatus();
+
+        if (status.equals(BookingStatus.APPROVED) || status.equals(BookingStatus.CONFIRMED)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already approved and/or confirmed.");
+        }
+
+        if (status.equals(BookingStatus.CANCELLED)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already cancelled and can not be approved");
+        }
+
+        booking.setBookingStatus(BookingStatus.APPROVED);
+
+        bookingRepository.save(booking);
+
+        return new PatchBookingResponse(
+                "The booking has been approved and is now awaiting payment.",
+                booking.getRental().getTitle(),
+                booking.getBookingNumber(),
+                booking.getUser().getUsername(),
+                booking.getNumberOfGuests(),
+                booking.getPeriod(),
+                booking.getTotalPrice(),
+                booking.getPaid(),
+                booking.getBookingStatus(),
+                booking.getNote());
     }
 
     public void deleteBooking(String id) {
@@ -193,9 +231,9 @@ public class BookingService {
         );
     }
 
-    private PatchBookingResponse convertToPatchBookingResponse(Booking booking) {
+    private PatchBookingResponse convertToPatchBookingResponse(String message, Booking booking) {
         return new PatchBookingResponse(
-                "Booking has been updated successfully!",
+                message,
                 booking.getRental().getTitle(),
                 booking.getBookingNumber(),
                 booking.getUser().getUsername(),

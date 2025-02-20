@@ -63,6 +63,12 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PatchMapping("/approve/{id}")
+    public ResponseEntity<PatchBookingResponse> approveBooking(@PathVariable String id) {
+        PatchBookingResponse response = bookingService.approveBooking(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBooking(@PathVariable String id) {
         bookingService.deleteBooking(id);
