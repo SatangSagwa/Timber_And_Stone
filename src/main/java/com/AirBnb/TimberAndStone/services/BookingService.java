@@ -191,9 +191,9 @@ public class BookingService {
 
         User currentUser = userService.getAuthenticated();
 
-        //Check if current user is the host of this rental.
+        //Check if current user is the booking user
         if (!currentUser.getId().equals(booking.getUser().getId())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You do not have permission to approve this booking!");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You do not have permission to pay and confirm this booking!");
         }
 
         BookingStatus status = booking.getBookingStatus();
