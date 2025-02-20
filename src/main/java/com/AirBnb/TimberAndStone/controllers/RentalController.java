@@ -66,6 +66,18 @@ public class RentalController {
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
+    @GetMapping("/capacity/{capacity}")
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByCapacity(@PathVariable Integer capacity) {
+        List<GetRentalsResponse> response = rentalService.getRentalsByCapacity(capacity);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/title/{title}")
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByTitle(@PathVariable String title) {
+        List<GetRentalsResponse> response = rentalService.getRentalsByTitle(title);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<Rental> patchRentalById(@PathVariable String id, @RequestBody Rental rental) {
         return new ResponseEntity<>(rentalService.patchRentalById(id, rental), HttpStatus.OK);

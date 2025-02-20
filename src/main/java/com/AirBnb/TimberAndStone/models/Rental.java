@@ -170,6 +170,10 @@ public class Rental {
         this.description = description;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public @NotNull(message = "Policy can not be null") String getPolicy() {
         return policy;
     }
