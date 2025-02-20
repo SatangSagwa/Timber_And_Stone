@@ -44,6 +44,16 @@ public class Address {
     public Address() {
     }
 
+    public Address(String country, String city, String postalCode, String streetName, String streetNumber, Double latitude, Double longitude) {
+        this.country = country;
+        this.city = city;
+        this.postalCode = postalCode;
+        this.streetName = streetName;
+        this.streetNumber = streetNumber;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
     public @NotNull(message = "Country can not be null") @NotEmpty(message = "Country can not be empty") String getCountry() {
