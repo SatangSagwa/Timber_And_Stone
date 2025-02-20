@@ -7,9 +7,12 @@ import com.AirBnb.TimberAndStone.models.RentalReview;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+
+@Component
 
 public class RentalReviewService {
     private final RentalReviewRepository rentalReviewRepository;
@@ -25,7 +28,19 @@ public class RentalReviewService {
     }
     public RentalReviewResponse createRentalReview(RentalReviewDTO rentalReviewDTO) {
 
+        if(rentalReviewDTO.getFromUser() == null || rentalReviewDTO.getFromUser().equals("")) {
+            throw new IllegalArgumentException("fromHost cannot be null or empty");
+        }
+        if(rentalReviewDTO.getToRental() == null || rentalReviewDTO.getToRental().equals("")) {
+            throw new IllegalArgumentException("toUser cannot be null or empty");
+        }
+        if(rentalReviewDTO.getRating() < 1 || rentalReviewDTO.getRating() > 5) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5");
+        }
+
         RentalReview rentalReview = new RentalReview();
+
+        rentalReview.setFromUser(userService.getAuthenticated());
 
         rentalReview.setFromUser(rentalReviewDTO.getFromUser());
         rentalReview.setToRental(rentalReviewDTO.getToRental());
@@ -35,7 +50,7 @@ public class RentalReviewService {
         rentalReview.setUpdatedAt(LocalDate.now());
 
         rentalReviewRepository.save(rentalReview);
-        return new RentalReviewResponse();
+        return new RentalReviewResponse("New rental review created", rentalReview.getToRental(), rentalReview.getRating());
     }
     public List<RentalReview> getAllRentalReviews () {
         return rentalReviewRepository.findAll();

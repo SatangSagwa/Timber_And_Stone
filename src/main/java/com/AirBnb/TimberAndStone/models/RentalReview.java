@@ -29,7 +29,7 @@ public class RentalReview {
     @Max(value=5,message="Rating can not be above 5")
     private int rating;
 
-    @Size(min=1, max=500, message="Review has to be between 1-500 characters")
+    @Size(max=500, message="Review can max be between 500 characters")
     private String review;
 
     @NotNull(message="createdAt can not be null")
@@ -75,11 +75,11 @@ public class RentalReview {
         this.rating = rating;
     }
 
-    public @Size(min = 1, max = 500, message = "Review has to be between 1-500 characters") String getReview() {
+    public @Size(max = 500, message = "Review has to be between 1-500 characters") String getReview() {
         return review;
     }
 
-    public void setReview(@Size(min = 1, max = 500, message = "Review has to be between 1-500 characters") String review) {
+    public void setReview(@Size(max = 500, message = "Review has to be between 1-500 characters") String review) {
         this.review = review;
     }
 

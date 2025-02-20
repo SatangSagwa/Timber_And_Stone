@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rentalreview")
+@RequestMapping("/rentalreviews")
 public class RentalReviewController {
 
     private final RentalReviewService rentalReviewService;
