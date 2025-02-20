@@ -48,7 +48,6 @@ public class RentalDTO {
     @Size(min = 1, max = 500, message = "Description has to be between 1-500 characters")
     private String description;
 
-    @NotNull(message = "Policy can not be null")
     private String policy;
 
 
@@ -110,7 +109,7 @@ public class RentalDTO {
         return description;
     }
 
-    public @NotNull(message = "Policy can not be null") String getPolicy() {
+    public String getPolicy() {
         return policy;
     }
 }

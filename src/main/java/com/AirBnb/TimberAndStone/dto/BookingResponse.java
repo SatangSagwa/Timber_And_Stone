@@ -31,6 +31,7 @@ public class BookingResponse {
         this.bookingDate = bookingDate;
     }
 
+
     public String getBookingNumber() {
         return bookingNumber;
     }
