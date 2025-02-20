@@ -1,8 +1,8 @@
 package com.AirBnb.TimberAndStone.models;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -11,7 +11,7 @@ public class Message {
 
     @NotNull(message = "Message cant be null")
     @NotEmpty(message = "Message cant be empty")
-    @Max(value = 200)
+    @Size(max = 200)
     private String message;
 
     @NotNull(message = "MessageStatus cant be null")
@@ -26,15 +26,21 @@ public class Message {
     public Message() {
     }
 
+    public Message(String message, MessageStatus messageStatus, LocalDateTime createdAt) {
+        this.message = message;
+        this.messageStatus = messageStatus;
+        this.createdAt = createdAt;
+    }
 
-//--------------------------------------------- Getter & Setters -------------------------------------------------------
+
+    //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
 
-    public @NotNull(message = "Message cant be null") @NotEmpty(message = "Message cant be empty") @Max(value = 200) String getMessage() {
+    public @NotNull(message = "Message cant be null") @NotEmpty(message = "Message cant be empty") @Size(max = 200) String getMessage() {
         return message;
     }
 
-    public void setMessage(@NotNull(message = "Message cant be null") @NotEmpty(message = "Message cant be empty") @Max(value = 200) String message) {
+    public void setMessage(@NotNull(message = "Message cant be null") @NotEmpty(message = "Message cant be empty") @Size(max = 200) String message) {
         this.message = message;
     }
 
