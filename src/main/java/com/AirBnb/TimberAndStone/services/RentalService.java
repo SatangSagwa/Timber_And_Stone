@@ -1,12 +1,10 @@
 package com.AirBnb.TimberAndStone.services;
 
 import com.AirBnb.TimberAndStone.dto.*;
+import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.Category;
-import com.AirBnb.TimberAndStone.models.Rating;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.models.User;
+import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -16,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class RentalService {
 
-   private final RentalRepository rentalRepository;
-   private final UserRepository userRepository;
+    private final RentalRepository rentalRepository;
+    private final UserRepository userRepository;
 
     public RentalService(RentalRepository rentalRepository, UserRepository userRepository) {
         this.rentalRepository = rentalRepository;
@@ -43,8 +42,7 @@ public class RentalService {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername())
-                        .orElseThrow(() -> new IllegalArgumentException("Rental not found"));
-
+                .orElseThrow(() -> new IllegalArgumentException("Rental not found"));
 
 
         Rental rental = new Rental();
@@ -66,26 +64,29 @@ public class RentalService {
         rental.setCategory(rentalDTO.getCategory());
         rental.setCapacity(rentalDTO.getCapacity());
         rental.setDescription(rentalDTO.getDescription());
-        rental.setPolicy(rentalDTO.getPolicy());
-
+        rental.setPolicy(getValidatedPolicy(rentalDTO.getPolicy()));
 
 
         rentalRepository.save(rental);
-        return new RentalResponse("New Rental has been created", rental.getTitle()) ;
+        return new RentalResponse("New Rental has been created", rental.getTitle());
     }
 
-    public List<Rental> getAllRentals () {
+    public List<Rental> getAllRentals() {
         return rentalRepository.findAll();
     }
 
     public Rental getRentalById(String id) {
-        return  rentalRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Rental not found"));
+        return rentalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
 
     }
 
-    public List<Rental> getRentalsByCategory(Category category) {
-    return rentalRepository.findByCategory(category);
+    public List<RentalFindByCategoryResponse> getRentalsByCategory(Category category) {
+        List<Rental> rentals = rentalRepository.findByCategory(category);
+
+        return rentals.stream()
+                .map(this::convertToDTOFour)
+                .collect(Collectors.toList());
     }
 
     public List<RentalFindByPricePerNightRangeResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
@@ -99,7 +100,7 @@ public class RentalService {
     // kolla igenom vad som faktiskt bör ligga i patch och se hur det fungarar med @annotation createdat and updatedAt
     public Rental patchRentalById(String id, Rental rental) {
         Rental existingRental = rentalRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Rental not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
 
         if (rental.getTitle() != null) {
             existingRental.setTitle(rental.getTitle());
@@ -135,7 +136,7 @@ public class RentalService {
             existingRental.setDescription(rental.getDescription());
         }
         if (rental.getPolicy() != null) {
-            existingRental.setPolicy(rental.getPolicy());
+            existingRental.setPolicy(getValidatedPolicy(rental.getPolicy()));
         }
         if (rental.getCreatedAt() != null) {
             existingRental.setCreatedAt(rental.getCreatedAt());
@@ -213,8 +214,48 @@ public class RentalService {
                 .collect(Collectors.toList());
     }
 
+    // https://chatgpt.com/share/67b4a4fb-a588-800b-9894-16722dd3a37d
+    public List<RentalFindByAvailabilityPeriodResponse> getRentalsByAvailabilityPeriod(LocalDate startDate, LocalDate endDate) {
+        List<Rental> rentals = getAllRentals();
+        if (startDate.isAfter(endDate) || startDate.isEqual(endDate) || endDate.isBefore(startDate) || endDate.isEqual(startDate)) {
+            throw new ConflictException("startDate and endDate have to be in order (startDate - endDate)");
+        }
+        List<Rental> matchingRentals = rentals.stream()
+                .filter(rental -> rental.getAvailablePeriods().stream()
+                        .anyMatch(period -> isPeriodMatching(period, startDate, endDate))
+                )
+                .collect(Collectors.toList());
+        return matchingRentals.stream()
+                .map(rental -> {
+                    List<Period> matchingPeriods = rental.getAvailablePeriods().stream()
+                            .filter(period -> isPeriodMatching(period, startDate, endDate))
+                            .collect(Collectors.toList());
+                    RentalFindByAvailabilityPeriodResponse response = convertToDTOThree(rental);
+                    response.setPeriods(matchingPeriods);
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
+
 
     // -------------------------- Help Methods -------------------------------------------------------------------------
+
+    private String getValidatedPolicy (String policy) {
+        //If policy is not null...
+        if(policy != null) {
+            //If empty, return default txt.
+            if(policy.trim().isEmpty()) {
+                return "Default policy txt";
+                //Else, return dto value
+            } else {
+                return policy;
+            }
+
+        } else {
+            //If policy is null
+            return "Default policy txt";
+        }
+    }
 
     private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
         RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();
@@ -225,15 +266,37 @@ public class RentalService {
 
     private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToDTOTwo(Rental rental) {
         RentalFindByMinAvgRatingAndMinNumberOfRatingResponse response = new RentalFindByMinAvgRatingAndMinNumberOfRatingResponse();
-
         response.setTitle(rental.getTitle());
         response.setAverageRating(rental.getRating().getAverageRating());
         response.setNumberOfRatings(rental.getRating().getNumberOfRatings());
-
-
         return response;
-
     }
+
+
+    private RentalFindByAvailabilityPeriodResponse convertToDTOThree(Rental rental) {
+        RentalFindByAvailabilityPeriodResponse response = new RentalFindByAvailabilityPeriodResponse();
+        response.setTitle(rental.getTitle());
+        response.setPeriods(rental.getAvailablePeriods());
+        return response;
+    }
+
+
+    // https://chatgpt.com/share/67b4a4fb-a588-800b-9894-16722dd3a37d
+    private boolean isPeriodMatching(Period period, LocalDate startDate, LocalDate endDate) {
+        boolean overlap = (startDate.isEqual(period.getStartDate()) || startDate.isAfter(period.getStartDate())) &&
+                (endDate.isEqual(period.getEndDate()) || endDate.isBefore(period.getEndDate()));
+        return overlap;
+    }
+
+
+    private RentalFindByCategoryResponse convertToDTOFour(Rental rental) {
+        RentalFindByCategoryResponse response = new RentalFindByCategoryResponse();
+        response.setTitle(rental.getTitle());
+        response.setCategory(rental.getCategory());
+        return response;
+    }
+
+
 
     private GetRentalsResponse convertToGetRentalsResponse(Rental rental) {
         return new GetRentalsResponse(
@@ -246,3 +309,4 @@ public class RentalService {
                 rental.getRating().getAverageRating());
     }
 }
+

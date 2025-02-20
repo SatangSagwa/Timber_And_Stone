@@ -2,15 +2,21 @@ package com.AirBnb.TimberAndStone.services;
 
 
 import com.AirBnb.TimberAndStone.dto.ActivateDeactivateResponse;
+import com.AirBnb.TimberAndStone.dto.ContactResponse;
 import com.AirBnb.TimberAndStone.dto.RegisterRequest;
 import com.AirBnb.TimberAndStone.dto.RegisterResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
+import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.Address;
 import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.models.Role;
 import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -127,6 +133,11 @@ public class UserService {
         throw new ResourceNotFoundException("User with email " + email + " not found.");
     }
 
+    public ContactResponse getUserContacts(String id) {
+        User user = getUserById(id);
+        return new ContactResponse("Contact Info:", user.getUsername(), user.getPhoneNumber(), user.getEmail());
+    }
+
     //Activates deactivated users, deactivates activated users.
     public ActivateDeactivateResponse activateDeactivateUser(String id) {
         User user = getUserById(id);
@@ -142,5 +153,14 @@ public class UserService {
         user.setActive(true);
         userRepository.save(user);
         return new ActivateDeactivateResponse("User has been activated", user.getUsername(), user.getActive());
+    }
+
+    public User getAuthenticated(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            throw new UnauthorizedException("User is not authenticated");
+        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return findByUsername(userDetails.getUsername());
     }
 }

@@ -1,6 +1,7 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 import com.AirBnb.TimberAndStone.dto.ActivateDeactivateResponse;
+import com.AirBnb.TimberAndStone.dto.ContactResponse;
 import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.services.UserService;
 import jakarta.validation.Valid;
@@ -36,6 +37,12 @@ public class UserController {
     public ResponseEntity<User> getUserByEmail(@Valid @PathVariable String email) {
         User user = userService.getUserByEmail(email);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("contact/{id}")
+    public ResponseEntity<ContactResponse> getUserContactInfo(@Valid @PathVariable String id) {
+        ContactResponse response = userService.getUserContacts(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
