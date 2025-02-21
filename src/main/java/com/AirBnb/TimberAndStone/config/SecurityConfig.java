@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/rental/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/booking/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/conversation/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/auth/**").permitAll()
                         // any other requests the user need to be logged
                         .anyRequest().authenticated()
