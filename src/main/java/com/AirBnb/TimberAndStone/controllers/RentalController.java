@@ -108,6 +108,11 @@ public class RentalController {
        List<RentalAmenitiesDTOResponse> rentals = rentalService.getRentalsByAmenities(rentalAmenitiesDTO);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
+    @GetMapping("/averagerating")
+    public ResponseEntity<List<RentalFindByAverageRatingResponse>> getRentalsByAverageRating(@RequestParam Double averageRating) {
+        List<RentalFindByAverageRatingResponse> rentals = rentalService.getRentalsByAverageRating(averageRating);
+        return new ResponseEntity<>(rentals, HttpStatus.OK);
+    }
 
 
 
