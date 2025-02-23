@@ -269,7 +269,7 @@ public class RentalService {
                 .collect(Collectors.toList());
     }
     public List<RentalFindByAverageRatingResponse> getRentalsByAverageRating(Double averageRating) {
-        List<Rental> rentals = rentalRepository.findByAverageRating(averageRating);
+        List<Rental> rentals = rentalRepository.findByRatingAverageRating(averageRating);
 
         return rentals.stream()
                 .map(this::convertToRentalFindByAverageRatingResponse)

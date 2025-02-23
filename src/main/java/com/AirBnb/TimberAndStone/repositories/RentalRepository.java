@@ -14,6 +14,6 @@ public interface RentalRepository extends MongoRepository<Rental, String> {
 
     List<Rental> findByPricePerNightBetween(Double minPrice, Double maxPrice);
 
-    List<Rental> findByAverageRating(Double averageRating);
+    List<Rental> findByRatingAverageRating(Double averageRating);
 
 }
