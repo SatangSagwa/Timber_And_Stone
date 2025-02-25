@@ -14,7 +14,8 @@ assignees: ''
 ### Blocked by:
 Example - Blocked by: Issue #3
 
-# Implement: Example - Short title of what is being implemented
+# Implement: 
+Example - Short title of what is being implemented
 ## Description:
 Example - Description of what is being implemented
 
