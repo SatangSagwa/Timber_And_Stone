@@ -268,6 +268,13 @@ public class RentalService {
                 .map(this::convertToDTOSeven)
                 .collect(Collectors.toList());
     }
+    public List<RentalFindByAverageRatingResponse> getRentalsByAverageRating(Double averageRating) {
+        List<Rental> rentals = rentalRepository.findByRatingAverageRating(averageRating);
+
+        return rentals.stream()
+                .map(this::convertToRentalFindByAverageRatingResponse)
+                .collect(Collectors.toList());
+    }
 
 
     // -------------------------- Help Methods -------------------------------------------------------------------------
@@ -455,6 +462,12 @@ public class RentalService {
                 rental.getAddress().getCountry(),
                 rental.getAddress().getCity(),
                 rental.getRating().getAverageRating());
+    }
+    private RentalFindByAverageRatingResponse convertToRentalFindByAverageRatingResponse(Rental rental) {
+        RentalFindByAverageRatingResponse response = new RentalFindByAverageRatingResponse();
+        response.setTitle(rental.getTitle());
+        response.setAverageRating(rental.getRating().getAverageRating());
+        return response;
     }
 }
 
