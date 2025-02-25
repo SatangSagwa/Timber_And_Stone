@@ -12,7 +12,7 @@ assignees: ''
 - <Example -  Its just a very basic implementation and still need work, but i will create a different issue for that in the future>
 
 ### Blocked by:
-<Example - The issue currently blocking this issue = Issue #3>
+<Example - Blocked by: Issue #3>
 
 # Implement: <Short title of what is being implemented>
 ## Description:
