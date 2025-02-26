@@ -65,14 +65,11 @@ public class UserReview {
         this.toUser = toUser;
     }
 
-    @NotNull
-    @Min(value = 1, message = "Rating can not be below 1")
-    @Max(value = 5, message = "Rating can not be above 5")
-    public int getRating() {
+    public @NotNull @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer getRating() {
         return rating;
     }
 
-    public void setRating(@NotNull @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") int rating) {
+    public void setRating(@NotNull @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer rating) {
         this.rating = rating;
     }
 
