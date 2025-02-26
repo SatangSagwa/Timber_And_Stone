@@ -1,9 +1,10 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.models.Booking;
-import com.AirBnb.TimberAndStone.models.BookingStatus;
-import com.AirBnb.TimberAndStone.models.User;
-import com.AirBnb.TimberAndStone.models.UserReview;
+import com.AirBnb.TimberAndStone.dto.UserReviewResponse;
+import com.AirBnb.TimberAndStone.exceptions.ConflictException;
+import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
+import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
+import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
@@ -31,15 +32,15 @@ public class UserReviewService {
         this.bookingService = bookingService;
         this.bookingRepository = bookingRepository;
     }
-    public UserReview createUserReview(UserReviewRequest request) {
+    public UserReviewResponse createUserReview(UserReviewRequest request) {
+        validateUserReviewRequest(request);
+
         UserReview userReview = new UserReview();
         Booking booking = bookingRepository.findByBookingNumber(request.getBookingNumber());
 
-        if (booking == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found");
-        }
-
+        //Set host to authenticated
         userReview.setFromHost(userService.getAuthenticated());
+        //Set user to bookings user
         userReview.setToUser(booking.getUser());
         userReview.setRating(request.getRating());
         userReview.setReview(request.getReview());
@@ -47,9 +48,10 @@ public class UserReviewService {
         //userReview.setCreatedAt(LocalDate.now());
         //userReview.setUpdatedAt(LocalDate.now());
 
-        validateUserReview(userReview, booking);
+        userReviewRepository.save(userReview);
+        UserReviewResponse response = convertToUserReviewResponse(userReview, booking.getRental(), "User has been reviewed successfully");
 
-        return userReviewRepository.save(userReview);
+        return response;
     }
 
     public List<UserReview> getAllUserReviews() {
@@ -68,35 +70,54 @@ public class UserReviewService {
         return userReviewRepository.getUserReviewBytoUser(toUser);
     }
 
-    private void validateUserReview(UserReview userReview, Booking booking) {
-        if(userReview.getFromHost() == null || userReview.getFromHost().equals("")) {
-            throw new IllegalArgumentException("fromHost cannot be null or empty");
-        }
-        if(userReview.getToUser() == null || userReview.getToUser().equals("")) {
-            throw new IllegalArgumentException("toUser cannot be null or empty");
-        }
-        if(userReview.getRating() < 1 || userReview.getRating() > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5");
+    private void validateUserReviewRequest(UserReviewRequest request) {
+        Booking booking = bookingRepository.findByBookingNumber(request.getBookingNumber());
+
+        if (booking == null) {
+            throw new ResourceNotFoundException("Booking not found");
         }
 
-        userRepository.findById(userReview.getToUser().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-        userRepository.findById(userReview.getFromHost().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Host not found"));
-
-        //Check so host owns this rental.
-        if(!userReview.getFromHost().getId().equals(booking.getRental().getHost().getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the host of this booking");
+        if(request.getRating() < 1 || request.getRating() > 5) {
+            throw new IllegalArgumentException("Rating has to be between 1 and 5");
         }
-        //Check so the booking is paid
+
+        if(request.getRating() == null) {
+            throw new IllegalArgumentException("Please enter a rating.");
+        }
+
+        if(request.getReview() == null || request.getReview().isEmpty()) {
+            throw new IllegalArgumentException("Please enter a review.");
+        }
+        //Check so logged in user is the host
+        if(!userService.getAuthenticated().getId().equals(booking.getRental().getHost().getId())) {
+            throw new UnauthorizedException("You are not the host of this booking!");
+        }
+        //Check so the booking is confirmed (and therefore, also paid)
         if(!booking.getBookingStatus().equals(BookingStatus.CONFIRMED)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Booking has to be confirmed to make a review.");
+            throw new IllegalArgumentException("Booking status must be confirmed before it can be reviewed.");
         }
-
+        //Check so the bookings end date has passed.
         if(booking.getPeriod().getEndDate().getDayOfYear() > LocalDateTime.now().getDayOfYear()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Booking has to be past end date.");
+            throw new ConflictException("The bookings enddate must expire before posting a review.");
+        }
+        //Check so the booking hasn´t been reviewed - NOT YET POSSIBLE
+        /*
+        if(booking.getReviewed) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Booking has to be reviewed.");
         }
 
+         */
+
+    }
+
+    private UserReviewResponse convertToUserReviewResponse(UserReview userReview, Rental rental, String message) {
+        UserReviewResponse userReviewResponse = new UserReviewResponse();
+        userReviewResponse.setMessage(message);
+        userReviewResponse.setUser(userReview.getToUser().getUsername());
+        userReviewResponse.setHost(userReview.getFromHost().getUsername());
+        userReviewResponse.setRental(rental.getTitle());
+        userReviewResponse.setRating(userReview.getRating());
+        userReviewResponse.setReview(userReview.getReview());
+        return userReviewResponse;
     }
 }
