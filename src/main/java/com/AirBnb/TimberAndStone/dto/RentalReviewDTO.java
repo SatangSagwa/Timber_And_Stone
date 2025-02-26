@@ -20,7 +20,7 @@ public class RentalReviewDTO {
     @NotNull
     @Min(value=1, message="Rating can not be below 1")
     @Max(value=5,message="Rating can not be above 5")
-    private int rating;
+    private Integer rating;
 
     @Size(max=500, message="Review can max be 500 characters")
     private String review;
@@ -28,7 +28,7 @@ public class RentalReviewDTO {
     public RentalReviewDTO() {
     }
 
-    public RentalReviewDTO(User fromUser, Rental toRental, int rating, String review) {
+    public RentalReviewDTO(User fromUser, Rental toRental, Integer rating, String review) {
         this.fromUser = fromUser;
         this.toRental = toRental;
         this.rating = rating;
@@ -43,10 +43,7 @@ public class RentalReviewDTO {
         return toRental;
     }
 
-    @NotNull
-    @Min(value = 1, message = "Rating can not be below 1")
-    @Max(value = 5, message = "Rating can not be above 5")
-    public int getRating() {
+    public @NotNull @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer getRating() {
         return rating;
     }
 
