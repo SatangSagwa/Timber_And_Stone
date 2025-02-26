@@ -35,7 +35,7 @@ private Integer rating;
         this.toRental = toRental;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
