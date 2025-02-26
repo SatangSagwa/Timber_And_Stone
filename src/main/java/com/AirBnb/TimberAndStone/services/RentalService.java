@@ -91,7 +91,7 @@ public class RentalService {
     }
 
     public List<RentalFindByPricePerNightRangeResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
-        List<Rental> rentals = rentalRepository.findByPricePerNightBetween(minPrice, maxPrice);
+        List<Rental> rentals = rentalRepository.findByPricePerNightBetweenInclusive(minPrice, maxPrice);
 
         return rentals.stream()
                 .map(this::convertToRentalFindByPricePerNightRangeResponse)
