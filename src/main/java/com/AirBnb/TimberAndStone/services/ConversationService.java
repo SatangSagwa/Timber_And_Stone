@@ -58,7 +58,8 @@ public class ConversationService {
     }
 
     public Conversation getConversationById(String id) {
-        return conversationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Conversation not found"));
+        return conversationRepository.findById(id).orElseThrow(()
+                -> new ResourceNotFoundException("Conversation not found"));
     }
 
     public Conversation getConversationByUsername(String username){

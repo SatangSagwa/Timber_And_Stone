@@ -1,12 +1,11 @@
 package com.AirBnb.TimberAndStone.services;
 
+import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.models.UserReview;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -49,7 +48,7 @@ public class UserReviewService {
     }
     public UserReview getUserReviewById(String id) {
         UserReview userReview = userReviewRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Userreview not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Userreview not found"));
         return userReview;
     }
     public List<UserReview> getUserReviewBytoUser(User toUser) {
