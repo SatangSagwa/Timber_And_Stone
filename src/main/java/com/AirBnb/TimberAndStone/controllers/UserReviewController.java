@@ -3,7 +3,7 @@ package com.AirBnb.TimberAndStone.controllers;
 
 import com.AirBnb.TimberAndStone.dto.UserReviewResponse;
 import com.AirBnb.TimberAndStone.models.UserReview;
-import com.AirBnb.TimberAndStone.requests.UserReviewRequest;
+import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
 import com.AirBnb.TimberAndStone.services.UserReviewService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

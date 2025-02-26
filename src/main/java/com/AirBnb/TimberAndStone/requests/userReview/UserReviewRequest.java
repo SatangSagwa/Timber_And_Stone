@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.requests;
+package com.AirBnb.TimberAndStone.requests.userReview;
 
 public class UserReviewRequest {
 

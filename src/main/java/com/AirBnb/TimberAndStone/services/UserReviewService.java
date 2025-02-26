@@ -8,7 +8,7 @@ import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
-import com.AirBnb.TimberAndStone.requests.UserReviewRequest;
+import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
