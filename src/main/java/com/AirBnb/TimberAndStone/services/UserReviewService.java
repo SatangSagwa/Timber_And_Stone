@@ -45,9 +45,6 @@ public class UserReviewService {
         userReview.setRating(request.getRating());
         userReview.setReview(request.getReview());
 
-        //userReview.setCreatedAt(LocalDate.now());
-        //userReview.setUpdatedAt(LocalDate.now());
-
         userReviewRepository.save(userReview);
         UserReviewResponse response = convertToUserReviewResponse(userReview, booking.getRental(), "User has been reviewed successfully");
 
@@ -105,7 +102,6 @@ public class UserReviewService {
         if(booking.getReviewed) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Booking has to be reviewed.");
         }
-
          */
 
     }
