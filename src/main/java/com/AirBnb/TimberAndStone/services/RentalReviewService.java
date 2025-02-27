@@ -19,13 +19,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-
 public class RentalReviewService {
     private final RentalReviewRepository rentalReviewRepository;
     private final RentalRepository rentalRepository;
     private final UserRepository userRepository;
     private final UserService userService;
     private final BookingRepository bookingRepository;
+
 
     public RentalReviewService(RentalReviewRepository rentalReviewRepository, RentalRepository rentalRepository, UserRepository userRepository, UserService userService, BookingRepository bookingRepository) {
         this.rentalReviewRepository = rentalReviewRepository;
@@ -34,6 +34,7 @@ public class RentalReviewService {
         this.userService = userService;
         this.bookingRepository = bookingRepository;
     }
+
     public RentalReviewResponse createRentalReview(RentalReviewRequest rentalReviewRequest) {
         validateRentalReviewRequest(rentalReviewRequest);
 
