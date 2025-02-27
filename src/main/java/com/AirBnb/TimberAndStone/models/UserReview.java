@@ -21,10 +21,12 @@ public class UserReview {
 
     @DBRef
     @NotNull(message="fromHost can not be null")
+    //private User fromHost;
     private User fromHost;
 
     @DBRef
     @NotNull(message="toUser can not be null")
+    //private User toUser;
     private User toUser;
 
     @Min(value=1, message="Rating can not be below 1")

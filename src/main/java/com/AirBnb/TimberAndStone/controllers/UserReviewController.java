@@ -1,6 +1,7 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 
+import com.AirBnb.TimberAndStone.responses.GetUserReviewResponse;
 import com.AirBnb.TimberAndStone.responses.UserReviewResponse;
 import com.AirBnb.TimberAndStone.models.UserReview;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
@@ -29,8 +30,8 @@ public class UserReviewController {
     }
     // Get all userReviews
     @GetMapping
-    public ResponseEntity<List<UserReview>> getAllUserReviews() {
-        List<UserReview> userReviews = userReviewService.getAllUserReviews();
+    public ResponseEntity<List<GetUserReviewResponse>> getAllUserReviews() {
+        List<GetUserReviewResponse> userReviews = userReviewService.getAllUserReviews();
         return new ResponseEntity<>(userReviews, HttpStatus.OK);
     }
     // Get userReview by id

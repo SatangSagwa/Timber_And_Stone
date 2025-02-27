@@ -11,6 +11,7 @@ import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
+import com.AirBnb.TimberAndStone.responses.GetUserReviewResponse;
 import com.AirBnb.TimberAndStone.responses.UserReviewResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserReviewService {
@@ -54,8 +56,11 @@ public class UserReviewService {
         return response;
     }
 
-    public List<UserReview> getAllUserReviews() {
-        return userReviewRepository.findAll();
+    public List<GetUserReviewResponse> getAllUserReviews() {
+        List<UserReview> userReviews = userReviewRepository.findAll();
+        return userReviews.stream()
+                .map(this::convertToGetUserReviewResponse)
+                .collect(Collectors.toList());
 
     }
 
