@@ -3,10 +3,7 @@ package com.AirBnb.TimberAndStone.services;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.Booking;
-import com.AirBnb.TimberAndStone.models.BookingStatus;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.models.UserReview;
+import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
@@ -118,5 +115,14 @@ public class UserReviewService {
         userReviewResponse.setRating(userReview.getRating());
         userReviewResponse.setReview(userReview.getReview());
         return userReviewResponse;
+    }
+
+    private GetUserReviewResponse convertToGetUserReviewResponse(UserReview userReview) {
+        GetUserReviewResponse response = new GetUserReviewResponse();
+        //response.setUser(userReview.getToUser().getUsername());
+        //response.setHost(userReview.getFromHost().getUsername());
+        response.setRating(userReview.getRating());
+        response.setReview(userReview.getReview());
+        return response;
     }
 }
