@@ -4,7 +4,10 @@ import com.AirBnb.TimberAndStone.dto.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.*;
+import com.AirBnb.TimberAndStone.models.Booking;
+import com.AirBnb.TimberAndStone.models.BookingStatus;
+import com.AirBnb.TimberAndStone.models.Rental;
+import com.AirBnb.TimberAndStone.models.RentalReview;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
@@ -33,8 +36,8 @@ public class RentalReviewService {
     }
 
     public RentalReviewResponse createRentalReview(RentalReviewRequest rentalReviewRequest) {
+        // validate rentalReviewRequest
         validateRentalReviewRequest(rentalReviewRequest);
-
 
         RentalReview rentalReview = new RentalReview();
         Booking booking = bookingRepository.findByBookingNumber(rentalReviewRequest.getBookingNumber());
@@ -60,20 +63,34 @@ public class RentalReviewService {
     public List<RentalReview> getAllRentalReviews () {
         return rentalReviewRepository.findAll();
     }
+
     public RentalReview getRentalReviewById(String id) {
         return rentalReviewRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Rental review not found"));
 
     }
-    public RentalReview updateRentalReviewById(String id, RentalReview rentalReview) {
+
+    public RentalReviewResponse updateRentalReviewById(String id, RentalReviewRequest rentalReviewRequest) {
+        // check to see if the review exists
         RentalReview existingRentalReview = rentalReviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Rental review not found"));
+        // validate rentalReviewRequest
+        validateRentalReviewRequest(rentalReviewRequest);
 
-        if (rentalReview.getReview() != null) {
-            existingRentalReview.setReview(rentalReview.getReview());
+        RentalReview rentalReview = new RentalReview();
+        Booking booking = bookingRepository.findByBookingNumber(rentalReviewRequest.getBookingNumber());
+        Rental rental = booking.getRental();
+        updateUpdateRentalRating(rentalReviewRequest, rental, rentalReview, id);
+
+        if (rentalReviewRequest.getRating() != null) {
+          existingRentalReview.setRating(rentalReviewRequest.getRating());
+        }
+        if (rentalReviewRequest.getReview() != null) {
+            existingRentalReview.setReview(rentalReviewRequest.getReview());
         }
 
-        return rentalReviewRepository.save(existingRentalReview);
+        rentalReviewRepository.save(existingRentalReview);
+        return convertToRentalReviewResponse(existingRentalReview, booking.getRental(), "The rentalReview has been updated successfully");
     }
 
 
@@ -137,7 +154,8 @@ public class RentalReviewService {
     }
 
 
-    private void updateRentalRating (RentalReviewRequest rentalReviewRequest, Rental rental) {
+    private void updateRentalRating(RentalReviewRequest rentalReviewRequest, Rental rental) {
+
         Integer numberOfRatings = rental.getRating().getNumberOfRatings();
         Double averageRating = rental.getRating().getAverageRating();
         Integer rating = rentalReviewRequest.getRating();
@@ -149,11 +167,33 @@ public class RentalReviewService {
         rental.getRating().setNumberOfRatings(numberOfRatings);
         rental.getRating().setAverageRating(averageRating);
         rental.setRating(rental.getRating());
+
         rentalRepository.save(rental);
-    }
-
 
     }
+
+    private void updateUpdateRentalRating(RentalReviewRequest rentalReviewRequest, Rental rental, RentalReview rentalReview, String id) {
+
+        rentalReview = getRentalReviewById(id);
+
+        Integer numberOfRatings = rental.getRating().getNumberOfRatings();
+        Double averageRating = rental.getRating().getAverageRating();
+        Integer rating = rentalReviewRequest.getRating();
+
+
+        averageRating = averageRating * numberOfRatings - rentalReview.getRating() + rating;
+        numberOfRatings = numberOfRatings;
+        averageRating = averageRating / numberOfRatings;
+
+        rental.getRating().setNumberOfRatings(numberOfRatings);
+        rental.getRating().setAverageRating(averageRating);
+        rental.setRating(rental.getRating());
+
+        rentalRepository.save(rental);
+
+    }
+
+}
 
 
 
