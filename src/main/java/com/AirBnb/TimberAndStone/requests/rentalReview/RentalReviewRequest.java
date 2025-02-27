@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.requests.rentalReview;
 
 import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.models.User;
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
-public class RentalReviewDTO {
+public class RentalReviewRequest {
     @DBRef
     @NotNull(message="User can not be null")
     private User fromUser;
@@ -25,10 +25,10 @@ public class RentalReviewDTO {
     @Size(max=500, message="Review can max be 500 characters")
     private String review;
 
-    public RentalReviewDTO() {
+    public RentalReviewRequest() {
     }
 
-    public RentalReviewDTO(User fromUser, Rental toRental, Integer rating, String review) {
+    public RentalReviewRequest(User fromUser, Rental toRental, Integer rating, String review) {
         this.fromUser = fromUser;
         this.toRental = toRental;
         this.rating = rating;
