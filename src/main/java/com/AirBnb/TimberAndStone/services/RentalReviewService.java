@@ -4,9 +4,7 @@ import com.AirBnb.TimberAndStone.dto.RentalReviewDTO;
 import com.AirBnb.TimberAndStone.dto.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.models.RentalReview;
-import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
-import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,15 +14,9 @@ import java.util.List;
 
 public class RentalReviewService {
     private final RentalReviewRepository rentalReviewRepository;
-    private final RentalRepository rentalRepository;
-    private final UserRepository userRepository;
-    private final UserService userService;
 
-    public RentalReviewService(RentalReviewRepository rentalReviewRepository, RentalRepository rentalRepository, UserRepository userRepository, UserService userService) {
+    public RentalReviewService(RentalReviewRepository rentalReviewRepository) {
         this.rentalReviewRepository = rentalReviewRepository;
-        this.rentalRepository = rentalRepository;
-        this.userRepository = userRepository;
-        this.userService = userService;
     }
     public RentalReviewResponse createRentalReview(RentalReviewDTO rentalReviewDTO) {
 
