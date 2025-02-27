@@ -1,13 +1,12 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
 import com.AirBnb.TimberAndStone.dto.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.models.RentalReview;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
+import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
