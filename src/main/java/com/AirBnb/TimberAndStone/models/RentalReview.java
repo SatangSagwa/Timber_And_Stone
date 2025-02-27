@@ -4,7 +4,9 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -33,9 +35,11 @@ public class RentalReview {
     private String review;
 
     @NotNull(message="createdAt can not be null")
+    @CreatedDate
     private LocalDate createdAt;
 
     @NotNull(message="updatedAt can not be null")
+    @LastModifiedDate
     private LocalDate updatedAt;
 
     public RentalReview() {

@@ -6,6 +6,7 @@ import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.Booking;
 import com.AirBnb.TimberAndStone.models.BookingStatus;
+import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.models.RentalReview;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
@@ -14,7 +15,6 @@ import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,18 +35,23 @@ public class RentalReviewService {
         this.bookingRepository = bookingRepository;
     }
     public RentalReviewResponse createRentalReview(RentalReviewRequest rentalReviewRequest) {
+        validateRentalReviewRequest(rentalReviewRequest);
 
         RentalReview rentalReview = new RentalReview();
+        Booking booking = bookingRepository.findByBookingNumber(rentalReviewRequest.getBookingNumber());
 
-        rentalReview.setFromUser(rentalReviewRequest.getFromUser());
-        rentalReview.setToRental(rentalReviewRequest.getToRental());
+        //Set user to authenticated
+        rentalReview.setFromUser(userService.getAuthenticated());
+        //Set rental to bookings rental
+        rentalReview.setToRental(booking.getRental());
+
         rentalReview.setRating(rentalReviewRequest.getRating());
         rentalReview.setReview(rentalReviewRequest.getReview());
-        rentalReview.setCreatedAt(LocalDate.now());
-        rentalReview.setUpdatedAt(LocalDate.now());
 
         rentalReviewRepository.save(rentalReview);
-        return new RentalReviewResponse("New rental review created", rentalReview.getToRental(), rentalReview.getRating());
+
+        return convertToRentalReviewResponse(rentalReview, booking.getRental(), "User has been reviewed successfully");
+
     }
     public List<RentalReview> getAllRentalReviews () {
         return rentalReviewRepository.findAll();
@@ -117,6 +122,15 @@ public class RentalReviewService {
 
     }
 
+    private RentalReviewResponse convertToRentalReviewResponse(RentalReview rentalReview, Rental rental, String message) {
+        RentalReviewResponse response = new RentalReviewResponse();
+        response.setMessage(message);
+        response.setUser(rentalReview.getFromUser().getUsername());
+        response.setRental(rental.getTitle());
+        response.setRating(rentalReview.getRating());
+        response.setReview(rentalReview.getReview());
+        return response;
+    }
 
     }
 
