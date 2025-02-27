@@ -26,8 +26,6 @@ public class RentalReviewService {
         rentalReview.setToRental(rentalReviewRequest.getToRental());
         rentalReview.setRating(rentalReviewRequest.getRating());
         rentalReview.setReview(rentalReviewRequest.getReview());
-        rentalReview.setCreatedAt(LocalDate.now());
-        rentalReview.setUpdatedAt(LocalDate.now());
 
         rentalReviewRepository.save(rentalReview);
         return new RentalReviewResponse("New rental review created", rentalReview.getToRental(), rentalReview.getRating());

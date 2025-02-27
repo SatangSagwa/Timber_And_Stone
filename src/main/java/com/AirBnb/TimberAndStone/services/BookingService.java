@@ -56,8 +56,6 @@ public class BookingService {
         booking.setTotalPrice(periodService.getAmountOfDays(period) * rental.getPricePerNight());
         booking.setPaid(false);
         booking.setBookingStatus(BookingStatus.PENDING);
-        booking.setCreatedAt(LocalDateTime.now());
-        booking.setUpdatedAt(LocalDateTime.now());
         booking.setBookingNumber(generateBookingNumber());
 
         bookingRepository.save(booking);
