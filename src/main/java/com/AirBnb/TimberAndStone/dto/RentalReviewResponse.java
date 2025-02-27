@@ -1,22 +1,22 @@
 package com.AirBnb.TimberAndStone.dto;
 
-import com.AirBnb.TimberAndStone.models.Rental;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
 public class RentalReviewResponse {
-private String message;
-@DBRef
-private Rental toRental;
-private Integer rating;
+    private String message;
+    private String user;
+    private String rental;
+    private Integer rating;
+    private String review;
 
 
-    public RentalReviewResponse(String message, Rental toRental, Integer rating) {
-        this.message = message;
-        this.toRental = toRental;
-        this.rating = rating;
-    }
     public RentalReviewResponse() {
+    }
 
+    public RentalReviewResponse(String message, String user, String rental, Integer rating, String review) {
+        this.message = message;
+        this.user = user;
+        this.rental = rental;
+        this.rating = rating;
+        this.review = review;
     }
 
     public String getMessage() {
@@ -27,12 +27,20 @@ private Integer rating;
         this.message = message;
     }
 
-    public Rental getToRental() {
-        return toRental;
+    public String getUser() {
+        return user;
     }
 
-    public void setToRental(Rental toRental) {
-        this.toRental = toRental;
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getRental() {
+        return rental;
+    }
+
+    public void setRental(String rental) {
+        this.rental = rental;
     }
 
     public Integer getRating() {
@@ -41,5 +49,13 @@ private Integer rating;
 
     public void setRating(Integer rating) {
         this.rating = rating;
+    }
+
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
     }
 }
