@@ -1,6 +1,6 @@
 package com.AirBnb.TimberAndStone.controllers;
 
-import com.AirBnb.TimberAndStone.dto.RentalReviewDTO;
+import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
 import com.AirBnb.TimberAndStone.dto.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.models.RentalReview;
 import com.AirBnb.TimberAndStone.services.RentalReviewService;
@@ -22,8 +22,8 @@ public class RentalReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createRentalReview(@Valid @RequestBody RentalReviewDTO rentalReviewDTO) {
-        RentalReviewResponse rentalReviewResponse = rentalReviewService.createRentalReview(rentalReviewDTO);
+    public ResponseEntity<?> createRentalReview(@Valid @RequestBody RentalReviewRequest rentalReviewRequest) {
+        RentalReviewResponse rentalReviewResponse = rentalReviewService.createRentalReview(rentalReviewRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(rentalReviewResponse);
     }
     @GetMapping

@@ -1,6 +1,6 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.dto.RentalReviewDTO;
+import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
 import com.AirBnb.TimberAndStone.dto.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.models.RentalReview;
@@ -18,14 +18,14 @@ public class RentalReviewService {
     public RentalReviewService(RentalReviewRepository rentalReviewRepository) {
         this.rentalReviewRepository = rentalReviewRepository;
     }
-    public RentalReviewResponse createRentalReview(RentalReviewDTO rentalReviewDTO) {
+    public RentalReviewResponse createRentalReview(RentalReviewRequest rentalReviewRequest) {
 
         RentalReview rentalReview = new RentalReview();
 
-        rentalReview.setFromUser(rentalReviewDTO.getFromUser());
-        rentalReview.setToRental(rentalReviewDTO.getToRental());
-        rentalReview.setRating(rentalReviewDTO.getRating());
-        rentalReview.setReview(rentalReviewDTO.getReview());
+        rentalReview.setFromUser(rentalReviewRequest.getFromUser());
+        rentalReview.setToRental(rentalReviewRequest.getToRental());
+        rentalReview.setRating(rentalReviewRequest.getRating());
+        rentalReview.setReview(rentalReviewRequest.getReview());
         rentalReview.setCreatedAt(LocalDate.now());
         rentalReview.setUpdatedAt(LocalDate.now());
 
@@ -35,11 +35,13 @@ public class RentalReviewService {
     public List<RentalReview> getAllRentalReviews () {
         return rentalReviewRepository.findAll();
     }
+
     public RentalReview getRentalReviewById(String id) {
         return rentalReviewRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Rental review not found"));
 
     }
+
     public RentalReview updateRentalReviewById(String id, RentalReview rentalReview) {
         RentalReview existingRentalReview = rentalReviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Rental review not found"));
@@ -50,6 +52,24 @@ public class RentalReviewService {
 
         return rentalReviewRepository.save(existingRentalReview);
     }
+
+
+
+
+
+
+
+
+
+
+    // ----------------------------------------- HELPERS ---------------------------------------------------------------
+
+
+    private void validateRentalReviewRequest(RentalReviewRequest rentalReviewRequest) {
+
+    }
+
+
 
     }
 
