@@ -7,10 +7,10 @@ public class RentalReviewResponse {
 private String message;
 @DBRef
 private Rental toRental;
-private int rating;
+private Integer rating;
 
 
-    public RentalReviewResponse(String message, Rental toRental, int rating) {
+    public RentalReviewResponse(String message, Rental toRental, Integer rating) {
         this.message = message;
         this.toRental = toRental;
         this.rating = rating;
@@ -35,11 +35,11 @@ private int rating;
         this.toRental = toRental;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 }

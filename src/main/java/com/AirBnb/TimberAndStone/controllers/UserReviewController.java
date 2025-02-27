@@ -1,7 +1,9 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 
+import com.AirBnb.TimberAndStone.responses.UserReviewResponse;
 import com.AirBnb.TimberAndStone.models.UserReview;
+import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
 import com.AirBnb.TimberAndStone.services.UserReviewService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,9 +23,9 @@ public class UserReviewController {
     }
     // create userReview
     @PostMapping
-    public ResponseEntity<UserReview> createUserReview(@Valid @RequestBody UserReview userReview) {
-        UserReview createdUserReview = userReviewService.createUserReview(userReview);
-        return new ResponseEntity<>(createdUserReview, HttpStatus.CREATED);
+    public ResponseEntity<UserReviewResponse> createUserReview(@Valid @RequestBody UserReviewRequest request) {
+        UserReviewResponse response = userReviewService.createUserReview(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     // Get all userReviews
     @GetMapping
