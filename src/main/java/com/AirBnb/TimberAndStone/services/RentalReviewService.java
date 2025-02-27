@@ -50,7 +50,7 @@ public class RentalReviewService {
 
         rentalReviewRepository.save(rentalReview);
 
-        return convertToRentalReviewResponse(rentalReview, booking.getRental(), "User has been reviewed successfully");
+        return convertToRentalReviewResponse(rentalReview, booking.getRental(), "The rental has been reviewed successfully");
 
     }
     public List<RentalReview> getAllRentalReviews () {

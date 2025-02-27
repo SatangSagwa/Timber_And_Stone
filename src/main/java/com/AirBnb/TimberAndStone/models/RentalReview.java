@@ -26,7 +26,7 @@ public class RentalReview {
     @NotNull(message="Rental can not be null")
     private Rental toRental;
 
-    @NotNull
+
     @Min(value=1, message="Rating can not be below 1")
     @Max(value=5,message="Rating can not be above 5")
     private Integer rating;
@@ -44,8 +44,6 @@ public class RentalReview {
 
     public RentalReview() {
     }
-
-
 
 
     public String getId() {
@@ -68,19 +66,19 @@ public class RentalReview {
         this.toRental = toRental;
     }
 
-    public @NotNull @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer getRating() {
+    public @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer getRating() {
         return rating;
     }
 
-    public void setRating(@NotNull @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer rating) {
+    public void setRating(@Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer rating) {
         this.rating = rating;
     }
 
-    public @Size(max = 500, message = "Review has to be between 1-500 characters") String getReview() {
+    public @Size(max = 500, message = "Review can max be between 500 characters") String getReview() {
         return review;
     }
 
-    public void setReview(@Size(max = 500, message = "Review has to be between 1-500 characters") String review) {
+    public void setReview(@Size(max = 500, message = "Review can max be between 500 characters") String review) {
         this.review = review;
     }
 
