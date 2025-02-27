@@ -4,10 +4,7 @@ import com.AirBnb.TimberAndStone.dto.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.Booking;
-import com.AirBnb.TimberAndStone.models.BookingStatus;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.models.RentalReview;
+import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
@@ -38,8 +35,14 @@ public class RentalReviewService {
     public RentalReviewResponse createRentalReview(RentalReviewRequest rentalReviewRequest) {
         validateRentalReviewRequest(rentalReviewRequest);
 
+
         RentalReview rentalReview = new RentalReview();
         Booking booking = bookingRepository.findByBookingNumber(rentalReviewRequest.getBookingNumber());
+
+        Rental rental = booking.getRental();
+
+        // add and update to the rentals rating
+        updateRentalRating(rentalReviewRequest, rental);
 
         //Set user to authenticated
         rentalReview.setFromUser(userService.getAuthenticated());
@@ -132,6 +135,23 @@ public class RentalReviewService {
         response.setReview(rentalReview.getReview());
         return response;
     }
+
+
+    private void updateRentalRating (RentalReviewRequest rentalReviewRequest, Rental rental) {
+        Integer numberOfRatings = rental.getRating().getNumberOfRatings();
+        Double averageRating = rental.getRating().getAverageRating();
+        Integer rating = rentalReviewRequest.getRating();
+
+        averageRating = averageRating * numberOfRatings + rating;
+        numberOfRatings = numberOfRatings + 1;
+        averageRating = averageRating / numberOfRatings;
+
+        rental.getRating().setNumberOfRatings(numberOfRatings);
+        rental.getRating().setAverageRating(averageRating);
+        rental.setRating(rental.getRating());
+        rentalRepository.save(rental);
+    }
+
 
     }
 
