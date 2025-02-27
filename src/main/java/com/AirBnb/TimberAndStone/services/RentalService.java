@@ -86,15 +86,15 @@ public class RentalService {
         List<Rental> rentals = rentalRepository.findByCategory(category);
 
         return rentals.stream()
-                .map(this::convertToDTOFour)
+                .map(this::convertToRentalFindByCategoryResponse)
                 .collect(Collectors.toList());
     }
 
     public List<RentalFindByPricePerNightRangeResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
-        List<Rental> rentals = rentalRepository.findByPricePerNightBetween(minPrice, maxPrice);
+        List<Rental> rentals = rentalRepository.findByPricePerNightBetweenInclusive(minPrice, maxPrice);
 
         return rentals.stream()
-                .map(this::convertToDTO)
+                .map(this::convertToRentalFindByPricePerNightRangeResponse)
                 .collect(Collectors.toList());
     }
 
@@ -158,7 +158,7 @@ public class RentalService {
         List<Rental> rentals = rentalRepository.findByRatingAverageRatingGreaterThanEqualAndRatingNumberOfRatingsGreaterThanEqual(minAvgRating, minNumberOfRatings);
 
         return rentals.stream()
-                .map(this::convertToDTOTwo)
+                .map(this::convertToRentalFindByMinAvgRatingAndMinNumberOfRatingResponse)
                 .collect(Collectors.toList());
     }
 
@@ -231,7 +231,7 @@ public class RentalService {
                     List<Period> matchingPeriods = rental.getAvailablePeriods().stream()
                             .filter(period -> isPeriodMatching(period, startDate, endDate))
                             .collect(Collectors.toList());
-                    RentalFindByAvailabilityPeriodResponse response = convertToDTOThree(rental);
+                    RentalFindByAvailabilityPeriodResponse response = convertToRentalFindByAvailabilityPeriodResponse(rental);
                     response.setPeriods(matchingPeriods);
                     return response;
                 })
@@ -265,9 +265,10 @@ public class RentalService {
                 .collect(Collectors.toList());
 
         return matchingRentals.stream()
-                .map(this::convertToDTOSeven)
+                .map(this::convertToRentalAmenitiesDTOResponse)
                 .collect(Collectors.toList());
     }
+
     public List<RentalFindByAverageRatingResponse> getRentalsByAverageRating(Double averageRating) {
         List<Rental> rentals = rentalRepository.findByRatingAverageRating(averageRating);
 
@@ -373,14 +374,14 @@ public class RentalService {
         }
     }
 
-    private RentalFindByPricePerNightRangeResponse convertToDTO(Rental rental) {
+    private RentalFindByPricePerNightRangeResponse convertToRentalFindByPricePerNightRangeResponse(Rental rental) {
         RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();
         response.setTitle(rental.getTitle());
         response.setPricePerNight(rental.getPricePerNight());
         return response;
     }
 
-    private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToDTOTwo(Rental rental) {
+    private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToRentalFindByMinAvgRatingAndMinNumberOfRatingResponse(Rental rental) {
         RentalFindByMinAvgRatingAndMinNumberOfRatingResponse response = new RentalFindByMinAvgRatingAndMinNumberOfRatingResponse();
         response.setTitle(rental.getTitle());
         response.setAverageRating(rental.getRating().getAverageRating());
@@ -388,14 +389,12 @@ public class RentalService {
         return response;
     }
 
-
-    private RentalFindByAvailabilityPeriodResponse convertToDTOThree(Rental rental) {
+    private RentalFindByAvailabilityPeriodResponse convertToRentalFindByAvailabilityPeriodResponse(Rental rental) {
         RentalFindByAvailabilityPeriodResponse response = new RentalFindByAvailabilityPeriodResponse();
         response.setTitle(rental.getTitle());
         response.setPeriods(rental.getAvailablePeriods());
         return response;
     }
-
 
     // https://chatgpt.com/share/67b4a4fb-a588-800b-9894-16722dd3a37d
     private boolean isPeriodMatching(Period period, LocalDate startDate, LocalDate endDate) {
@@ -404,15 +403,14 @@ public class RentalService {
         return overlap;
     }
 
-
-    private RentalFindByCategoryResponse convertToDTOFour(Rental rental) {
+    private RentalFindByCategoryResponse convertToRentalFindByCategoryResponse(Rental rental) {
         RentalFindByCategoryResponse response = new RentalFindByCategoryResponse();
         response.setTitle(rental.getTitle());
         response.setCategory(rental.getCategory());
         return response;
     }
 
-    private RentalAmenitiesDTOResponse convertToDTOSeven(Rental rental) {
+    private RentalAmenitiesDTOResponse convertToRentalAmenitiesDTOResponse(Rental rental) {
         RentalAmenitiesDTOResponse response = new RentalAmenitiesDTOResponse();
         response.setTitle(rental.getTitle());
         response.setAmenities(rental.getAmenities());
@@ -448,11 +446,6 @@ public class RentalService {
         return match;
     }
 
-
-
-
-
-
     private GetRentalsResponse convertToGetRentalsResponse(Rental rental) {
         return new GetRentalsResponse(
                 rental.getTitle(),
@@ -463,6 +456,7 @@ public class RentalService {
                 rental.getAddress().getCity(),
                 rental.getRating().getAverageRating());
     }
+
     private RentalFindByAverageRatingResponse convertToRentalFindByAverageRatingResponse(Rental rental) {
         RentalFindByAverageRatingResponse response = new RentalFindByAverageRatingResponse();
         response.setTitle(rental.getTitle());
