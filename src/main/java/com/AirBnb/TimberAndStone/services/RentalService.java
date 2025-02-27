@@ -43,7 +43,7 @@ public class RentalService {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Rental not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
 
         Rental rental = new Rental();

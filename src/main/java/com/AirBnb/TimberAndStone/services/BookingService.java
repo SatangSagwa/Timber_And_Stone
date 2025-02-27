@@ -1,13 +1,13 @@
 package com.AirBnb.TimberAndStone.services;
 
 import com.AirBnb.TimberAndStone.dto.*;
+import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
+import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -56,8 +56,6 @@ public class BookingService {
         booking.setTotalPrice(periodService.getAmountOfDays(period) * rental.getPricePerNight());
         booking.setPaid(false);
         booking.setBookingStatus(BookingStatus.PENDING);
-        booking.setCreatedAt(LocalDateTime.now());
-        booking.setUpdatedAt(LocalDateTime.now());
         booking.setBookingNumber(generateBookingNumber());
 
         bookingRepository.save(booking);
@@ -80,13 +78,13 @@ public class BookingService {
 
     public BookingResponse getBookingById(String id) {
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
         return convertToBookingResponse(booking);
     }
 
     public List<BookingResponse> getBookingsByUserId(String id){
         userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         List<Booking> bookings = bookingRepository.findByUserId(id);
 
@@ -100,7 +98,7 @@ public class BookingService {
         List<Booking> bookings = bookingRepository.findByUserId(user.getId());
 
         if(bookings.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No bookings found");
+            throw new ResourceNotFoundException("No bookings found");
         }
 
         return bookings.stream()
@@ -110,7 +108,7 @@ public class BookingService {
 
     public List<BookingResponse> getBookingsByRentalId(String id) {
         rentalRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
 
         List<Booking> bookings = bookingRepository.findByRentalId(id);
 
@@ -121,12 +119,12 @@ public class BookingService {
 
     public PatchBookingResponse patchBooking(String id, PatchBookingRequest request) {
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         User currentUser = userService.getAuthenticated();
 
         if (!currentUser.getId().equals(booking.getUser().getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to change this booking!");
+            throw new UnauthorizedException("You do not have permission to change this booking!");
         }
 
         if(request.getNumberOfGuests() != null) {
@@ -149,23 +147,23 @@ public class BookingService {
 
     public PatchBookingResponse approveBooking(String id) {
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         User currentUser = userService.getAuthenticated();
 
         //Check if current user is the host of this rental.
         if (!currentUser.getId().equals(booking.getRental().getHost().getId())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You do not have permission to approve this booking!");
+            throw new UnauthorizedException("You do not have permission to approve this booking!");
         }
 
         BookingStatus status = booking.getBookingStatus();
 
         if (status.equals(BookingStatus.APPROVED) || status.equals(BookingStatus.CONFIRMED)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already approved and/or confirmed.");
+            throw new IllegalArgumentException("Booking is already approved and/or confirmed.");
         }
 
         if (status.equals(BookingStatus.CANCELLED)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already cancelled and can not be approved");
+            throw new IllegalArgumentException("Booking is already cancelled and can not be approved");
         }
 
         booking.setBookingStatus(BookingStatus.APPROVED);
@@ -187,23 +185,23 @@ public class BookingService {
 
     public PatchBookingResponse payAndConfirm(String id) {
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         User currentUser = userService.getAuthenticated();
 
         //Check if current user is the booking user
         if (!currentUser.getId().equals(booking.getUser().getId())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You do not have permission to pay and confirm this booking!");
+            throw new UnauthorizedException("You do not have permission to pay and confirm this booking!");
         }
 
         BookingStatus status = booking.getBookingStatus();
 
         if (status.equals(BookingStatus.PENDING)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking has to be approved first!");
+            throw new IllegalArgumentException("Booking has to be approved first!");
         } else if (status.equals(BookingStatus.CANCELLED)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already cancelled and can not be approved");
+            throw new IllegalArgumentException("Booking is already cancelled and can not be approved");
         } else if (status.equals(BookingStatus.CONFIRMED) && booking.getPaid()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already confirmed and paid!");
+            throw new IllegalArgumentException("Booking is already confirmed and paid!");
         }
 
         booking.setBookingStatus(BookingStatus.CONFIRMED);
@@ -225,12 +223,12 @@ public class BookingService {
     public void deleteBooking(String id) {
         //Find by id
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         //Get user and check if this is the users booking, else throw ex.
         User currentUser = userService.getAuthenticated();
         if (!currentUser.getId().equals(booking.getUser().getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to change this booking!");
+            throw new UnauthorizedException("You do not have permission to change this booking!");
         }
 
         bookingRepository.delete(booking);
@@ -240,9 +238,9 @@ public class BookingService {
 
     private void validateNumberOfGuests(Rental rental, int numberOfGuests) {
         if (numberOfGuests < 1) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of guests must be greater than 0");
+            throw new IllegalArgumentException("Number of guests must be greater than 0");
         } else if (numberOfGuests > rental.getCapacity()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This rental allows max " + rental.getCapacity() + " guests!");
+            throw new IllegalArgumentException("This rental allows max " + rental.getCapacity() + " guests!");
         }
     }
 

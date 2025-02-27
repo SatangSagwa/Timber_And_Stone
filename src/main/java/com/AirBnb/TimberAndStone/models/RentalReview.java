@@ -34,17 +34,14 @@ public class RentalReview {
     @Size(max=500, message="Review can max be between 500 characters")
     private String review;
 
-    @NotNull(message="createdAt can not be null")
     @CreatedDate
     private LocalDate createdAt;
 
-    @NotNull(message="updatedAt can not be null")
     @LastModifiedDate
     private LocalDate updatedAt;
 
     public RentalReview() {
     }
-
 
     public String getId() {
         return id;
@@ -82,19 +79,19 @@ public class RentalReview {
         this.review = review;
     }
 
-    public @NotNull(message = "createdAt can not be null") LocalDate getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull(message = "createdAt can not be null") LocalDate createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public @NotNull(message = "updatedAt can not be null") LocalDate getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(@NotNull(message = "updatedAt can not be null") LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

@@ -17,11 +17,9 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -51,10 +49,6 @@ public class UserService {
         user.setLastName(registerRequest.getLastName());
         user.setPhoneNumber(registerRequest.getPhoneNumber());
         user.setPassword(registerRequest.getPassword());
-
-        //Set created and updated at to now.
-        user.setCreatedAt(LocalDate.now());
-        user.setUpdatedAt(LocalDate.now());
 
         //Set active to true when account is created.
         user.setActive(true);
@@ -104,7 +98,7 @@ public class UserService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).
-                orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     public boolean existsByUsername(String username) {
