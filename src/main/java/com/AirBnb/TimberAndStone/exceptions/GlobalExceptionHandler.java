@@ -44,7 +44,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
     }
 
-
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<String> handleNullPointerException(NullPointerException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An unexpected NullPointerException has occurred.");
+    }
 
     // https://chatgpt.com/share/67afa18c-6c9c-800b-8210-a0ee475d4e62
     // https://chatgpt.com/share/67afa170-7498-800b-a88c-831dff26b325
