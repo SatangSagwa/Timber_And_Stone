@@ -10,7 +10,6 @@ import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
 import com.AirBnb.TimberAndStone.responses.GetUserReviewResponse;
 import com.AirBnb.TimberAndStone.responses.UserReviewResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -54,9 +53,19 @@ public class UserReviewService {
 
     public List<GetUserReviewResponse> getAllUserReviews() {
         List<UserReview> userReviews = userReviewRepository.findAll();
+        for (UserReview userReview : userReviews) {
+            userReview.setFromHost(userService.getAuthenticated());
+            //Set user to bookings user
+            //userReview.setToUser(booking.getUser());
+
+        }
+
         return userReviews.stream()
                 .map(this::convertToGetUserReviewResponse)
                 .collect(Collectors.toList());
+        /*return userReviews.stream()
+                .map(this::convertToGetUserReviewResponse)
+                .collect(Collectors.toList());*/
 
     }
 
@@ -118,8 +127,8 @@ public class UserReviewService {
 
     private GetUserReviewResponse convertToGetUserReviewResponse(UserReview userReview) {
         GetUserReviewResponse response = new GetUserReviewResponse();
-        //response.setUser(userReview.getToUser().getUsername());
-        //response.setHost(userReview.getFromHost().getUsername());
+        response.setUser(userReview.getToUser().getUsername());
+        response.setHost(userReview.getFromHost().getUsername());
         response.setRating(userReview.getRating());
         response.setReview(userReview.getReview());
         return response;
