@@ -26,34 +26,23 @@ public class RentalReviewService {
     private final RentalRepository rentalRepository;
     private final UserService userService;
     private final BookingRepository bookingRepository;
-    private final BookingService bookingService;
 
-
-    public RentalReviewService(RentalReviewRepository rentalReviewRepository, RentalRepository rentalRepository, UserService userService, BookingRepository bookingRepository, BookingService bookingService) {
+    public RentalReviewService(RentalReviewRepository rentalReviewRepository, RentalRepository rentalRepository, UserService userService, BookingRepository bookingRepository) {
         this.rentalReviewRepository = rentalReviewRepository;
         this.rentalRepository = rentalRepository;
         this.userService = userService;
         this.bookingRepository = bookingRepository;
-        this.bookingService = bookingService;
     }
 
     public RentalReviewResponse createRentalReview(RentalReviewRequest request) {
 
         Booking booking = bookingRepository.findById(request.getBookingId())
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found11"));
-        System.out.println("Booking found");
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
         // validate rentalReviewRequest
         validateRentalReviewRequest(request);
-        System.out.println("Validation passed");
-
 
         RentalReview rentalReview = new RentalReview();
-        /*
-        Booking booking = bookingRepository.findByBookingNumberAndUserAndRental(request.getBooking().getBookingNumber(), userService.getAuthenticated(), request.getBooking().getRental())
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found1"));
-
-         */
-
         Rental rental = booking.getRental();
 
         // add and update to the rentals rating
@@ -124,17 +113,15 @@ public class RentalReviewService {
         // Validate the rating and review inputs before proceeding
         validateRentalReviewRequest(request, id);
 
-        // Fetch the associated booking
+        // find booking
         Booking booking = bookingRepository.findByBookingNumberAndUserAndRental(
                 existingRentalReview.getBooking().getBookingNumber(),
                 existingRentalReview.getFromUser(),
                 existingRentalReview.getToRental()
         ).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
-        // Update the rental rating
         updateRentalRating(existingRentalReview, booking.getRental(), id);
 
-        // Apply updates only if values are present in the request
         if (request.getRating() != null) {
             existingRentalReview.setRating(request.getRating());
         }
@@ -142,7 +129,6 @@ public class RentalReviewService {
             existingRentalReview.setReview(request.getReview());
         }
 
-        // Save the updated review
         rentalReviewRepository.save(existingRentalReview);
 
         return convertToRentalReviewResponse(existingRentalReview, "The review has been updated successfully");
