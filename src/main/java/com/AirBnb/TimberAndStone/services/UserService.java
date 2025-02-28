@@ -8,10 +8,7 @@ import com.AirBnb.TimberAndStone.responses.authentication.RegisterResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.Address;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.models.Role;
-import com.AirBnb.TimberAndStone.models.User;
+import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -52,6 +49,12 @@ public class UserService {
 
         //Set active to true when account is created.
         user.setActive(true);
+
+        // set rating to 0, 0
+        Rating rating = new Rating();
+        rating.setAverageRating(0.0);
+        rating.setNumberOfRatings(0);
+        user.setRating(rating);
 
         //Sets favorites to new empty array
         user.setFavouriteRentals(new ArrayList<Rental>());
