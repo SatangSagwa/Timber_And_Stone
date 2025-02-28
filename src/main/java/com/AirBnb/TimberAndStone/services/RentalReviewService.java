@@ -1,7 +1,6 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewsResponse;
-import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewResponse;
+
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
@@ -14,6 +13,8 @@ import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
 import com.AirBnb.TimberAndStone.requests.rentalReview.PatchRentalReviewRequest;
 import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
+import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewResponse;
+import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewsResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
