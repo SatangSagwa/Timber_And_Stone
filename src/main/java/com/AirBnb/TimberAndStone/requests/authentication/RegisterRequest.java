@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.requests.authentication;
 
 
 import com.AirBnb.TimberAndStone.models.Role;

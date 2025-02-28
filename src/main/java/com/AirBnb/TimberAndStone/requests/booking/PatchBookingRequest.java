@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.requests.booking;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
