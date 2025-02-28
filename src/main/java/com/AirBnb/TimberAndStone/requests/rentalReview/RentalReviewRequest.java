@@ -1,19 +1,24 @@
 package com.AirBnb.TimberAndStone.requests.rentalReview;
 
 public class RentalReviewRequest {
-    private String bookingNumber;
+    private String bookingId;
     private Integer rating;
     private String review;
 
     public RentalReviewRequest() {
     }
 
+    public RentalReviewRequest(String bookingId, Integer rating, String review) {
+        this.bookingId = bookingId;
+        this.rating = rating;
+        this.review = review;
+    }
 
-// --------------------- Getters ------------------------------------------------
+    // --------------------- Getters ------------------------------------------------
 
 
-    public String getBookingNumber() {
-        return bookingNumber;
+    public String getBookingId() {
+        return bookingId;
     }
 
     public Integer getRating() {

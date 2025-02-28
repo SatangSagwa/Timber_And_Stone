@@ -6,6 +6,7 @@ import com.AirBnb.TimberAndStone.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookingRepository extends MongoRepository<Booking, String> {
     List<Booking> findByUserId(String userId);
@@ -14,5 +15,5 @@ public interface BookingRepository extends MongoRepository<Booking, String> {
     // booking number is not globally unique and may return
     // multiple results and throw IncorrectResultSizeDataAccessException.
     Booking findByBookingNumber(String bookingId);
-    Booking findByBookingNumberAndUserAndRental(String bookingNumber, User user, Rental rental);
+    Optional<Booking> findByBookingNumberAndUserAndRental(String bookingNumber, User user, Rental rental);
 }
