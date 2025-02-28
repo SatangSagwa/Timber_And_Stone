@@ -39,12 +39,12 @@ public class UserReviewController {
         return new ResponseEntity<>(userReview, HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
+    /*@PatchMapping("/{id}")
     public ResponseEntity<UserReviewResponse> updateUserReviewById(@Valid @PathVariable String id, @RequestBody UserReviewRequest userReviewRequest) {
             return new ResponseEntity<>(userReviewService.updateUserReviewById(id, userReviewRequest), HttpStatus.OK);
 
 
-    }
+    }*/
 
 }
 
