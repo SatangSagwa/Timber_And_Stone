@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -50,10 +49,6 @@ public class UserService {
         user.setLastName(registerRequest.getLastName());
         user.setPhoneNumber(registerRequest.getPhoneNumber());
         user.setPassword(registerRequest.getPassword());
-
-        //Set created and updated at to now.
-        user.setCreatedAt(LocalDate.now());
-        user.setUpdatedAt(LocalDate.now());
 
         //Set active to true when account is created.
         user.setActive(true);

@@ -37,8 +37,8 @@ public class RentalReviewController {
         return ResponseEntity.ok(rentalReview);
     }
     @PatchMapping("/{id}")
-    public ResponseEntity<RentalReview> updateRentalReviewById(@PathVariable String id, @RequestBody RentalReview rentalReview) {
-            return new ResponseEntity<>(rentalReviewService.updateRentalReviewById(id, rentalReview), HttpStatus.OK);
+    public ResponseEntity<RentalReviewResponse> updateRentalReviewById(@Valid @PathVariable String id, @RequestBody RentalReviewRequest rentalReviewRequest) {
+            return new ResponseEntity<>(rentalReviewService.updateRentalReviewById(id, rentalReviewRequest), HttpStatus.OK);
         }
 
     }

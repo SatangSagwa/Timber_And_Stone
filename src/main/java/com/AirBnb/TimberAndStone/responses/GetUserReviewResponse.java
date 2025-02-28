@@ -6,7 +6,7 @@ public class GetUserReviewResponse {
     private Integer rating;
     private String review;
 
-    public GetUserReviewResponse(String user, String host, String rental, Integer rating, String review) {
+    public GetUserReviewResponse(String user, String host, Integer rating, String review) {
         this.user = user;
         this.host = host;
         this.rating = rating;
