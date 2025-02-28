@@ -56,7 +56,10 @@ public class BookingService {
         booking.setTotalPrice(periodService.getAmountOfDays(period) * rental.getPricePerNight());
         booking.setPaid(false);
         booking.setBookingStatus(BookingStatus.PENDING);
-        booking.setBookingNumber(generateBookingNumber());
+        booking.setCreatedAt(LocalDateTime.now());
+        booking.setUpdatedAt(LocalDateTime.now());
+        booking.setBookingNumber(generateBookingNumber(booking.getUser(), booking.getRental()));
+
 
         bookingRepository.save(booking);
 
@@ -285,10 +288,42 @@ public class BookingService {
 
     //https://www.baeldung.com/java-uuid-unique-long-generation
     //https://www.baeldung.com/java-secure-random
-    //Can have more validation later, for ex. checking uniqueness in combination with rental/user.
-    private String generateBookingNumber() {
+    //Checking uniqueness in combination with rental/user and returns a number as a String.
+    private String generateBookingNumber(User user, Rental rental) {
         SecureRandom secureRandom = new SecureRandom();
-        Integer randomPositiveLong = Math.abs(secureRandom.nextInt());
-        return randomPositiveLong.toString();
+        //Generate random number
+        Integer randomPositiveInt = Math.abs(secureRandom.nextInt());
+
+        // Use a magic number for testing, set a default value and make a booking with the same user and rental twice.
+        // Check console for print results. Should return result 1 first time and result 2 second time.
+        //randomPositiveInt = 88156710;
+
+        System.out.println("Generated number: " + randomPositiveInt);
+
+        //Check if there is any matches with existing booking number
+        //Should return null if the booking number does not already exist.
+        Booking matchingBooking = bookingRepository.findByBookingNumberAndUserAndRental(randomPositiveInt.toString(), user, rental);
+
+        //if booking is found
+        if(matchingBooking != null) {
+            System.out.println("Booking number already exists in combination with user or rental!");
+            String matchingNumber = matchingBooking.getBookingNumber();
+
+            System.out.println("Matching bookingID: " + matchingBooking.getId());
+            System.out.println("Matching bookingNumber: " + matchingNumber);
+
+                while (true) {
+                        //Generate a new number.
+                        randomPositiveInt = Math.abs(secureRandom.nextInt());
+                    System.out.println("New Generated number: " + randomPositiveInt);
+                        Booking newMatch = bookingRepository.findByBookingNumberAndUserAndRental(randomPositiveInt.toString(), user, rental);
+                        if (newMatch == null) {
+                            System.out.println("2: No matches found, ID is unique in combination with user and rental");
+                            return randomPositiveInt.toString();
+                        }
+                    }
+                }
+        System.out.println("1: No matches found, ID is unique in combination with user and rental");
+        return randomPositiveInt.toString();
     }
 }
