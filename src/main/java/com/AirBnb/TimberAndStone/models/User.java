@@ -48,6 +48,8 @@ public class User {
     @NotNull(message = "Address cannot be null")
     private Address address;
 
+    @NotNull(message = "Rating can not be null")
+    private Rating rating;
 
     @NotNull(message = "isActive cannot be null")
     private Boolean isActive;
@@ -85,22 +87,6 @@ public class User {
 
     public String getId() {
         return id;
-    }
-
-    public @Max(value = 10, message = "you can max have 10 favorite rentals") List<Rental> getFavouriteRentals() {
-        return favouriteRentals;
-    }
-
-    public void setFavouriteRentals(@Max(value = 10, message = "you can max have 10 favorite rentals") List<Rental> favouriteRentals) {
-        this.favouriteRentals = favouriteRentals;
-    }
-
-    public @NotNull(message = "Address cannot be null") Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(@NotNull(message = "Address cannot be null") Address address) {
-        this.address = address;
     }
 
     public @Email(message = "Incorrect email format") @NotNull @NotEmpty String getEmail() {
@@ -143,6 +129,22 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public @NotNull(message = "Address cannot be null") Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(@NotNull(message = "Address cannot be null") Address address) {
+        this.address = address;
+    }
+
+    public @NotNull(message = "Rating can not be null") Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(@NotNull(message = "Rating can not be null") Rating rating) {
+        this.rating = rating;
+    }
+
     public @NotNull(message = "isActive cannot be null") Boolean getActive() {
         return isActive;
     }
@@ -167,19 +169,27 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public @NotEmpty(message = "Profile photo cant be empty") @NotNull(message = "Profile photo cant be null") @Size(max = 300) String getProfilePhoto() {
+    public @NotEmpty(message = "Profile photo cant be empty") @NotNull(message = "Profile photo cant be null") @Max(value = 300) String getProfilePhoto() {
         return profilePhoto;
     }
 
-    public void setProfilePhoto(@NotEmpty(message = "Profile photo cant be empty") @NotNull(message = "Profile photo cant be null") @Size(max = 300) String profilePhoto) {
+    public void setProfilePhoto(@NotEmpty(message = "Profile photo cant be empty") @NotNull(message = "Profile photo cant be null") @Max(value = 300) String profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 
-    public @Max(value = 10, message = "you can max have 10 favorite rentals") @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character") String getPassword() {
+    public @Max(value = 10, message = "you can max have 10 favorite rentals") List<Rental> getFavouriteRentals() {
+        return favouriteRentals;
+    }
+
+    public void setFavouriteRentals(@Max(value = 10, message = "you can max have 10 favorite rentals") List<Rental> favouriteRentals) {
+        this.favouriteRentals = favouriteRentals;
+    }
+
+    public @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character") String getPassword() {
         return password;
     }
 
-    public void setPassword(@Max(value = 10, message = "you can max have 10 favorite rentals") @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character") String password) {
+    public void setPassword(@Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>])(?=.{8,})" + ".*$", message = "Password must be at least 8 characters long and contain at least " + "one uppercase letter, one number, and one special character") String password) {
         this.password = password;
     }
 
