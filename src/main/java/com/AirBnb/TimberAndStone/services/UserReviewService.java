@@ -117,8 +117,9 @@ public class UserReviewService {
 
     private GetUserReviewResponse convertToGetUserReviewResponse(UserReview userReview) {
         GetUserReviewResponse response = new GetUserReviewResponse();
-        //response.setUser(userReview.getToUser().getUsername());
-        //response.setHost(userReview.getFromHost().getUsername());
+        System.out.println("Username = " + userReview.getToUser().getUsername());
+        response.setUser(userReview.getToUser().getUsername());
+        response.setHost(userReview.getFromHost().getUsername());
         response.setRating(userReview.getRating());
         response.setReview(userReview.getReview());
         return response;
