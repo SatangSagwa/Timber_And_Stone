@@ -112,7 +112,7 @@ updateRentalRating
                 .orElseThrow(() -> new ResourceNotFoundException("Rental review not found"));
 
         // Validate the rating and review inputs before proceeding
-        validateRentalReviewRequest(request, id);
+        validateRentalReviewRequest(request, existingRentalReview);
 
         // find booking
         Booking booking = bookingRepository.findByBookingNumberAndUserAndRental(
@@ -179,11 +179,13 @@ updateRentalRating
          */
     }
 
-    private void validateRentalReviewRequest(PatchRentalReviewRequest rentalReviewRequest, String id) {
+    private void validateRentalReviewRequest(PatchRentalReviewRequest rentalReviewRequest, RentalReview review) {
 
+        /*
         RentalReview review = rentalReviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found2"));
 
+         */
         if(rentalReviewRequest.getRating() != null) {
             if(rentalReviewRequest.getRating() < 1 || rentalReviewRequest.getRating() > 5) {
                 throw new IllegalArgumentException("Rating has to be between 1 and 5");
