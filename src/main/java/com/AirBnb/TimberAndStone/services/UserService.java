@@ -1,10 +1,10 @@
 package com.AirBnb.TimberAndStone.services;
 
 
-import com.AirBnb.TimberAndStone.dto.ActivateDeactivateResponse;
-import com.AirBnb.TimberAndStone.dto.ContactResponse;
-import com.AirBnb.TimberAndStone.dto.RegisterRequest;
-import com.AirBnb.TimberAndStone.dto.RegisterResponse;
+import com.AirBnb.TimberAndStone.responses.user.ActivateDeactivateResponse;
+import com.AirBnb.TimberAndStone.responses.rental.ContactResponse;
+import com.AirBnb.TimberAndStone.requests.authentication.RegisterRequest;
+import com.AirBnb.TimberAndStone.responses.authentication.RegisterResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;

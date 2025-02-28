@@ -1,12 +1,17 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.dto.*;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
+import com.AirBnb.TimberAndStone.requests.booking.BookingRequest;
+import com.AirBnb.TimberAndStone.requests.booking.PatchBookingRequest;
+import com.AirBnb.TimberAndStone.responses.booking.AllBookingsResponse;
+import com.AirBnb.TimberAndStone.responses.booking.BookingResponse;
+import com.AirBnb.TimberAndStone.responses.booking.PatchBookingResponse;
+import com.AirBnb.TimberAndStone.responses.booking.PostBookingResponse;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
