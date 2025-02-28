@@ -2,11 +2,13 @@ package com.AirBnb.TimberAndStone.models;
 
 
 import jakarta.validation.constraints.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -51,11 +53,11 @@ public class User {
     private Boolean isActive;
 
 
-    @NotNull(message = "CreatedAt cannot be null")
-    private LocalDate createdAt;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
-    @NotNull(message = "UpdatedAt cannot be null")
-    private LocalDate updatedAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     @NotEmpty(message = "Profile photo cant be empty")
     @NotNull(message = "Profile photo cant be null")
@@ -149,19 +151,19 @@ public class User {
         isActive = active;
     }
 
-    public @NotNull(message = "CreatedAt cannot be null") LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(@NotNull(message = "CreatedAt cannot be null") LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public @NotNull(message = "UpdatedAt cannot be null") LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(@NotNull(message = "UpdatedAt cannot be null") LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 

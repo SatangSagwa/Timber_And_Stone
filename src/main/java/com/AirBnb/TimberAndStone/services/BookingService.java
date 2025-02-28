@@ -60,6 +60,7 @@ public class BookingService {
         booking.setUpdatedAt(LocalDateTime.now());
         booking.setBookingNumber(generateBookingNumber(booking.getUser(), booking.getRental()));
 
+
         bookingRepository.save(booking);
 
         return new PostBookingResponse("Rental has been booked successfully",
