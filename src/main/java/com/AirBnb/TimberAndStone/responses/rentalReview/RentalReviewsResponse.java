@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.responses.rentalReview;
 
 public class RentalReviewsResponse {
     private String rental;

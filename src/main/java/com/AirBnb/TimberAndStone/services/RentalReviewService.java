@@ -1,6 +1,6 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.dto.RentalReviewsResponse;
+import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewsResponse;
 import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
@@ -99,7 +99,7 @@ public class RentalReviewService {
         if (request.getReview() != null) {
             existingRentalReview.setReview(request.getReview());
         }
-
+updateRentalRating
         rentalReviewRepository.save(existingRentalReview);
         return convertToRentalReviewResponse(existingRentalReview, "The review has been updated successfully");
     }
