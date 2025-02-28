@@ -1,7 +1,7 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 
-import com.AirBnb.TimberAndStone.dto.UserReviewResponse;
+import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
 import com.AirBnb.TimberAndStone.models.UserReview;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
 import com.AirBnb.TimberAndStone.services.UserReviewService;

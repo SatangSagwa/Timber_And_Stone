@@ -1,16 +1,16 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.requests.rental;
 
 import com.AirBnb.TimberAndStone.models.Amenity;
 
 import java.util.List;
 
-public class RentalAmenitiesDTO {
+public class RentalAmenitiesRequest {
     private List<Amenity> amenities;
 
-    public RentalAmenitiesDTO() {
+    public RentalAmenitiesRequest() {
     }
 
-    public RentalAmenitiesDTO(List<Amenity> amenities) {
+    public RentalAmenitiesRequest(List<Amenity> amenities) {
         this.amenities = amenities;
     }
 

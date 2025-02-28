@@ -1,7 +1,7 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
-import com.AirBnb.TimberAndStone.dto.RentalReviewResponse;
+import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.models.RentalReview;
 import com.AirBnb.TimberAndStone.services.RentalReviewService;
 import jakarta.validation.Valid;

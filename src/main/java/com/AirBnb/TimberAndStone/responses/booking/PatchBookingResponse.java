@@ -1,43 +1,42 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.responses.booking;
 
 import com.AirBnb.TimberAndStone.models.BookingStatus;
 import com.AirBnb.TimberAndStone.models.Period;
 
-import java.time.LocalDateTime;
-
-public class BookingResponse {
-    private String bookingNumber;
+public class PatchBookingResponse {
+    private String message;
     private String rental;
+    private String bookingNumber;
     private String guest;
     private Integer numberOfGuests;
     private Period period;
     private Double totalPrice;
+    private Boolean isPaid;
     private BookingStatus status;
     private String note;
-    private LocalDateTime bookingDate;
 
-    public BookingResponse() {
+    public PatchBookingResponse() {
     }
 
-    public BookingResponse(String bookingNumber, String rental, String guest, Integer numberOfGuests, Period period, Double totalPrice, BookingStatus status, String note, LocalDateTime bookingDate) {
-        this.bookingNumber = bookingNumber;
+    public PatchBookingResponse(String message, String rental, String bookingNumber, String guest, Integer numberOfGuests, Period period, Double totalPrice, Boolean isPaid, BookingStatus status, String note) {
+        this.message = message;
         this.rental = rental;
+        this.bookingNumber = bookingNumber;
         this.guest = guest;
         this.numberOfGuests = numberOfGuests;
         this.period = period;
         this.totalPrice = totalPrice;
+        this.isPaid = isPaid;
         this.status = status;
         this.note = note;
-        this.bookingDate = bookingDate;
     }
 
-
-    public String getBookingNumber() {
-        return bookingNumber;
+    public String getMessage() {
+        return message;
     }
 
-    public void setBookingNumber(String bookingNumber) {
-        this.bookingNumber = bookingNumber;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getRental() {
@@ -46,6 +45,14 @@ public class BookingResponse {
 
     public void setRental(String rental) {
         this.rental = rental;
+    }
+
+    public String getBookingNumber() {
+        return bookingNumber;
+    }
+
+    public void setBookingNumber(String bookingNumber) {
+        this.bookingNumber = bookingNumber;
     }
 
     public String getGuest() {
@@ -80,6 +87,14 @@ public class BookingResponse {
         this.totalPrice = totalPrice;
     }
 
+    public Boolean getPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
+    }
+
     public BookingStatus getStatus() {
         return status;
     }
@@ -94,13 +109,5 @@ public class BookingResponse {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public LocalDateTime getBookingDate() {
-        return bookingDate;
-    }
-
-    public void setBookingDate(LocalDateTime bookingDate) {
-        this.bookingDate = bookingDate;
     }
 }
