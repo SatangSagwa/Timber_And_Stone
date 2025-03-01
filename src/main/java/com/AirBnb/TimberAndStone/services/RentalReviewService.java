@@ -245,11 +245,13 @@ updateRentalRating
     private void updateRentalRating(RentalReview rentalReview, Rental rental, String id) {
         RentalReview existingRentalReview = rentalReviewRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Rental review not found"));
-
+        System.out.println("existingRATING: " + existingRentalReview.getRating());
         Integer numberOfRatings = rental.getRating().getNumberOfRatings();
         Double averageRating = rental.getRating().getAverageRating();
         Integer rating = rentalReview.getRating();
-
+        System.out.println("newRating = " + rentalReview.getRating());
+        System.out.println("averageRating = " + averageRating);
+        System.out.println("numberOfRatings = " + numberOfRatings);
 
         averageRating = averageRating * numberOfRatings - existingRentalReview.getRating() + rating;
         averageRating = averageRating / numberOfRatings;
@@ -257,7 +259,7 @@ updateRentalRating
         rental.getRating().setNumberOfRatings(numberOfRatings);
         rental.getRating().setAverageRating(averageRating);
         rental.setRating(rental.getRating());
-
+        System.out.println("Rating :" + rental.getRating().getAverageRating() + "numb: " + rental.getRating().getNumberOfRatings());
         rentalRepository.save(rental);
 
     }
