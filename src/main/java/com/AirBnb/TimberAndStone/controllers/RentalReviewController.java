@@ -1,8 +1,9 @@
 package com.AirBnb.TimberAndStone.controllers;
 
+import com.AirBnb.TimberAndStone.requests.rentalReview.PatchRentalReviewRequest;
 import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
 import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewResponse;
-import com.AirBnb.TimberAndStone.models.RentalReview;
+import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewsResponse;
 import com.AirBnb.TimberAndStone.services.RentalReviewService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -28,17 +29,18 @@ public class RentalReviewController {
     }
     @GetMapping
     public ResponseEntity<?> getAllRentalReviews() {
-        List<RentalReview> rentalReviews = rentalReviewService.getAllRentalReviews();
-        return ResponseEntity.ok(rentalReviews);
+        List<RentalReviewsResponse> response = rentalReviewService.getAllRentalReviews();
+        return ResponseEntity.ok(response);
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> getRentalReviewById(@PathVariable String id) {
-        RentalReview rentalReview = rentalReviewService.getRentalReviewById(id);
-        return ResponseEntity.ok(rentalReview);
+        RentalReviewResponse response = rentalReviewService.getRentalReviewById(id);
+        return ResponseEntity.ok(response);
     }
     @PatchMapping("/{id}")
-    public ResponseEntity<RentalReviewResponse> updateRentalReviewById(@Valid @PathVariable String id, @RequestBody RentalReviewRequest rentalReviewRequest) {
-            return new ResponseEntity<>(rentalReviewService.updateRentalReviewById(id, rentalReviewRequest), HttpStatus.OK);
+    public ResponseEntity<RentalReviewResponse> updateRentalReviewById(@Valid @PathVariable String id, @RequestBody PatchRentalReviewRequest request) {
+        return ResponseEntity.ok(rentalReviewService.updateRentalReviewById(id, request));
+        //return new ResponseEntity<>(rentalReviewService.updateRentalReviewById(id, rentalReviewRequest), HttpStatus.OK);
         }
 
     }
