@@ -1,8 +1,10 @@
 package com.AirBnb.TimberAndStone.controllers;
 
-import com.AirBnb.TimberAndStone.dto.*;
 import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Rental;
+import com.AirBnb.TimberAndStone.requests.rental.RentalAmenitiesRequest;
+import com.AirBnb.TimberAndStone.requests.rental.RentalRequest;
+import com.AirBnb.TimberAndStone.responses.rental.*;
 import com.AirBnb.TimberAndStone.services.RentalService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,8 +27,8 @@ public class RentalController {
 
 
     @PostMapping
-    public ResponseEntity<?> createRental(@Valid @RequestBody RentalDTO rentalDTO) {
-        RentalResponse rentalResponse = rentalService.createRental(rentalDTO);
+    public ResponseEntity<?> createRental(@Valid @RequestBody RentalRequest rentalRequest) {
+        RentalResponse rentalResponse = rentalService.createRental(rentalRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(rentalResponse);
     }
 
@@ -104,8 +106,8 @@ public class RentalController {
 
 
     @GetMapping("/amenities")
-    public ResponseEntity<List<RentalAmenitiesDTOResponse>>getRentalsByAmenities(@Valid @RequestBody RentalAmenitiesDTO rentalAmenitiesDTO) {
-       List<RentalAmenitiesDTOResponse> rentals = rentalService.getRentalsByAmenities(rentalAmenitiesDTO);
+    public ResponseEntity<List<RentalAmenitiesDTOResponse>>getRentalsByAmenities(@Valid @RequestBody RentalAmenitiesRequest rentalAmenitiesRequest) {
+       List<RentalAmenitiesDTOResponse> rentals = rentalService.getRentalsByAmenities(rentalAmenitiesRequest);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
     @GetMapping("/averagerating")

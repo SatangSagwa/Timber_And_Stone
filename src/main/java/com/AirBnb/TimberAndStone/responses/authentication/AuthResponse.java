@@ -1,28 +1,30 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.responses.authentication;
+
 
 
 import com.AirBnb.TimberAndStone.models.Role;
 
 import java.util.Set;
 
-public class RegisterResponse {
-
-    private String message;
+public class AuthResponse {
+    private String jwtToken;
     private String username;
     private Set<Role> roles;
 
-    public RegisterResponse(String message, String username, Set<Role> roles) {
-        this.message = message;
+
+    public AuthResponse(String jwtToken, String username, Set<Role> roles) {
+        this.jwtToken = jwtToken;
         this.username = username;
         this.roles = roles;
     }
 
-    public String getMessage() {
-        return message;
+
+    public String getJwtToken() {
+        return jwtToken;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 
     public String getUsername() {
@@ -41,4 +43,3 @@ public class RegisterResponse {
         this.roles = roles;
     }
 }
-

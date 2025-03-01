@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.responses;
+package com.AirBnb.TimberAndStone.responses.userReview;
 
 public class GetUserReviewResponse {
     private String user;

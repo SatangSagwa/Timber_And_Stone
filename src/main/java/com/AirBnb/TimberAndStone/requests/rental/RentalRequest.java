@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.requests.rental;
 
 import com.AirBnb.TimberAndStone.models.Address;
 import com.AirBnb.TimberAndStone.models.Amenity;
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.*;
 
 import java.util.List;
 
-public class RentalDTO {
+public class RentalRequest {
 
     @NotNull(message = "Title can not be null")
     @NotEmpty(message = "Title can not be empty")
@@ -54,10 +54,10 @@ public class RentalDTO {
 //--------------------------------------------- Constructors ------------------------------------------------------------
 
 
-    public RentalDTO() {
+    public RentalRequest() {
     }
 
-    public RentalDTO(String title, List<String> photos, Double pricePerNight, Address address, Category category, List<Amenity> amenities, Integer capacity, List<Period> availablePeriods, String description, String policy) {
+    public RentalRequest(String title, List<String> photos, Double pricePerNight, Address address, Category category, List<Amenity> amenities, Integer capacity, List<Period> availablePeriods, String description, String policy) {
         this.title = title;
         this.photos = photos;
         this.pricePerNight = pricePerNight;

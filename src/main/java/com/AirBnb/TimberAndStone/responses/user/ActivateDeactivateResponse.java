@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.responses.user;
 
 public class ActivateDeactivateResponse {
 

@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.dto;
+package com.AirBnb.TimberAndStone.responses.rental;
 
 import com.AirBnb.TimberAndStone.models.Period;
 

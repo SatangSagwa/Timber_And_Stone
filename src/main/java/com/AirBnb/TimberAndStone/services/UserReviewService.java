@@ -11,8 +11,8 @@ import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
-import com.AirBnb.TimberAndStone.responses.GetUserReviewResponse;
-import com.AirBnb.TimberAndStone.responses.UserReviewResponse;
+import com.AirBnb.TimberAndStone.responses.userReview.GetUserReviewResponse;
+import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

@@ -1,12 +1,14 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.dto.*;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
+import com.AirBnb.TimberAndStone.requests.rental.RentalAmenitiesRequest;
+import com.AirBnb.TimberAndStone.requests.rental.RentalRequest;
+import com.AirBnb.TimberAndStone.responses.rental.*;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +35,7 @@ public class RentalService {
 
 // --------------------------------- Methods ---------------------------------------------------------------------------
 
-    public RentalResponse createRental(RentalDTO rentalDTO) {
+    public RentalResponse createRental(RentalRequest rentalRequest) {
 
         // Detta under sätter host som den som är inloggad
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -56,16 +58,16 @@ public class RentalService {
         rental.setHost(user);
 
         // DTON
-        rental.setAddress(rentalDTO.getAddress());
-        rental.setAvailablePeriods(rentalDTO.getAvailablePeriods());
-        rental.setAmenities(rentalDTO.getAmenities());
-        rental.setTitle(rentalDTO.getTitle());
-        rental.setPhotos(rentalDTO.getPhotos());
-        rental.setPricePerNight(rentalDTO.getPricePerNight());
-        rental.setCategory(rentalDTO.getCategory());
-        rental.setCapacity(rentalDTO.getCapacity());
-        rental.setDescription(rentalDTO.getDescription());
-        rental.setPolicy(getValidatedPolicy(rentalDTO.getPolicy()));
+        rental.setAddress(rentalRequest.getAddress());
+        rental.setAvailablePeriods(rentalRequest.getAvailablePeriods());
+        rental.setAmenities(rentalRequest.getAmenities());
+        rental.setTitle(rentalRequest.getTitle());
+        rental.setPhotos(rentalRequest.getPhotos());
+        rental.setPricePerNight(rentalRequest.getPricePerNight());
+        rental.setCategory(rentalRequest.getCategory());
+        rental.setCapacity(rentalRequest.getCapacity());
+        rental.setDescription(rentalRequest.getDescription());
+        rental.setPolicy(getValidatedPolicy(rentalRequest.getPolicy()));
 
 
         rentalRepository.save(rental);
@@ -256,11 +258,11 @@ public class RentalService {
                 .collect(Collectors.toList());
     }
 
-    public List<RentalAmenitiesDTOResponse> getRentalsByAmenities(RentalAmenitiesDTO rentalAmenitiesDTO) {
+    public List<RentalAmenitiesDTOResponse> getRentalsByAmenities(RentalAmenitiesRequest rentalAmenitiesRequest) {
         List<Rental> rentals = getAllRentals();
         List<Rental> matchingRentals = rentals.stream()
                 .filter(rental -> rental.getAmenities().stream()
-                        .anyMatch(amenities -> isAmenitiesMatching(rental.getAmenities(), rentalAmenitiesDTO.getAmenities()))
+                        .anyMatch(amenities -> isAmenitiesMatching(rental.getAmenities(), rentalAmenitiesRequest.getAmenities()))
                 )
                 .collect(Collectors.toList());
 
