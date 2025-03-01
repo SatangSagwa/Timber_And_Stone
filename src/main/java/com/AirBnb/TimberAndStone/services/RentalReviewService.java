@@ -3,10 +3,7 @@ package com.AirBnb.TimberAndStone.services;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.Booking;
-import com.AirBnb.TimberAndStone.models.BookingStatus;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.models.RentalReview;
+import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
@@ -101,6 +98,19 @@ public class RentalReviewService {
 
         List<RentalReview> rentalReviews = rentalReviewRepository.findByToRentalId(id);
 
+        return rentalReviews.stream()
+                .map(this::convertToGetRentalReviewResponse)
+                .collect(Collectors.toList());
+    }
+    public List<GetRentalReviewResponse> getRentalReviewByHostId(String id) {
+        if(!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Host not found");
+        }
+        List<Rental> rentals = rentalRepository.findByHostId(id);
+        if(rentals.isEmpty()) {
+            throw new ResourceNotFoundException("No rentals found for this host");
+        }
+        List<RentalReview> rentalReviews = rentalReviewRepository.findByToRentalId(id);
         return rentalReviews.stream()
                 .map(this::convertToGetRentalReviewResponse)
                 .collect(Collectors.toList());
@@ -204,6 +214,7 @@ public class RentalReviewService {
     }
     private GetRentalReviewResponse convertToGetRentalReviewResponse(RentalReview rentalReview) {
         Rental rental = rentalReview.getToRental();
+        User host = rental.getHost();
 
         GetRentalReviewResponse getRentalReviewResponse = new GetRentalReviewResponse();
         getRentalReviewResponse.setUser(rentalReview.getFromUser().getUsername());
@@ -212,6 +223,7 @@ public class RentalReviewService {
         getRentalReviewResponse.setReview(rentalReview.getReview());
         return getRentalReviewResponse;
     }
+
 
 }
 
