@@ -47,7 +47,7 @@ public class RentalReviewService {
         Rental rental = booking.getRental();
 
         // add and update to the rentals rating
-        updateRentalRating(request, rental);
+        //updateRentalRating(request, rental);
 
         //Set user to authenticated
         rentalReview.setFromUser(userService.getAuthenticated());
@@ -121,7 +121,7 @@ updateRentalRating
                 existingRentalReview.getToRental()
         ).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
-        updateRentalRating(existingRentalReview, booking.getRental(), id);
+        //updateRentalRating(existingRentalReview, booking.getRental(), id);
 
         if (request.getRating() != null) {
             existingRentalReview.setRating(request.getRating());
@@ -221,7 +221,7 @@ updateRentalRating
         return response;
     }
 
-
+    /*
     //For create - adds to numberOfRatings
     private void updateRentalRating(RentalReviewRequest rentalReviewRequest, Rental rental) {
 
@@ -240,6 +240,7 @@ updateRentalRating
         rentalRepository.save(rental);
 
     }
+
 
     //For update - finds by id
     private void updateRentalRating(RentalReview rentalReview, Rental rental, String id) {
@@ -263,6 +264,8 @@ updateRentalRating
         rentalRepository.save(rental);
 
     }
+
+     */
 
 }
 
