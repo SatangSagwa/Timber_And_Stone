@@ -1,33 +1,19 @@
-
-
 package com.AirBnb.TimberAndStone.responses.userReview;
 
-public class UserReviewResponse {
-    private String message;
+public class GetUserReviewResponse {
     private String user;
     private String host;
-    private String rental;
     private Integer rating;
     private String review;
 
-    public UserReviewResponse(String message, String user, String host, String rental, Integer rating, String review) {
-        this.message = message;
+    public GetUserReviewResponse(String user, String host, Integer rating, String review) {
         this.user = user;
         this.host = host;
-        this.rental = rental;
         this.rating = rating;
         this.review = review;
     }
 
-    public UserReviewResponse() {
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public GetUserReviewResponse() {
     }
 
     public String getUser() {
@@ -44,14 +30,6 @@ public class UserReviewResponse {
 
     public void setHost(String host) {
         this.host = host;
-    }
-
-    public String getRental() {
-        return rental;
-    }
-
-    public void setRental(String rental) {
-        this.rental = rental;
     }
 
     public Integer getRating() {

@@ -65,37 +65,35 @@ public class UserReview {
         this.toUser = toUser;
     }
 
-    public @NotNull @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer getRating() {
+    public @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer getRating() {
         return rating;
     }
 
-    public void setRating(@NotNull @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer rating) {
+    public void setRating(@Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer rating) {
         this.rating = rating;
     }
 
-    public @Size(min = 1, max = 500, message = "Review has to be between 1-500 characters") String getReview() {
+    public @NotNull(message = "Review can not be null") @Size(min = 1, max = 500, message = "Review has to be between 1-500 characters") String getReview() {
         return review;
     }
 
-    public void setReview(@Size(min = 1, max = 500, message = "Review has to be between 1-500 characters") String review) {
+    public void setReview(@NotNull(message = "Review can not be null") @Size(min = 1, max = 500, message = "Review has to be between 1-500 characters") String review) {
         this.review = review;
     }
 
-    public @CreatedDate LocalDate getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt (LocalDate createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public @LastModifiedDate LocalDate getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt (LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-
 }
