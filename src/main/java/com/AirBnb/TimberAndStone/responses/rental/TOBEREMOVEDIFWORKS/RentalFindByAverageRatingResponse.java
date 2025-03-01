@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.responses.rental;
+package com.AirBnb.TimberAndStone.responses.rental.TOBEREMOVEDIFWORKS;
 
 public class RentalFindByAverageRatingResponse {
     private String title;

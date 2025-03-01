@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.responses.rental;
+package com.AirBnb.TimberAndStone.responses.rental.TOBEREMOVEDIFWORKS;
 
 import com.AirBnb.TimberAndStone.models.Category;
 
