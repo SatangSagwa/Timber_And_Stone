@@ -33,38 +33,38 @@ public class RentalController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Rental>> getAllRentals() {
-        List<Rental> rentals = rentalService.getAllRentals();
+    public ResponseEntity<List<GetRentalsResponse>> getAllRentals() {
+        List<GetRentalsResponse> rentals = rentalService.getAllRentals();
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Rental> getRentalById(@Valid @PathVariable String id) {
-        Rental rental = rentalService.getRentalById(id);
+    public ResponseEntity<GetRentalsResponse> getRentalById(@Valid @PathVariable String id) {
+        GetRentalsResponse rental = rentalService.getRentalById(id);
         return new ResponseEntity<>(rental, HttpStatus.OK);
     }
 
     @GetMapping("category/{category}")
-    public ResponseEntity<List<RentalFindByCategoryResponse>> getRentalsByCategory(@Valid @PathVariable Category category) {
-        List <RentalFindByCategoryResponse> rentals = rentalService.getRentalsByCategory(category);
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByCategory(@Valid @PathVariable Category category) {
+        List <GetRentalsResponse> rentals = rentalService.getRentalsByCategory(category);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
     @GetMapping("/rating")
-    public ResponseEntity<List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse>> getRentalsByMinAvgRatingAndMinNumberOfRating(@RequestParam Double minAvgRating, @RequestParam Integer minNumberOfRatings) {
-        List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse> rentals = rentalService.getRentalsByMinAvgRatingAndMinNumberOfRating(minAvgRating, minNumberOfRatings);
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByMinAvgRatingAndMinNumberOfRating(@RequestParam Double minAvgRating, @RequestParam Integer minNumberOfRatings) {
+        List<GetRentalsResponse> rentals = rentalService.getRentalsByMinAvgRatingAndMinNumberOfRating(minAvgRating, minNumberOfRatings);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
     @GetMapping("/pricepernight")
-    public ResponseEntity<List<RentalFindByPricePerNightRangeResponse>> getRentalsByPricePerNightRange(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
-        List<RentalFindByPricePerNightRangeResponse> rentals = rentalService.getRentalsByPricePerNightRange(minPrice, maxPrice);
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByPricePerNightRange(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
+        List<GetRentalsResponse> rentals = rentalService.getRentalsByPricePerNightRange(minPrice, maxPrice);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
     @GetMapping("/availability")
-    public ResponseEntity<List<RentalFindByAvailabilityPeriodResponse>> getRentalsByAvailabilityPeriod(@Valid @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
-        List<RentalFindByAvailabilityPeriodResponse> rentals = rentalService.getRentalsByAvailabilityPeriod(startDate, endDate);
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByAvailabilityPeriod(@Valid @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+        List<GetRentalsResponse> rentals = rentalService.getRentalsByAvailabilityPeriod(startDate, endDate);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
@@ -86,7 +86,6 @@ public class RentalController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     @GetMapping("/address/{country}/{city}")
     public ResponseEntity<List<GetRentalsResponse>> getRentalsByCountryAndCity(@PathVariable String country, @PathVariable String city) {
         List<GetRentalsResponse> response = rentalService.getRentalsDTOByCountryAndCity(country, city);
@@ -106,13 +105,14 @@ public class RentalController {
 
 
     @GetMapping("/amenities")
-    public ResponseEntity<List<RentalAmenitiesDTOResponse>>getRentalsByAmenities(@Valid @RequestBody RentalAmenitiesRequest rentalAmenitiesRequest) {
-       List<RentalAmenitiesDTOResponse> rentals = rentalService.getRentalsByAmenities(rentalAmenitiesRequest);
+    public ResponseEntity<List<GetRentalsResponse>>getRentalsByAmenities(@Valid @RequestBody RentalAmenitiesRequest rentalAmenitiesRequest) {
+       List<GetRentalsResponse> rentals = rentalService.getRentalsByAmenities(rentalAmenitiesRequest);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
+
     @GetMapping("/averagerating")
-    public ResponseEntity<List<RentalFindByAverageRatingResponse>> getRentalsByAverageRating(@RequestParam Double averageRating) {
-        List<RentalFindByAverageRatingResponse> rentals = rentalService.getRentalsByAverageRating(averageRating);
+    public ResponseEntity<List<GetRentalsResponse>> getRentalsByAverageRating(@RequestParam Double averageRating) {
+        List<GetRentalsResponse> rentals = rentalService.getRentalsByAverageRating(averageRating);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 

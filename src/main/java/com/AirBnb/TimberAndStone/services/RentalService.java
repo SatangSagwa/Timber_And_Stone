@@ -74,29 +74,33 @@ public class RentalService {
         return new RentalResponse("New Rental has been created", rental.getTitle());
     }
 
-    public List<Rental> getAllRentals() {
-        return rentalRepository.findAll();
-    }
-
-    public Rental getRentalById(String id) {
-        return rentalRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
-
-    }
-
-    public List<RentalFindByCategoryResponse> getRentalsByCategory(Category category) {
-        List<Rental> rentals = rentalRepository.findByCategory(category);
+    public List<GetRentalsResponse> getAllRentals() {
+        List<Rental> rentals = rentalRepository.findAll();
 
         return rentals.stream()
-                .map(this::convertToRentalFindByCategoryResponse)
+                .map(this::convertToGetRentalsResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<RentalFindByPricePerNightRangeResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
+    public GetRentalsResponse getRentalById(String id) {
+        Rental rental = rentalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
+        return convertToGetRentalsResponse(rental);
+    }
+
+    public List<GetRentalsResponse> getRentalsByCategory(Category category) {
+        List<Rental> rentals = rentalRepository.findByCategory(category);
+
+        return rentals.stream()
+                .map(this::convertToGetRentalsResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<GetRentalsResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
         List<Rental> rentals = rentalRepository.findByPricePerNightBetweenInclusive(minPrice, maxPrice);
 
         return rentals.stream()
-                .map(this::convertToRentalFindByPricePerNightRangeResponse)
+                .map(this::convertToGetRentalsResponse)
                 .collect(Collectors.toList());
     }
 
@@ -156,11 +160,11 @@ public class RentalService {
         rentalRepository.delete(rental);
     }
 
-    public List<RentalFindByMinAvgRatingAndMinNumberOfRatingResponse> getRentalsByMinAvgRatingAndMinNumberOfRating(Double minAvgRating, Integer minNumberOfRatings) {
+    public List<GetRentalsResponse> getRentalsByMinAvgRatingAndMinNumberOfRating(Double minAvgRating, Integer minNumberOfRatings) {
         List<Rental> rentals = rentalRepository.findByRatingAverageRatingGreaterThanEqualAndRatingNumberOfRatingsGreaterThanEqual(minAvgRating, minNumberOfRatings);
 
         return rentals.stream()
-                .map(this::convertToRentalFindByMinAvgRatingAndMinNumberOfRatingResponse)
+                .map(this::convertToGetRentalsResponse)
                 .collect(Collectors.toList());
     }
 
@@ -170,7 +174,7 @@ public class RentalService {
             throw new IllegalArgumentException("Capacity must be greater than 0");
         }
 
-        List<Rental> rentals = getAllRentals();
+        List<Rental> rentals = rentalRepository.findAll();
 
         //Filters matching rentals
         rentals = rentals.stream()
@@ -189,13 +193,13 @@ public class RentalService {
         String trimmedtitle = StringUtils.trimAllWhitespace(title);
 
         //Trim all whitespace from rentals titles
-        List<Rental> trimmedRentals = getAllRentals();
+        List<Rental> trimmedRentals = rentalRepository.findAll();
         for(Rental rental : trimmedRentals) {
             rental.setTitle(StringUtils.trimAllWhitespace(rental.getTitle()));
         }
 
         //Filter matching rentals to trimmedRentals
-        List<Rental> rentals = getAllRentals();
+        List<Rental> rentals = rentalRepository.findAll();
         trimmedRentals = trimmedRentals.stream()
                 .filter(rental -> rental.getTitle().equalsIgnoreCase(trimmedtitle))
                 .toList();
@@ -218,8 +222,8 @@ public class RentalService {
     }
 
     // https://chatgpt.com/share/67b4a4fb-a588-800b-9894-16722dd3a37d
-    public List<RentalFindByAvailabilityPeriodResponse> getRentalsByAvailabilityPeriod(LocalDate startDate, LocalDate endDate) {
-        List<Rental> rentals = getAllRentals();
+    public List<GetRentalsResponse> getRentalsByAvailabilityPeriod(LocalDate startDate, LocalDate endDate) {
+        List<Rental> rentals = rentalRepository.findAll();
         if (startDate.isAfter(endDate) || startDate.isEqual(endDate) || endDate.isBefore(startDate) || endDate.isEqual(startDate)) {
             throw new ConflictException("startDate and endDate have to be in order (startDate - endDate)");
         }
@@ -233,8 +237,8 @@ public class RentalService {
                     List<Period> matchingPeriods = rental.getAvailablePeriods().stream()
                             .filter(period -> isPeriodMatching(period, startDate, endDate))
                             .collect(Collectors.toList());
-                    RentalFindByAvailabilityPeriodResponse response = convertToRentalFindByAvailabilityPeriodResponse(rental);
-                    response.setPeriods(matchingPeriods);
+                    GetRentalsResponse response = convertToGetRentalsResponse(rental);
+                    //response.setPeriods(matchingPeriods);
                     return response;
                 })
                 .collect(Collectors.toList());
@@ -258,8 +262,8 @@ public class RentalService {
                 .collect(Collectors.toList());
     }
 
-    public List<RentalAmenitiesDTOResponse> getRentalsByAmenities(RentalAmenitiesRequest rentalAmenitiesRequest) {
-        List<Rental> rentals = getAllRentals();
+    public List<GetRentalsResponse> getRentalsByAmenities(RentalAmenitiesRequest rentalAmenitiesRequest) {
+        List<Rental> rentals = rentalRepository.findAll();
         List<Rental> matchingRentals = rentals.stream()
                 .filter(rental -> rental.getAmenities().stream()
                         .anyMatch(amenities -> isAmenitiesMatching(rental.getAmenities(), rentalAmenitiesRequest.getAmenities()))
@@ -267,15 +271,15 @@ public class RentalService {
                 .collect(Collectors.toList());
 
         return matchingRentals.stream()
-                .map(this::convertToRentalAmenitiesDTOResponse)
+                .map(this::convertToGetRentalsResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<RentalFindByAverageRatingResponse> getRentalsByAverageRating(Double averageRating) {
+    public List<GetRentalsResponse> getRentalsByAverageRating(Double averageRating) {
         List<Rental> rentals = rentalRepository.findByRatingAverageRating(averageRating);
 
         return rentals.stream()
-                .map(this::convertToRentalFindByAverageRatingResponse)
+                .map(this::convertToGetRentalsResponse)
                 .collect(Collectors.toList());
     }
 
@@ -288,7 +292,7 @@ public class RentalService {
         String trimmedCountry = StringUtils.trimAllWhitespace(country);
 
         //Make a list of rentals with trimmed country names.
-        List<Rental> trimmedRentals = getAllRentals();
+        List<Rental> trimmedRentals = rentalRepository.findAll();
 
         for(Rental rental : trimmedRentals) {
             rental.setAddress(new Address(
@@ -310,7 +314,7 @@ public class RentalService {
         List<Rental> matchingRentals = new ArrayList<>();
 
         //For each rental.id, compare to trimmedRental.id and add to matchingRentals.
-        List<Rental> rentals = getAllRentals();
+        List<Rental> rentals = rentalRepository.findAll();
         for (Rental rental : rentals) {
             for (Rental trimmedRental : trimmedRentals) {
                 if(rental.getId().equals(trimmedRental.getId())) {
@@ -348,7 +352,7 @@ public class RentalService {
         List<Rental> matchingRentals = new ArrayList<>();
 
         //For each rental.id, compare to trimmedRental.id and add to matchingRentals.
-        List<Rental> rentals = getAllRentals();
+        List<Rental> rentals = rentalRepository.findAll();
         for (Rental rental : rentals) {
             for (Rental trimmedRental : trimmedRentals) {
                 if(rental.getId().equals(trimmedRental.getId())) {

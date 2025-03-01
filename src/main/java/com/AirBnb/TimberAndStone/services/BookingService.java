@@ -45,7 +45,9 @@ public class BookingService {
         booking.setUser(userService.getAuthenticated());
 
         //Find and set rental
-        Rental rental = rentalService.getRentalById(bookingRequest.getRental().getId());
+        Rental rental = rentalRepository.findById(bookingRequest.getRental().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
+       // Rental rental = rentalService.getRentalById(bookingRequest.getRental().getId());
         booking.setRental(rental);
 
         //DTO values
