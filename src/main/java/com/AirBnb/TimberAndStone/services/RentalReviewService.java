@@ -1,6 +1,5 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
@@ -13,10 +12,13 @@ import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
+import com.AirBnb.TimberAndStone.responses.rentalReview.GetRentalReviewResponse;
+import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RentalReviewService {
@@ -92,9 +94,17 @@ public class RentalReviewService {
         rentalReviewRepository.save(existingRentalReview);
         return convertToRentalReviewResponse(existingRentalReview, booking.getRental(), "The rentalReview has been updated successfully");
     }
+    public List<GetRentalReviewResponse> getRentalReviewByRentalId(String id) {
+        if(!rentalRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Rental not found");
+        }
 
+        List<RentalReview> rentalReviews = rentalReviewRepository.findByToRentalId(id);
 
-
+        return rentalReviews.stream()
+                .map(this::convertToGetRentalReviewResponse)
+                .collect(Collectors.toList());
+    }
 
 
     //------------------------------------------- HELPERS --------------------------------------------------------------
@@ -191,6 +201,16 @@ public class RentalReviewService {
 
         rentalRepository.save(rental);
 
+    }
+    private GetRentalReviewResponse convertToGetRentalReviewResponse(RentalReview rentalReview) {
+        Rental rental = rentalReview.getToRental();
+
+        GetRentalReviewResponse getRentalReviewResponse = new GetRentalReviewResponse();
+        getRentalReviewResponse.setUser(rentalReview.getFromUser().getUsername());
+        getRentalReviewResponse.setRental(rental.getTitle());
+        getRentalReviewResponse.setRating(rentalReview.getRating());
+        getRentalReviewResponse.setReview(rentalReview.getReview());
+        return getRentalReviewResponse;
     }
 
 }

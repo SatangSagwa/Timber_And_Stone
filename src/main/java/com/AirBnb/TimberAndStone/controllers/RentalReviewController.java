@@ -1,6 +1,7 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
+import com.AirBnb.TimberAndStone.responses.rentalReview.GetRentalReviewResponse;
 import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewResponse;
 import com.AirBnb.TimberAndStone.models.RentalReview;
 import com.AirBnb.TimberAndStone.services.RentalReviewService;
@@ -39,6 +40,11 @@ public class RentalReviewController {
     @PatchMapping("/{id}")
     public ResponseEntity<RentalReviewResponse> updateRentalReviewById(@Valid @PathVariable String id, @RequestBody RentalReviewRequest rentalReviewRequest) {
             return new ResponseEntity<>(rentalReviewService.updateRentalReviewById(id, rentalReviewRequest), HttpStatus.OK);
+        }
+        @GetMapping("rental/{id}")
+    public ResponseEntity<List<GetRentalReviewResponse>> getRentalReviewsByRentalId(@Valid @PathVariable String id) {
+        List<GetRentalReviewResponse> rentalReviews = rentalReviewService.getRentalReviewByRentalId(id);
+        return ResponseEntity.ok(rentalReviews);
         }
 
     }
