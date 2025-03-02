@@ -107,10 +107,12 @@ public class RentalReviewService {
             throw new ResourceNotFoundException("Host not found");
         }
         List<Rental> rentals = rentalRepository.findByHostId(id);
+        System.out.println("Found Rentals: " + rentals);
         if(rentals.isEmpty()) {
             throw new ResourceNotFoundException("No rentals found for this host");
         }
         List<RentalReview> rentalReviews = rentalReviewRepository.findByToRentalId(id);
+        System.out.println("Found Reviews: " + rentalReviews);
         return rentalReviews.stream()
                 .map(this::convertToGetRentalReviewResponse)
                 .collect(Collectors.toList());

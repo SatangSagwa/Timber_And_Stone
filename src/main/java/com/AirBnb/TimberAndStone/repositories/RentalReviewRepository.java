@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface RentalReviewRepository extends MongoRepository<RentalReview, String> {
     List<RentalReview> findByToRentalId(String rentalId);
-    List<RentalReview> findByHostId(String hostId);
+
 }
