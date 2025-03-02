@@ -44,6 +44,10 @@ public class RentalReviewService {
         Booking booking = bookingRepository.findById(request.getBookingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
+        if(booking.getReviewedByUser()) {
+            throw new IllegalArgumentException("You have already left a review for this visit!");
+        }
+
         // validate rentalReviewRequest
         validateRentalReviewRequest(request);
 
@@ -63,6 +67,8 @@ public class RentalReviewService {
         rentalReview.setRating(request.getRating());
         rentalReview.setReview(request.getReview());
 
+        booking.setReviewedByUser(true);
+        bookingRepository.save(booking);
         rentalReviewRepository.save(rentalReview);
 
         return convertToRentalReviewResponse(rentalReview, "The rental has been reviewed successfully");
@@ -119,10 +125,10 @@ updateRentalRating
         validateRentalReviewRequest(request, existingRentalReview);
 
         // find booking
-        Booking booking = bookingRepository.findByBookingNumberAndUserAndRental(
+        Booking booking = bookingRepository.findByBookingNumberAndUserIdAndRentalId(
                 existingRentalReview.getBooking().getBookingNumber(),
-                existingRentalReview.getFromUser(),
-                existingRentalReview.getToRental()
+                existingRentalReview.getFromUser().getId(),
+                existingRentalReview.getToRental().getId()
         ).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         //updateRentalRating(existingRentalReview, booking.getRental(), id);
@@ -182,6 +188,10 @@ updateRentalRating
 
         Booking booking = bookingRepository.findById(rentalReviewRequest.getBookingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found2"));
+
+        if(booking.getReviewedByUser()) {
+            throw new IllegalArgumentException("You have already reviewed your visit");
+        }
 
         if(rentalReviewRequest.getRating() < 1 || rentalReviewRequest.getRating() > 5) {
             throw new IllegalArgumentException("Rating has to be between 1 and 5");

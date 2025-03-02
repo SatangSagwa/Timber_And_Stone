@@ -40,21 +40,27 @@ public class BookingService {
 
     public PostBookingResponse createBooking(BookingRequest bookingRequest) {
         Booking booking = new Booking();
+        System.out.println("Booking created");
 
         //Set user to authorized user.
         booking.setUser(userService.getAuthenticated());
+        System.out.println("User set to " + userService.getAuthenticated().getUsername());
+
 
         //Find and set rental
         Rental rental = rentalService.getRentalById(bookingRequest.getRental().getId());
         booking.setRental(rental);
+        System.out.println("Rental set to " + rental.getTitle());
 
         //DTO values
         Period period = new Period();
         period.setStartDate(bookingRequest.getStartDate());
         period.setEndDate(bookingRequest.getEndDate());
         booking.setPeriod(period);
+        System.out.println("Period set");
         booking.setNote(bookingRequest.getNote());
-        validateNumberOfGuests(booking.getRental(), bookingRequest.getNumberOfGuests());
+        validateNumberOfGuests(rental, bookingRequest.getNumberOfGuests());
+        System.out.println("Num of guests validated");
         booking.setNumberOfGuests(bookingRequest.getNumberOfGuests());
 
         //Autovalues
@@ -63,17 +69,20 @@ public class BookingService {
         booking.setBookingStatus(BookingStatus.PENDING);
         booking.setCreatedAt(LocalDateTime.now());
         booking.setUpdatedAt(LocalDateTime.now());
-        booking.setBookingNumber(generateBookingNumber(booking.getUser(), booking.getRental()));
+        //booking.setBookingNumber(generateBookingNumber(userService.getAuthenticated(), rental));
+        booking.setBookingNumber("1234");
+        booking.setReviewedByUser(false);
+        booking.setReviewedByHost(false);
 
 
-        bookingRepository.save(booking);
+        Booking createdBooking = bookingRepository.save(booking);
 
         return new PostBookingResponse("Rental has been booked successfully",
-                booking.getRental().getTitle(),
-                booking.getPeriod(),
-                booking.getTotalPrice(),
-                booking.getNote(),
-                booking.getBookingStatus());
+                createdBooking.getRental().getTitle(),
+                createdBooking.getPeriod(),
+                createdBooking.getTotalPrice(),
+                createdBooking.getNote(),
+                createdBooking.getBookingStatus());
     }
 
     public List<AllBookingsResponse> getAllBookings() {
@@ -307,8 +316,8 @@ public class BookingService {
 
         //Check if there is any matches with existing booking number
         //Should return null if the booking number does not already exist.
-        Booking matchingBooking = bookingRepository.findByBookingNumberAndUserAndRental(randomPositiveInt.toString(), user, rental)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+        Booking matchingBooking = bookingRepository.findByBookingNumberAndUserIdAndRentalId(randomPositiveInt.toString(), user.getId(), rental.getId())
+                .orElse(null);
 
         //if booking is found
         if(matchingBooking != null) {
@@ -322,8 +331,8 @@ public class BookingService {
                         //Generate a new number.
                         randomPositiveInt = Math.abs(secureRandom.nextInt());
                     System.out.println("New Generated number: " + randomPositiveInt);
-                        Booking newMatch = bookingRepository.findByBookingNumberAndUserAndRental(randomPositiveInt.toString(), user, rental)
-                                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+                        Booking newMatch = bookingRepository.findByBookingNumberAndUserIdAndRentalId(randomPositiveInt.toString(), user.getId(), rental.getId())
+                                .orElse(null);
                         if (newMatch == null) {
                             System.out.println("2: No matches found, ID is unique in combination with user and rental");
                             return randomPositiveInt.toString();

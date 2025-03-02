@@ -56,6 +56,12 @@ public class Booking {
     //Can be empty, in case the customer has no notes fo the host.
     private String note;
 
+    @NotNull(message = "Reviewed by user can not be null")
+    private Boolean reviewedByUser;
+
+    @NotNull(message = "Reviewed by host can not be null")
+    private Boolean reviewedByHost;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -145,6 +151,22 @@ public class Booking {
 
     public void setNote(@NotNull(message = "Note can not be null") @Size(max = 300, message = "Note can not exceed 300 characters.") String note) {
         this.note = note;
+    }
+
+    public @NotNull(message = "Reviewed by user can not be null") Boolean getReviewedByUser() {
+        return reviewedByUser;
+    }
+
+    public void setReviewedByUser(@NotNull(message = "Reviewed by user can not be null") Boolean reviewedByUser) {
+        this.reviewedByUser = reviewedByUser;
+    }
+
+    public @NotNull(message = "Reviewed by host can not be null") Boolean getReviewedByHost() {
+        return reviewedByHost;
+    }
+
+    public void setReviewedByHost(@NotNull(message = "Reviewed by host can not be null") Boolean reviewedByHost) {
+        this.reviewedByHost = reviewedByHost;
     }
 
     public LocalDateTime getCreatedAt() {
