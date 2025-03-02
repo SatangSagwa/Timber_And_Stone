@@ -91,6 +91,7 @@ public class RentalReviewService {
         rentalReviewRepository.save(existingRentalReview);
         return convertToRentalReviewResponse(existingRentalReview, booking.getRental(), "The rentalReview has been updated successfully");
     }
+
     public List<GetRentalReviewResponse> getRentalReviewByRentalId(String id) {
         if(!rentalRepository.existsById(id)) {
             throw new ResourceNotFoundException("Rental not found");
@@ -102,16 +103,18 @@ public class RentalReviewService {
                 .map(this::convertToGetRentalReviewResponse)
                 .collect(Collectors.toList());
     }
+
     public List<GetRentalReviewResponse> getRentalReviewByHostId(String id) {
-        if(!userRepository.existsById(id)) {
+        if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("Host not found");
         }
         List<Rental> rentals = rentalRepository.findByHostId(id);
+
         System.out.println("Found Rentals: " + rentals);
-        if(rentals.isEmpty()) {
+        if (rentals.isEmpty()) {
             throw new ResourceNotFoundException("No rentals found for this host");
         }
-        List<RentalReview> rentalReviews = rentalReviewRepository.findByToRentalId(id);
+        List<RentalReview> rentalReviews = rentalReviewRepository.findByToRentalId(rentals.get(0).getId());
         System.out.println("Found Reviews: " + rentalReviews);
         return rentalReviews.stream()
                 .map(this::convertToGetRentalReviewResponse)
