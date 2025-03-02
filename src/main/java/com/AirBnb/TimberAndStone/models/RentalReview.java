@@ -26,6 +26,9 @@ public class RentalReview {
     @NotNull(message="Rental can not be null")
     private Rental toRental;
 
+    @DBRef
+    @NotNull(message = "Booking can not be null")
+    private Booking booking;
 
     @Min(value=1, message="Rating can not be below 1")
     @Max(value=5,message="Rating can not be above 5")
@@ -77,6 +80,14 @@ public class RentalReview {
 
     public void setReview(@Size(max = 500, message = "Review can max be between 500 characters") String review) {
         this.review = review;
+    }
+
+    public @NotNull(message = "Booking can not be null") Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(@NotNull(message = "Booking can not be null") Booking booking) {
+        this.booking = booking;
     }
 
     public LocalDate getCreatedAt() {

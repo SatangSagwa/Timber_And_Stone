@@ -307,7 +307,8 @@ public class BookingService {
 
         //Check if there is any matches with existing booking number
         //Should return null if the booking number does not already exist.
-        Booking matchingBooking = bookingRepository.findByBookingNumberAndUserAndRental(randomPositiveInt.toString(), user, rental);
+        Booking matchingBooking = bookingRepository.findByBookingNumberAndUserAndRental(randomPositiveInt.toString(), user, rental)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         //if booking is found
         if(matchingBooking != null) {
@@ -321,7 +322,8 @@ public class BookingService {
                         //Generate a new number.
                         randomPositiveInt = Math.abs(secureRandom.nextInt());
                     System.out.println("New Generated number: " + randomPositiveInt);
-                        Booking newMatch = bookingRepository.findByBookingNumberAndUserAndRental(randomPositiveInt.toString(), user, rental);
+                        Booking newMatch = bookingRepository.findByBookingNumberAndUserAndRental(randomPositiveInt.toString(), user, rental)
+                                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
                         if (newMatch == null) {
                             System.out.println("2: No matches found, ID is unique in combination with user and rental");
                             return randomPositiveInt.toString();

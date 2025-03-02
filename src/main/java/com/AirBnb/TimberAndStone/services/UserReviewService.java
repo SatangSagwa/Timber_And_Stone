@@ -1,18 +1,23 @@
 package com.AirBnb.TimberAndStone.services;
 
-import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.*;
+import com.AirBnb.TimberAndStone.models.Booking;
+import com.AirBnb.TimberAndStone.models.BookingStatus;
+import com.AirBnb.TimberAndStone.models.Rental;
+import com.AirBnb.TimberAndStone.models.UserReview;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
+import com.AirBnb.TimberAndStone.responses.userReview.GetUserReviewResponse;
+import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserReviewService {
@@ -49,21 +54,25 @@ public class UserReviewService {
         return response;
     }
 
-    public List<UserReview> getAllUserReviews() {
-        return userReviewRepository.findAll();
+    public List<GetUserReviewResponse> getAllUserReviews() {
+        List<UserReview> userReviews = userReviewRepository.findAll();
+        return userReviews.stream()
+                .map(this::convertToGetUserReviewResponse)
+                .collect(Collectors.toList());
 
     }
 
-    public UserReview getUserReviewById(String id) {
+    public GetUserReviewResponse getUserReviewById(String id) {
         UserReview userReview = userReviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Userreview not found"));
-        return userReview;
+        return convertToGetUserReviewResponse(userReview);
     }
 
-    public List<UserReview> getUserReviewBytoUser(User toUser) {
-        List<UserReview> userReview = userReviewRepository.getUserReviewBytoUser(toUser);
-        return userReviewRepository.getUserReviewBytoUser(toUser);
-    }
+    /* we currently dont have rating in user, after fixing this we need to implement patch method to
+    have rating for user update when a user review is updated
+
+    public UserReviewResponse updateUserReviewById(String id, UserReviewRequest request) {
+    }*/
 
     private void validateUserReviewRequest(UserReviewRequest request) {
         Booking booking = bookingRepository.findByBookingNumber(request.getBookingNumber());
@@ -114,4 +123,15 @@ public class UserReviewService {
         userReviewResponse.setReview(userReview.getReview());
         return userReviewResponse;
     }
-}
+
+    private GetUserReviewResponse convertToGetUserReviewResponse(UserReview userReview) {
+        GetUserReviewResponse response = new GetUserReviewResponse();
+        response.setUser(userReview.getToUser().getUsername());
+        response.setHost(userReview.getFromHost().getUsername());
+        response.setRating(userReview.getRating());
+        response.setReview(userReview.getReview());
+        return response;
+    }
+
+    }
+
