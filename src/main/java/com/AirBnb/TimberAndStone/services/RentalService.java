@@ -380,27 +380,6 @@ public class RentalService {
         }
     }
 
-//    private RentalFindByPricePerNightRangeResponse convertToRentalFindByPricePerNightRangeResponse(Rental rental) {
-//        RentalFindByPricePerNightRangeResponse response = new RentalFindByPricePerNightRangeResponse();
-//        response.setTitle(rental.getTitle());
-//        response.setPricePerNight(rental.getPricePerNight());
-//        return response;
-//    }
-
-//    private RentalFindByMinAvgRatingAndMinNumberOfRatingResponse convertToRentalFindByMinAvgRatingAndMinNumberOfRatingResponse(Rental rental) {
-//        RentalFindByMinAvgRatingAndMinNumberOfRatingResponse response = new RentalFindByMinAvgRatingAndMinNumberOfRatingResponse();
-//        response.setTitle(rental.getTitle());
-//        response.setAverageRating(rental.getRating().getAverageRating());
-//        response.setNumberOfRatings(rental.getRating().getNumberOfRatings());
-//        return response;
-//    }
-
-//    private RentalFindByAvailabilityPeriodResponse convertToRentalFindByAvailabilityPeriodResponse(Rental rental) {
-//        RentalFindByAvailabilityPeriodResponse response = new RentalFindByAvailabilityPeriodResponse();
-//        response.setTitle(rental.getTitle());
-//        response.setPeriods(rental.getAvailablePeriods());
-//        return response;
-//    }
 
     // https://chatgpt.com/share/67b4a4fb-a588-800b-9894-16722dd3a37d
     private boolean isPeriodMatching(Period period, LocalDate startDate, LocalDate endDate) {
@@ -409,19 +388,6 @@ public class RentalService {
         return overlap;
     }
 
-//    private RentalFindByCategoryResponse convertToRentalFindByCategoryResponse(Rental rental) {
-//        RentalFindByCategoryResponse response = new RentalFindByCategoryResponse();
-//        response.setTitle(rental.getTitle());
-//        response.setCategory(rental.getCategory());
-//        return response;
-//    }
-
-//    private RentalAmenitiesDTOResponse convertToRentalAmenitiesDTOResponse(Rental rental) {
-//        RentalAmenitiesDTOResponse response = new RentalAmenitiesDTOResponse();
-//        response.setTitle(rental.getTitle());
-//        response.setAmenities(rental.getAmenities());
-//        return response;
-//    }
 
     private boolean isAmenitiesMatching(List<Amenity> amenitiesRental, List<Amenity> amenitiesDTO) {
         Boolean match = false;
@@ -463,11 +429,5 @@ public class RentalService {
                 rental.getRating().getAverageRating());
     }
 
-//    private RentalFindByAverageRatingResponse convertToRentalFindByAverageRatingResponse(Rental rental) {
-//        RentalFindByAverageRatingResponse response = new RentalFindByAverageRatingResponse();
-//        response.setTitle(rental.getTitle());
-//        response.setAverageRating(rental.getRating().getAverageRating());
-//        return response;
-//    }
 }
 
