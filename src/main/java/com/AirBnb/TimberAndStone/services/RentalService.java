@@ -8,7 +8,8 @@ import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.requests.rental.RentalAmenitiesRequest;
 import com.AirBnb.TimberAndStone.requests.rental.RentalRequest;
-import com.AirBnb.TimberAndStone.responses.rental.*;
+import com.AirBnb.TimberAndStone.responses.rental.GetRentalsResponse;
+import com.AirBnb.TimberAndStone.responses.rental.RentalResponse;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -276,8 +277,11 @@ public class RentalService {
     }
 
     public List<GetRentalsResponse> getRentalsByAverageRating(Double averageRating) {
-        List<Rental> rentals = rentalRepository.findByRatingAverageRating(averageRating);
+        List<Rental> rentals = rentalRepository.findByAverageRatingGreaterThanEqual(averageRating);
 
+        if(rentals.isEmpty()) {
+            throw new ResourceNotFoundException("Rental not found");
+        }
         return rentals.stream()
                 .map(this::convertToGetRentalsResponse)
                 .collect(Collectors.toList());
