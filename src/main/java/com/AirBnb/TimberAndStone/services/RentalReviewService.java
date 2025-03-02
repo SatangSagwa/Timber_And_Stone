@@ -14,6 +14,7 @@ import com.AirBnb.TimberAndStone.responses.rentalReview.RentalReviewResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -114,7 +115,12 @@ public class RentalReviewService {
         if (rentals.isEmpty()) {
             throw new ResourceNotFoundException("No rentals found for this host");
         }
-        List<RentalReview> rentalReviews = rentalReviewRepository.findByToRentalId(rentals.get(0).getId());
+        // New arraylist for rental reviews connected to host
+        List<RentalReview> rentalReviews = new ArrayList<>();
+        for (Rental rental : rentals) {
+            List<RentalReview> reviewsForRental = rentalReviewRepository.findByToRentalId(rental.getId());
+            rentalReviews.addAll(reviewsForRental);
+        }
         System.out.println("Found Reviews: " + rentalReviews);
         return rentalReviews.stream()
                 .map(this::convertToGetRentalReviewResponse)
