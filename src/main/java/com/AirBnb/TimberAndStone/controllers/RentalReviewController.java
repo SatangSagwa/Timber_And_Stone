@@ -42,6 +42,16 @@ public class RentalReviewController {
         return ResponseEntity.ok(rentalReviewService.updateRentalReviewById(id, request));
         //return new ResponseEntity<>(rentalReviewService.updateRentalReviewById(id, rentalReviewRequest), HttpStatus.OK);
         }
+        @GetMapping("rental/{id}")
+    public ResponseEntity<List<RentalReviewsResponse>> getRentalReviewsByRentalId(@Valid @PathVariable String id) {
+        List<RentalReviewsResponse> rentalReviews = rentalReviewService.getRentalReviewByRentalId(id);
+        return ResponseEntity.ok(rentalReviews);
+        }
+        @GetMapping("rental/host/{id}")
+        public ResponseEntity<List<RentalReviewsResponse>> getRentalReviewsByHostId(@Valid @PathVariable String id) {
+         List<RentalReviewsResponse> rentalReviews = rentalReviewService.getRentalReviewByHostId(id);
+            return ResponseEntity.ok(rentalReviews);
+        }
 
     }
 

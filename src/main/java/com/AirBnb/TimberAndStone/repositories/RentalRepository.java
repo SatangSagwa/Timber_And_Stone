@@ -19,4 +19,6 @@ public interface RentalRepository extends MongoRepository<Rental, String> {
 
     List<Rental> findByRatingAverageRating(Double averageRating);
 
+    List<Rental> findByHostId(String hostId);
+
 }
