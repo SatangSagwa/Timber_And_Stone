@@ -2,7 +2,7 @@ package com.AirBnb.TimberAndStone.requests.userReview;
 
 public class UserReviewRequest {
 
-    private String bookingNumber;
+    private String bookingId;
 
     private Integer rating;
 
@@ -11,8 +11,8 @@ public class UserReviewRequest {
     public UserReviewRequest() {
     }
 
-    public String getBookingNumber() {
-        return bookingNumber;
+    public String getBookingId() {
+        return bookingId;
     }
 
     public Integer getRating() {

@@ -39,7 +39,12 @@ public class UserReviewService {
         validateUserReviewRequest(request);
 
         UserReview userReview = new UserReview();
-        Booking booking = bookingRepository.findByBookingNumber(request.getBookingNumber());
+        Booking booking = bookingRepository.findById(request.getBookingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        if(booking.getReviewedByHost()) {
+            throw new IllegalArgumentException("You have already left a review for this visit!");
+        }
 
         //Set host to authenticated
         userReview.setFromHost(userService.getAuthenticated());
@@ -47,6 +52,9 @@ public class UserReviewService {
         userReview.setToUser(booking.getUser());
         userReview.setRating(request.getRating());
         userReview.setReview(request.getReview());
+
+        booking.setReviewedByHost(true);
+        bookingRepository.save(booking);
 
         userReviewRepository.save(userReview);
         UserReviewResponse response = convertToUserReviewResponse(userReview, booking.getRental(), "User has been reviewed successfully");
@@ -75,7 +83,8 @@ public class UserReviewService {
     }*/
 
     private void validateUserReviewRequest(UserReviewRequest request) {
-        Booking booking = bookingRepository.findByBookingNumber(request.getBookingNumber());
+        Booking booking = bookingRepository.findById(request.getBookingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         if (booking == null) {
             throw new ResourceNotFoundException("Booking not found");
