@@ -4,7 +4,6 @@ import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Rental;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -18,8 +17,7 @@ public interface RentalRepository extends MongoRepository<Rental, String> {
     @Query("{'pricePerNight': { $gte: ?0, $lte: ?1 }}")
     List<Rental> findByPricePerNightBetweenInclusive(Double minPrice, Double maxPrice);
 
-    List<Rental> findByAverageRatingGreaterThanEqual(@Param("averageRating")Double averageRating);
-
     List<Rental> findByHostId(String hostId);
 
+    List<Rental> findByRatingAverageRatingGreaterThanEqual(Double averageRating);
 }

@@ -277,7 +277,7 @@ public class RentalService {
     }
 
     public List<GetRentalsResponse> getRentalsByAverageRating(Double averageRating) {
-        List<Rental> rentals = rentalRepository.findByAverageRatingGreaterThanEqual(averageRating);
+        List<Rental> rentals = rentalRepository.findByRatingAverageRatingGreaterThanEqual(averageRating);
 
         if(rentals.isEmpty()) {
             throw new ResourceNotFoundException("Rental not found");

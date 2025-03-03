@@ -77,7 +77,6 @@ public class Rental {
 
 //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
-
     public String getId() {
         return id;
     }
