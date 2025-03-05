@@ -123,14 +123,10 @@ updateRentalRating
 
         // Validate the rating and review inputs before proceeding
         validateRentalReviewRequest(request, existingRentalReview);
+        Booking booking = bookingRepository.findById(existingRentalReview.getBooking().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
-        // find booking
-        Booking booking = bookingRepository.findByBookingNumberAndUserIdAndRentalId(
-                existingRentalReview.getBooking().getBookingNumber(),
-                existingRentalReview.getFromUser().getId(),
-                existingRentalReview.getToRental().getId()
-        ).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
-
+        // Use the booking.getRental, id and existingRentalReview to update rating in rental
         //updateRentalRating(existingRentalReview, booking.getRental(), id);
 
         if (request.getRating() != null) {
