@@ -28,6 +28,7 @@ public class UserReviewService {
     private final BookingService bookingService;
     private final BookingRepository bookingRepository;
 
+    private final String noReviewsYet = "There are no reviews yet!";
 
     public UserReviewService(UserReviewRepository userReviewRepository, UserRepository userRepository, UserService userService, BookingService bookingService, BookingRepository bookingRepository) {
         this.userReviewRepository = userReviewRepository;
@@ -72,10 +73,13 @@ public class UserReviewService {
     }
 
     public Optional<?> getUserReviewsByUserId(String id) {
-        Optional<?> reviews = userReviewRepository.findByToUserId(id);
+        List<UserReview> reviews = userReviewRepository.findByToUserId(id);
         if(reviews.isEmpty()) {
-            return Optional.of()
+            return Optional.of(noReviewsYet);
         }
+        return Optional.of(reviews.stream()
+                .map(this::convertToGetUserReviewResponse)
+                .collect(Collectors.toList()));
     }
 
     public GetUserReviewResponse getUserReviewById(String id) {

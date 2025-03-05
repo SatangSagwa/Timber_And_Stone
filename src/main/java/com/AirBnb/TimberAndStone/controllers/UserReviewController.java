@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/userreviews")
@@ -37,6 +38,12 @@ public class UserReviewController {
     public ResponseEntity<GetUserReviewResponse> getUserReviewById(@Valid @PathVariable String id) {
         GetUserReviewResponse userReview = userReviewService.getUserReviewById(id);
         return new ResponseEntity<>(userReview, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Optional<?>> getUserReviewsByUserId(@PathVariable String id) {
+        Optional<?> response = userReviewService.getUserReviewsByUserId(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /*@PatchMapping("/{id}")
