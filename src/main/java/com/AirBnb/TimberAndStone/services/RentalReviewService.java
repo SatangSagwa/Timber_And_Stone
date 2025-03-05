@@ -228,6 +228,10 @@ updateRentalRating
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found2"));
 
          */
+        if (!userService.getAuthenticated().getId().equals(review.getFromUser().getId())) {
+            throw new UnauthorizedException("You are not the owner of this review!");
+        }
+
         if(rentalReviewRequest.getRating() != null) {
             if(rentalReviewRequest.getRating() < 1 || rentalReviewRequest.getRating() > 5) {
                 throw new IllegalArgumentException("Rating has to be between 1 and 5");
