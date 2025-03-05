@@ -8,7 +8,6 @@ import com.AirBnb.TimberAndStone.models.BookingStatus;
 import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.models.UserReview;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
-import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
 import com.AirBnb.TimberAndStone.responses.userReview.GetUserReviewResponse;
@@ -23,18 +22,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserReviewService {
     private final UserReviewRepository userReviewRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
-    private final BookingService bookingService;
     private final BookingRepository bookingRepository;
 
     private final String noReviewsYet = "There are no reviews yet!";
 
-    public UserReviewService(UserReviewRepository userReviewRepository, UserRepository userRepository, UserService userService, BookingService bookingService, BookingRepository bookingRepository) {
+    public UserReviewService(UserReviewRepository userReviewRepository, UserService userService, BookingRepository bookingRepository) {
         this.userReviewRepository = userReviewRepository;
-        this.userRepository = userRepository;
         this.userService = userService;
-        this.bookingService = bookingService;
         this.bookingRepository = bookingRepository;
     }
     public UserReviewResponse createUserReview(UserReviewRequest request) {
