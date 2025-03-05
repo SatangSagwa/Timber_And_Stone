@@ -76,6 +76,13 @@ public class UserReviewService {
         return convertToGetUserReviewResponse(userReview);
     }
 
+    public List<GetUserReviewResponse> getMyReviews() {
+        List<UserReview> myReviews = userReviewRepository.findByToUserId(userService.getAuthenticated().getId());
+        return myReviews.stream()
+                .map(this::convertToGetUserReviewResponse)
+                .collect(Collectors.toList());
+    }
+
     /* we currently dont have rating in user, after fixing this we need to implement patch method to
     have rating for user update when a user review is updated
 

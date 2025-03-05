@@ -39,6 +39,12 @@ public class UserReviewController {
         return new ResponseEntity<>(userReview, HttpStatus.OK);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<List<GetUserReviewResponse>> getMyReviews() {
+        List<GetUserReviewResponse> response = userReviewService.getMyReviews();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     /*@PatchMapping("/{id}")
     public ResponseEntity<UserReviewResponse> updateUserReviewById(@Valid @PathVariable String id, @RequestBody UserReviewRequest userReviewRequest) {
             return new ResponseEntity<>(userReviewService.updateUserReviewById(id, userReviewRequest), HttpStatus.OK);
