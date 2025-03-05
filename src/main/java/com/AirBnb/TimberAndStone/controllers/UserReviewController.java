@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/userreviews")
@@ -37,6 +38,15 @@ public class UserReviewController {
     public ResponseEntity<GetUserReviewResponse> getUserReviewById(@Valid @PathVariable String id) {
         GetUserReviewResponse userReview = userReviewService.getUserReviewById(id);
         return new ResponseEntity<>(userReview, HttpStatus.OK);
+    }
+
+    @GetMapping("/me/{ascending}/{descending}/{latest}/{oldest}")
+    public ResponseEntity<Optional<?>> getMyReviews(@Valid @PathVariable Boolean ascending,
+                                                    @Valid @PathVariable Boolean descending,
+                                                    @Valid @PathVariable Boolean latest,
+                                                    @Valid @PathVariable Boolean oldest) {
+        Optional<?> response = userReviewService.getMyReviews(ascending, descending, latest, oldest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /*@PatchMapping("/{id}")

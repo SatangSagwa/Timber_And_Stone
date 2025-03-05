@@ -1,16 +1,20 @@
 package com.AirBnb.TimberAndStone.responses.userReview;
 
+import java.time.LocalDate;
+
 public class GetUserReviewResponse {
     private String user;
     private String host;
     private Integer rating;
     private String review;
+    private LocalDate date;
 
-    public GetUserReviewResponse(String user, String host, Integer rating, String review) {
+    public GetUserReviewResponse(String user, String host, Integer rating, String review, LocalDate date) {
         this.user = user;
         this.host = host;
         this.rating = rating;
         this.review = review;
+        this.date = date;
     }
 
     public GetUserReviewResponse() {
@@ -46,5 +50,13 @@ public class GetUserReviewResponse {
 
     public void setReview(String review) {
         this.review = review;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
