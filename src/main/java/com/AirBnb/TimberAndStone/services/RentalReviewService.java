@@ -125,6 +125,7 @@ updateRentalRating
         validateRentalReviewRequest(request, existingRentalReview);
         Booking booking = bookingRepository.findById(existingRentalReview.getBooking().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+        System.out.println("Rental title: " + booking.getRental().getTitle());
 
         // Use the booking.getRental, id and existingRentalReview to update rating in rental
         //updateRentalRating(existingRentalReview, booking.getRental(), id);
