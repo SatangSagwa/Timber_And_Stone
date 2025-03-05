@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/userreviews")
@@ -40,8 +41,8 @@ public class UserReviewController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<List<GetUserReviewResponse>> getMyReviews() {
-        List<GetUserReviewResponse> response = userReviewService.getMyReviews();
+    public ResponseEntity<Optional<?>> getMyReviews() {
+        Optional<?> response = userReviewService.getMyReviews();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

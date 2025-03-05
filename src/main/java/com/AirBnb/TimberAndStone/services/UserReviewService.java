@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,11 +77,14 @@ public class UserReviewService {
         return convertToGetUserReviewResponse(userReview);
     }
 
-    public List<GetUserReviewResponse> getMyReviews() {
-        List<UserReview> myReviews = userReviewRepository.findByToUserId(userService.getAuthenticated().getId());
-        return myReviews.stream()
+    public Optional<?> getMyReviews() {
+        Optional<UserReview> myReviews = userReviewRepository.findByToUserId(userService.getAuthenticated().getId());
+        if(myReviews.isEmpty()) {
+            return Optional.of(new String("You do not have any reviews yet"));
+        }
+        return Optional.of(myReviews.stream()
                 .map(this::convertToGetUserReviewResponse)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     /* we currently dont have rating in user, after fixing this we need to implement patch method to
