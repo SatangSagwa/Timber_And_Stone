@@ -3,10 +3,7 @@ package com.AirBnb.TimberAndStone.services;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.Booking;
-import com.AirBnb.TimberAndStone.models.BookingStatus;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.models.UserReview;
+import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
@@ -16,6 +13,7 @@ import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,12 +77,15 @@ public class UserReviewService {
         return convertToGetUserReviewResponse(userReview);
     }
 
-    public Optional<?> getMyReviews() {
-        Optional<UserReview> myReviews = userReviewRepository.findByToUserId(userService.getAuthenticated().getId());
+    public Optional<?> getMyReviews(Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
+        List<UserReview> myReviews = userReviewRepository.findByToUserId(userService.getAuthenticated().getId());
         if(myReviews.isEmpty()) {
             return Optional.of(noReviewsYet);
         }
-        return Optional.of(myReviews.stream()
+
+        List<UserReview> sortedReviews = sortReviews(myReviews, ascending, descending, latest, oldest);
+
+        return Optional.of(sortedReviews.stream()
                 .map(this::convertToGetUserReviewResponse)
                 .collect(Collectors.toList()));
     }
@@ -135,6 +136,33 @@ public class UserReviewService {
 
     }
 
+    private List<UserReview> sortReviews(List<UserReview> reviews, Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
+        //Sort by latest if no option has been chosen
+        if(!ascending && !descending && !latest && !oldest) {
+            latest = true;
+        }
+
+        if(!reviews.isEmpty()) {
+            if(ascending) {
+                Comparator<UserReview> comparator = Comparator.comparingInt(UserReview::getRating);
+                reviews.sort(comparator);
+
+            } else if (descending) {
+                Comparator<UserReview> comparator = Comparator.comparingInt(UserReview::getRating).reversed();
+                reviews.sort(comparator);
+
+            } else if (latest) {
+                Comparator<UserReview> comparator = Comparator.comparing(UserReview::getCreatedAt).reversed();
+                reviews.sort(comparator);
+
+            } else if (oldest) {
+                Comparator<UserReview> comparator = Comparator.comparing(UserReview::getCreatedAt);
+                reviews.sort(comparator);
+            }
+        }
+        return reviews;
+    }
+
     private UserReviewResponse convertToUserReviewResponse(UserReview userReview, Rental rental, String message) {
         UserReviewResponse userReviewResponse = new UserReviewResponse();
         userReviewResponse.setMessage(message);
@@ -152,8 +180,10 @@ public class UserReviewService {
         response.setHost(userReview.getFromHost().getUsername());
         response.setRating(userReview.getRating());
         response.setReview(userReview.getReview());
+        response.setDate(userReview.getCreatedAt());
         return response;
     }
+
 
     }
 
