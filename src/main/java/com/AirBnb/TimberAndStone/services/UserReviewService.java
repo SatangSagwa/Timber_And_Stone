@@ -28,7 +28,7 @@ public class UserReviewService {
     private final BookingService bookingService;
     private final BookingRepository bookingRepository;
 
-    private final String noReviewsYet = "You do not have any reviews yet! ";
+    private final String noReviewsYet = "There are no reviews yet!";
 
 
     public UserReviewService(UserReviewRepository userReviewRepository, UserRepository userRepository, UserService userService, BookingService bookingService, BookingRepository bookingRepository) {
