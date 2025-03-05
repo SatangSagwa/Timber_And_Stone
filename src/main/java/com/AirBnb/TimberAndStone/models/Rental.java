@@ -17,7 +17,7 @@ public class Rental {
     private String id;
 
     @NotNull(message = "Title can not be null")
-    @NotEmpty(message = "Title can not be empty")
+    //@NotEmpty(message = "Title can not be empty")
     @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters")
     private String title;
 
@@ -82,9 +82,12 @@ public class Rental {
         return id;
     }
 
-    public @NotNull(message = "Title can not be null") @NotEmpty(message = "Title can not be empty") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String getTitle() {
+
+
+    public @NotNull(message = "Title can not be null") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String getTitle() {
         return title;
     }
+
 
     public void setTitle(@NotNull(message = "Title can not be null") @NotEmpty(message = "Title can not be empty") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String title) {
         this.title = title;

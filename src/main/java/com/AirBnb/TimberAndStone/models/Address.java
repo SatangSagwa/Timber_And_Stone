@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class Address {
 
-    @NotNull(message = "Country can not be null")
+    //@NotNull(message = "Country can not be null")
     @NotEmpty(message = "Country can not be empty")
     private String country;
 
@@ -56,11 +56,12 @@ public class Address {
 
     //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
-    public @NotNull(message = "Country can not be null") @NotEmpty(message = "Country can not be empty") String getCountry() {
+
+    public @NotEmpty(message = "Country can not be empty") String getCountry() {
         return country;
     }
 
-    public void setCountry(@NotNull(message = "Country can not be null") @NotEmpty(message = "Country can not be empty") String country) {
+    public void setCountry(@NotEmpty(message = "Country can not be empty") String country) {
         this.country = country;
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 public class RentalRequest {
 
     @NotNull(message = "Title can not be null")
-    @NotEmpty(message = "Title can not be empty")
+    //@NotEmpty(message = "Title can not be empty")
     @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters")
     private String title;
 
@@ -73,7 +73,7 @@ public class RentalRequest {
     //--------------------------------------------- Getters ------------------------------------------------------------
 
 
-    public @NotNull(message = "Title can not be null") @NotEmpty(message = "Title can not be empty") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String getTitle() {
+    public @NotNull(message = "Title can not be null") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String getTitle() {
         return title;
     }
 
