@@ -97,6 +97,12 @@ public class RentalService {
     }
 
     public List<GetRentalsResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
+        if(minPrice <= 0 || maxPrice <= 0) {
+            throw new IllegalArgumentException("Price must be greater than 0");
+        }
+        if(minPrice > maxPrice) {
+            throw new IllegalArgumentException("minPrice must be less than or equal to maxPrice");
+        }
         List<Rental> rentals = rentalRepository.findByPricePerNightBetweenInclusive(minPrice, maxPrice);
 
         return rentals.stream()
