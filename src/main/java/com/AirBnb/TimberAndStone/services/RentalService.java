@@ -277,10 +277,13 @@ public class RentalService {
     }
 
     public List<GetRentalsResponse> getRentalsByAverageRating(Double averageRating) {
+        if(averageRating < 0) {
+            throw new IllegalArgumentException("Rating can not be negative");
+        }
         List<Rental> rentals = rentalRepository.findByRatingAverageRatingGreaterThanEqual(averageRating);
 
         if(rentals.isEmpty()) {
-            throw new ResourceNotFoundException("Rental not found");
+            return List.of();
         }
         return rentals.stream()
                 .map(this::convertToGetRentalsResponse)
