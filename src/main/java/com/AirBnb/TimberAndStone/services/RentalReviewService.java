@@ -144,7 +144,8 @@ updateRentalRating
 
 
     public List<RentalReviewsResponse> getRentalReviewByRentalId(String id) {
-        if(!rentalRepository.existsById(id)) {
+
+        if (!rentalRepository.existsById(id)) {
             throw new ResourceNotFoundException("Rental not found");
         }
 
