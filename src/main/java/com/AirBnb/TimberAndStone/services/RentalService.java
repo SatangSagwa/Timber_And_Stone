@@ -57,6 +57,11 @@ public class RentalService {
         rental.setRating(rating);
         rental.setHost(user);
 
+        String title = rentalRequest.getTitle();
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be null or empty");
+        }
+
         // DTON
         rental.setAddress(rentalRequest.getAddress());
         rental.setAvailablePeriods(rentalRequest.getAvailablePeriods());
