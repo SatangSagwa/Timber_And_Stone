@@ -16,12 +16,12 @@ public class Rental {
     @Id
     private String id;
 
-    @NotNull(message = "Title can not be null")
-    //@NotEmpty(message = "Title can not be empty")
+    //@NotNull(message = "Title can not be null")
+    @NotEmpty(message = "Title can not be empty")
     @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters")
     private String title;
 
-    @NotNull(message = "Photos can not be null")
+    //@NotNull(message = "Photos can not be null")
     @Size(max = 10, message = "You can add max 10 photos")
     private List<String> photos;
 
@@ -89,7 +89,7 @@ public class Rental {
     }
 
 
-    public void setTitle(@NotNull(message = "Title can not be null") @NotEmpty(message = "Title can not be empty") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String title) {
+    public void setTitle(@NotEmpty(message = "Title can not be empty") @Size(min = 1, max = 50, message = "Title has to be between 1-50 characters") String title) {
         this.title = title;
     }
 
