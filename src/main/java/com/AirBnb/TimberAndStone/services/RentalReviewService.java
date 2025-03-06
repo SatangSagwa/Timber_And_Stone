@@ -123,14 +123,11 @@ updateRentalRating
 
         // Validate the rating and review inputs before proceeding
         validateRentalReviewRequest(request, existingRentalReview);
+        Booking booking = bookingRepository.findById(existingRentalReview.getBooking().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+        System.out.println("Rental title: " + booking.getRental().getTitle());
 
-        // find booking
-        Booking booking = bookingRepository.findByBookingNumberAndUserIdAndRentalId(
-                existingRentalReview.getBooking().getBookingNumber(),
-                existingRentalReview.getFromUser().getId(),
-                existingRentalReview.getToRental().getId()
-        ).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
-
+        // Use the booking.getRental, id and existingRentalReview to update rating in rental
         //updateRentalRating(existingRentalReview, booking.getRental(), id);
 
         if (request.getRating() != null) {
@@ -231,6 +228,10 @@ updateRentalRating
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found2"));
 
          */
+        if (!userService.getAuthenticated().getId().equals(review.getFromUser().getId())) {
+            throw new UnauthorizedException("You are not the owner of this review!");
+        }
+
         if(rentalReviewRequest.getRating() != null) {
             if(rentalReviewRequest.getRating() < 1 || rentalReviewRequest.getRating() > 5) {
                 throw new IllegalArgumentException("Rating has to be between 1 and 5");

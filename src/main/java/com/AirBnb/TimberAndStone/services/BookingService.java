@@ -71,8 +71,8 @@ public class BookingService {
         booking.setBookingStatus(BookingStatus.PENDING);
         booking.setCreatedAt(LocalDateTime.now());
         booking.setUpdatedAt(LocalDateTime.now());
-        //booking.setBookingNumber(generateBookingNumber(userService.getAuthenticated(), rental));
-        booking.setBookingNumber("1234");
+        booking.setBookingNumber(generateBookingNumber(userService.getAuthenticated(), rental));
+        //booking.setBookingNumber("1234");
         booking.setReviewedByUser(false);
         booking.setReviewedByHost(false);
 
