@@ -144,7 +144,9 @@ updateRentalRating
 
 
     public List<RentalReviewsResponse> getRentalReviewByRentalId(String id) {
-
+        if (id == null || id.isEmpty() || "null".equals(id)) {
+            throw new IllegalArgumentException("Rental id cannot be 'null' or empty");
+        }
         if (!rentalRepository.existsById(id)) {
             throw new ResourceNotFoundException("Rental not found");
         }
