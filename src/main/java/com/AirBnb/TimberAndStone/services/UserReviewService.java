@@ -7,6 +7,7 @@ import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
+import com.AirBnb.TimberAndStone.requests.userReview.PatchUserReviewRequest;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
 import com.AirBnb.TimberAndStone.responses.userReview.GetUserReviewResponse;
 import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
@@ -65,7 +66,33 @@ public class UserReviewService {
         return convertToUserReviewResponse(userReview, booking.getRental(), "User has been reviewed successfully");
     }
 
+    public UserReviewResponse updateUserReviewById(String id, PatchUserReviewRequest request) {
+        // Check if the review exists
+        UserReview existingUserReview = userReviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User review not found"));
 
+        // Validate the rating and review inputs before proceeding
+        validateUserReviewRequest(request, existingUserReview);
+
+        Booking booking = bookingRepository.findById(existingUserReview.getBooking().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+
+
+        if (request.getRating() != null) {
+            existingUserReview.setRating(request.getRating());
+        }
+        if (request.getReview() != null) {
+            existingUserReview.setReview(request.getReview());
+        }
+
+        // Use the booking.getUser, request and existingRentalReview to update rating in rental
+        //ratingService.updateRentalRating(existingUserReview, request, booking.getUser());
+
+        userReviewRepository.save(existingUserReview);
+
+        return convertToUserReviewResponse(existingUserReview, booking.getRental(), "The review has been updated successfully");
+    }
 
 
 
@@ -161,6 +188,33 @@ public class UserReviewService {
         }
          */
 
+    }
+
+    private void validateUserReviewRequest(PatchUserReviewRequest request, UserReview review) {
+
+        /*
+        RentalReview review = rentalReviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found2"));
+
+         */
+        if (!userService.getAuthenticated().getId().equals(review.getFromHost().getId())) {
+            throw new UnauthorizedException("You are not the owner of this review!");
+        }
+
+        if(request.getRating() != null) {
+            if(request.getRating() < 1 || request.getRating() > 5) {
+                throw new IllegalArgumentException("Rating has to be between 1 and 5");
+            }
+        }
+
+        //Check so loggedin user is the user
+        if(!userService.getAuthenticated().getId().equals(review.getFromHost().getId())) {
+            throw new UnauthorizedException("You are not the user of this booking!");
+        }
+        //Check so the booking is confirmed (and therefore, also paid)
+        if(!review.getBooking().getBookingStatus().equals(BookingStatus.CONFIRMED)) {
+            throw new IllegalArgumentException("Booking status must be confirmed before it can be reviewed.");
+        }
     }
 
     private List<UserReview> sortReviews(List<UserReview> reviews, Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
