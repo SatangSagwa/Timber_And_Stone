@@ -56,6 +56,9 @@ public class UserReviewService {
         userReview.setRating(request.getRating());
         userReview.setReview(request.getReview());
 
+        //Set booking to found booking.
+        userReview.setBooking(booking);
+
         // add and update to the user rating
         //ratingService.updateUserRating(request, user);
 
