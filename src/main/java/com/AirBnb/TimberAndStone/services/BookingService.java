@@ -40,29 +40,21 @@ public class BookingService {
 
     public PostBookingResponse createBooking(BookingRequest bookingRequest) {
         Booking booking = new Booking();
-        System.out.println("Booking created");
 
         //Set user to authorized user.
         booking.setUser(userService.getAuthenticated());
-        System.out.println("User set to " + userService.getAuthenticated().getUsername());
-
 
         //Find and set rental
         Rental rental = rentalRepository.findById(bookingRequest.getRental().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
-       // Rental rental = rentalService.getRentalById(bookingRequest.getRental().getId());
         booking.setRental(rental);
-        System.out.println("Rental set to " + rental.getTitle());
 
         //DTO values
         Period period = new Period();
         period.setStartDate(bookingRequest.getStartDate());
         period.setEndDate(bookingRequest.getEndDate());
         booking.setPeriod(period);
-        System.out.println("Period set");
         booking.setNote(bookingRequest.getNote());
-        validateNumberOfGuests(rental, bookingRequest.getNumberOfGuests());
-        System.out.println("Num of guests validated");
         booking.setNumberOfGuests(bookingRequest.getNumberOfGuests());
 
         //Autovalues
@@ -72,10 +64,10 @@ public class BookingService {
         booking.setCreatedAt(LocalDateTime.now());
         booking.setUpdatedAt(LocalDateTime.now());
         booking.setBookingNumber(generateBookingNumber(userService.getAuthenticated(), rental));
-        //booking.setBookingNumber("1234");
         booking.setReviewedByUser(false);
         booking.setReviewedByHost(false);
 
+        validateBooking(booking);
 
         Booking createdBooking = bookingRepository.save(booking);
 
@@ -160,6 +152,9 @@ public class BookingService {
             booking.setPeriod(period);
             booking.setTotalPrice(periodService.getAmountOfDays(period) * booking.getRental().getPricePerNight());
         }
+
+        validateBooking(booking);
+
         bookingRepository.save(booking);
         return convertToPatchBookingResponse("The booking has been updated successfully", booking);
     }
@@ -261,6 +256,14 @@ public class BookingService {
         } else if (numberOfGuests > rental.getCapacity()) {
             throw new IllegalArgumentException("This rental allows max " + rental.getCapacity() + " guests!");
         }
+    }
+
+    private void validateBooking(Booking booking) {
+        if(booking.getPeriod().getStartDate().isAfter(booking.getPeriod().getEndDate()) || booking.getPeriod().getStartDate().equals(booking.getPeriod().getEndDate())) {
+            throw new IllegalArgumentException("Booking period start date must be before end date!");
+        }
+
+        validateNumberOfGuests(booking.getRental(), booking.getNumberOfGuests());
     }
 
     private BookingResponse convertToBookingResponse(Booking booking) {
