@@ -76,10 +76,16 @@ public class UserReviewService {
         return convertToGetUserReviewResponse(userReview);
     }
 
-    public Optional<?> getUserReviewsByUserId(String id, Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        List<UserReview> reviews = userReviewRepository.findByToUserId(id);
+    public Optional<?> getUserReviewsByBooking(String bookingId, Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        if(!booking.getRental().getHost().getId().equals(userService.getAuthenticated().getId())) {
+            throw new IllegalArgumentException("You are not authorized to view these reviews!");
+        }
+
+        List<UserReview> reviews = userReviewRepository.findByToUserId(booking.getUser().getId());
+
         if(reviews.isEmpty()) {
             return Optional.of(noReviewsYet);
         }
