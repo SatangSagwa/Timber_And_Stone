@@ -17,8 +17,7 @@ public interface RentalRepository extends MongoRepository<Rental, String> {
     @Query("{'pricePerNight': { $gte: ?0, $lte: ?1 }}")
     List<Rental> findByPricePerNightBetweenInclusive(Double minPrice, Double maxPrice);
 
-    List<Rental> findByRatingAverageRating(Double averageRating);
-
     List<Rental> findByHostId(String hostId);
 
+    List<Rental> findByRatingAverageRatingGreaterThanEqual(Double averageRating);
 }
