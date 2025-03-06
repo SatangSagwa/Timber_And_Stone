@@ -3,11 +3,9 @@ package com.AirBnb.TimberAndStone.services;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
-import com.AirBnb.TimberAndStone.models.Booking;
-import com.AirBnb.TimberAndStone.models.BookingStatus;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.models.UserReview;
+import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
+import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
 import com.AirBnb.TimberAndStone.responses.userReview.GetUserReviewResponse;
@@ -27,12 +25,14 @@ public class UserReviewService {
     private final BookingRepository bookingRepository;
 
     private final String noReviewsYet = "There are no reviews yet!";
+    private final UserRepository userRepository;
 
 
-    public UserReviewService(UserReviewRepository userReviewRepository, UserService userService, BookingRepository bookingRepository) {
+    public UserReviewService(UserReviewRepository userReviewRepository, UserService userService, BookingRepository bookingRepository, UserRepository userRepository) {
         this.userReviewRepository = userReviewRepository;
         this.userService = userService;
         this.bookingRepository = bookingRepository;
+        this.userRepository = userRepository;
     }
     public UserReviewResponse createUserReview(UserReviewRequest request) {
         validateUserReviewRequest(request);
@@ -69,20 +69,26 @@ public class UserReviewService {
 
     }
 
-    public Optional<?> getUserReviewsByUserId(String id) {
-        List<UserReview> reviews = userReviewRepository.findByToUserId(id);
-        if(reviews.isEmpty()) {
-            return Optional.of(noReviewsYet);
-        }
-        return Optional.of(reviews.stream()
-                .map(this::convertToGetUserReviewResponse)
-                .collect(Collectors.toList()));
-    }
 
     public GetUserReviewResponse getUserReviewById(String id) {
         UserReview userReview = userReviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Userreview not found"));
         return convertToGetUserReviewResponse(userReview);
+    }
+
+    public Optional<?> getUserReviewsByUserId(String id, Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        List<UserReview> reviews = userReviewRepository.findByToUserId(id);
+        if(reviews.isEmpty()) {
+            return Optional.of(noReviewsYet);
+        }
+
+        List<UserReview> sortedReviews = sortReviews(reviews, ascending, descending, latest, oldest);
+
+        return Optional.of(sortedReviews.stream()
+                .map(this::convertToGetUserReviewResponse)
+                .collect(Collectors.toList()));
     }
 
     public Optional<?> getMyReviews(Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
