@@ -57,6 +57,43 @@ public class RentalService {
         rental.setRating(rating);
         rental.setHost(user);
 
+        // Validate title can not be empty or null
+        String title = rentalRequest.getTitle();
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title can not be null or empty");
+        }
+        // Validate photos is not more than 10
+        List<String> photos = rentalRequest.getPhotos();
+        if (photos != null && photos.size() > 10) {
+            throw new IllegalArgumentException("Can not have more than 10 photos");
+        }
+
+        // Validate pricePerNight is between 1-1000000
+        Double pricePerNight = rentalRequest.getPricePerNight();
+        if (pricePerNight == null) {
+            throw new IllegalArgumentException("Price per night can not be null");
+        }
+        if (pricePerNight < 1 || pricePerNight > 1000000) {
+            throw new IllegalArgumentException("Price per night must be between 1 and 1000000");
+        }
+        // Validate category is not null
+        Category category = rentalRequest.getCategory();
+        if (category == null) {
+            throw new IllegalArgumentException("Category can not be null");
+        }
+
+        // Validate capacity is at least 1
+        Integer capacity = rentalRequest.getCapacity();
+        if (capacity == null || capacity < 1) {
+            throw new IllegalArgumentException("Capacity must be at least 1");
+        }
+
+        // Validate description is not empty or null
+        String description = rentalRequest.getDescription();
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description can not be null or empty");
+        }
+
         // DTON
         rental.setAddress(rentalRequest.getAddress());
         rental.setAvailablePeriods(rentalRequest.getAvailablePeriods());
@@ -97,6 +134,12 @@ public class RentalService {
     }
 
     public List<GetRentalsResponse> getRentalsByPricePerNightRange(Double minPrice, Double maxPrice) {
+        if(minPrice <= 0 || maxPrice <= 0) {
+            throw new IllegalArgumentException("Price must be greater than 0");
+        }
+        if(minPrice > maxPrice) {
+            throw new IllegalArgumentException("minPrice must be less than or equal to maxPrice");
+        }
         List<Rental> rentals = rentalRepository.findByPricePerNightBetweenInclusive(minPrice, maxPrice);
 
         return rentals.stream()

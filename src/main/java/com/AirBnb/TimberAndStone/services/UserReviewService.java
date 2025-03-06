@@ -15,6 +15,7 @@ import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class UserReviewService {
     private final BookingRepository bookingRepository;
 
     private final String noReviewsYet = "There are no reviews yet!";
+
 
     public UserReviewService(UserReviewRepository userReviewRepository, UserService userService, BookingRepository bookingRepository) {
         this.userReviewRepository = userReviewRepository;
@@ -83,6 +85,19 @@ public class UserReviewService {
         return convertToGetUserReviewResponse(userReview);
     }
 
+    public Optional<?> getMyReviews(Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
+        List<UserReview> myReviews = userReviewRepository.findByToUserId(userService.getAuthenticated().getId());
+        if(myReviews.isEmpty()) {
+            return Optional.of(noReviewsYet);
+        }
+
+        List<UserReview> sortedReviews = sortReviews(myReviews, ascending, descending, latest, oldest);
+
+        return Optional.of(sortedReviews.stream()
+                .map(this::convertToGetUserReviewResponse)
+                .collect(Collectors.toList()));
+    }
+
     /* we currently dont have rating in user, after fixing this we need to implement patch method to
     have rating for user update when a user review is updated
 
@@ -129,6 +144,33 @@ public class UserReviewService {
 
     }
 
+    private List<UserReview> sortReviews(List<UserReview> reviews, Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
+        //Sort by latest if no option has been chosen
+        if(!ascending && !descending && !latest && !oldest) {
+            latest = true;
+        }
+
+        if(!reviews.isEmpty()) {
+            if(ascending) {
+                Comparator<UserReview> comparator = Comparator.comparingInt(UserReview::getRating);
+                reviews.sort(comparator);
+
+            } else if (descending) {
+                Comparator<UserReview> comparator = Comparator.comparingInt(UserReview::getRating).reversed();
+                reviews.sort(comparator);
+
+            } else if (latest) {
+                Comparator<UserReview> comparator = Comparator.comparing(UserReview::getCreatedAt).reversed();
+                reviews.sort(comparator);
+
+            } else if (oldest) {
+                Comparator<UserReview> comparator = Comparator.comparing(UserReview::getCreatedAt);
+                reviews.sort(comparator);
+            }
+        }
+        return reviews;
+    }
+
     private UserReviewResponse convertToUserReviewResponse(UserReview userReview, Rental rental, String message) {
         UserReviewResponse userReviewResponse = new UserReviewResponse();
         userReviewResponse.setMessage(message);
@@ -146,6 +188,7 @@ public class UserReviewService {
         response.setHost(userReview.getFromHost().getUsername());
         response.setRating(userReview.getRating());
         response.setReview(userReview.getReview());
+        response.setDate(userReview.getCreatedAt());
         return response;
     }
 

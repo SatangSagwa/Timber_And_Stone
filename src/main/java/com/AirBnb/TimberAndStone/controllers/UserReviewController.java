@@ -40,6 +40,15 @@ public class UserReviewController {
         return new ResponseEntity<>(userReview, HttpStatus.OK);
     }
 
+    @GetMapping("/me/{ascending}/{descending}/{latest}/{oldest}")
+    public ResponseEntity<Optional<?>> getMyReviews(@Valid @PathVariable Boolean ascending,
+                                                    @Valid @PathVariable Boolean descending,
+                                                    @Valid @PathVariable Boolean latest,
+                                                    @Valid @PathVariable Boolean oldest) {
+        Optional<?> response = userReviewService.getMyReviews(ascending, descending, latest, oldest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/user/{id}")
     public ResponseEntity<Optional<?>> getUserReviewsByUserId(@PathVariable String id) {
         Optional<?> response = userReviewService.getUserReviewsByUserId(id);

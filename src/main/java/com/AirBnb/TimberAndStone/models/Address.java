@@ -8,33 +8,33 @@ import jakarta.validation.constraints.NotNull;
 
 public class Address {
 
-    @NotNull(message = "Country can not be null")
-    @NotEmpty(message = "Country can not be empty")
+
+    @NotEmpty(message = "Country can not be empty or null")
     private String country;
 
-    @NotNull(message = "City can not be null")
-    @NotEmpty(message = "City can not be empty")
+
+    @NotEmpty(message = "City can not be empty or null")
     private String city;
 
-    @NotNull(message = "Postal code can not be null")
-    @NotEmpty(message = "Postal code can not be empty")
+
+    @NotEmpty(message = "Postal code can not be empty or null")
     private String postalCode;
 
-    @NotNull(message = "Street name can not be null")
-    @NotEmpty(message = "Street name can not be empty")
+
+    @NotEmpty(message = "Street name can not be empty or null")
     private String streetName;
 
-    @NotNull(message = "Street number can not be null")
-    @NotEmpty(message = "Street number can not be empty")
+
+    @NotEmpty(message = "Street number can not be empty or null")
     private String streetNumber;
 
     //-- Latitude and longitude in decimal degrees format (ex. 41.40338, 2.17403)
-    @NotNull(message = "Latitude can not be null")
+    @NotNull(message = "Latitude can not be empty or null")
     @Min(value = -90L, message = "Latitude has to be between -90 & +90")
     @Max(value = 90L, message = "Latitude has to be between -90 & +90")
     private Double latitude;
 
-    @NotNull(message = "Longitude can not be null")
+    @NotNull(message = "Longitude can not be empty or null")
     @Min(value = -180L, message = "Latitude has to be between -180 & +180")
     @Max(value = 180L, message = "Latitude has to be between -180 & +180")
     private Double longitude;
@@ -56,59 +56,60 @@ public class Address {
 
     //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
-    public @NotNull(message = "Country can not be null") @NotEmpty(message = "Country can not be empty") String getCountry() {
+
+    public @NotEmpty(message = "Country can not be empty or null") String getCountry() {
         return country;
     }
 
-    public void setCountry(@NotNull(message = "Country can not be null") @NotEmpty(message = "Country can not be empty") String country) {
+    public void setCountry(@NotEmpty(message = "Country can not be empty or null") String country) {
         this.country = country;
     }
 
-    public @NotNull(message = "City can not be null") @NotEmpty(message = "City can not be empty") String getCity() {
+    public @NotEmpty(message = "City can not be empty or null") String getCity() {
         return city;
     }
 
-    public void setCity(@NotNull(message = "City can not be null") @NotEmpty(message = "City can not be empty") String city) {
+    public void setCity(@NotEmpty(message = "City can not be empty or null") String city) {
         this.city = city;
     }
 
-    public @NotNull(message = "Postal code can not be null") @NotEmpty(message = "Postal code can not be empty") String getPostalCode() {
+    public @NotEmpty(message = "Postal code can not be empty or null") String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(@NotNull(message = "Postal code can not be null") @NotEmpty(message = "Postal code can not be empty") String postalCode) {
+    public void setPostalCode(@NotEmpty(message = "Postal code can not be empty or null") String postalCode) {
         this.postalCode = postalCode;
     }
 
-    public @NotNull(message = "Street name can not be null") @NotEmpty(message = "Street name can not be empty") String getStreetName() {
+    public @NotEmpty(message = "Street name can not be empty or null") String getStreetName() {
         return streetName;
     }
 
-    public void setStreetName(@NotNull(message = "Street name can not be null") @NotEmpty(message = "Street name can not be empty") String streetName) {
+    public void setStreetName(@NotEmpty(message = "Street name can not be empty or null") String streetName) {
         this.streetName = streetName;
     }
 
-    public @NotNull(message = "Street number can not be null") @NotEmpty(message = "Street number can not be empty") String getStreetNumber() {
+    public @NotEmpty(message = "Street number can not be empty or null") String getStreetNumber() {
         return streetNumber;
     }
 
-    public void setStreetNumber(@NotNull(message = "Street number can not be null") @NotEmpty(message = "Street number can not be empty") String streetNumber) {
+    public void setStreetNumber(@NotEmpty(message = "Street number can not be empty or null") String streetNumber) {
         this.streetNumber = streetNumber;
     }
 
-    public @NotNull(message = "Latitude can not be null") @Min(value = -90L, message = "Latitude has to be between -90 & +90") @Max(value = 90L, message = "Latitude has to be between -90 & +90") Double getLatitude() {
+    public @NotNull(message = "Latitude can not be empty or null") @Min(value = -90L, message = "Latitude has to be between -90 & +90") @Max(value = 90L, message = "Latitude has to be between -90 & +90") Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(@NotNull(message = "Latitude can not be null") @Min(value = -90L, message = "Latitude has to be between -90 & +90") @Max(value = 90L, message = "Latitude has to be between -90 & +90") Double latitude) {
+    public void setLatitude(@NotNull(message = "Latitude can not be empty or null") @Min(value = -90L, message = "Latitude has to be between -90 & +90") @Max(value = 90L, message = "Latitude has to be between -90 & +90") Double latitude) {
         this.latitude = latitude;
     }
 
-    public @NotNull(message = "Longitude can not be null") @Min(value = -180L, message = "Latitude has to be between -180 & +180") @Max(value = 180L, message = "Latitude has to be between -180 & +180") Double getLongitude() {
+    public @NotNull(message = "Longitude can not be empty or null") @Min(value = -180L, message = "Latitude has to be between -180 & +180") @Max(value = 180L, message = "Latitude has to be between -180 & +180") Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(@NotNull(message = "Longitude can not be null") @Min(value = -180L, message = "Latitude has to be between -180 & +180") @Max(value = 180L, message = "Latitude has to be between -180 & +180") Double longitude) {
+    public void setLongitude(@NotNull(message = "Longitude can not be empty or null") @Min(value = -180L, message = "Latitude has to be between -180 & +180") @Max(value = 180L, message = "Latitude has to be between -180 & +180") Double longitude) {
         this.longitude = longitude;
     }
 }
