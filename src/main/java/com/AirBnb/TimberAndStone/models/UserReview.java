@@ -27,6 +27,10 @@ public class UserReview {
     @NotNull(message="toUser can not be null")
     private User toUser;
 
+    @DBRef
+    @NotNull(message = "Booking can not be null")
+    private Booking booking;
+
     @Min(value=1, message="Rating can not be below 1")
     @Max(value=5, message="Rating can not be above 5")
     private Integer rating;
@@ -63,6 +67,14 @@ public class UserReview {
 
     public void setToUser(@NotNull(message = "toUser can not be null") User toUser) {
         this.toUser = toUser;
+    }
+
+    public @NotNull(message = "Booking can not be null") Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(@NotNull(message = "Booking can not be null") Booking booking) {
+        this.booking = booking;
     }
 
     public @Min(value = 1, message = "Rating can not be below 1") @Max(value = 5, message = "Rating can not be above 5") Integer getRating() {
