@@ -6,11 +6,11 @@ import jakarta.validation.constraints.Size;
 
 public class Amenity {
 
-    @NotNull(message = "AmenityTitle cant be null")
+    @NotNull(message = "AmenityTitle can not be null")
     private AmenityTitle amenityTitle;
 
-    @NotNull(message = "Description can not be null")
-    @NotEmpty(message = "Description can not be empty")
+
+    @NotEmpty(message = "Description can not be empty or null")
     @Size(min = 1, max = 500, message = "Description has to be between 1-500 characters")
     private String description;
 
@@ -23,19 +23,19 @@ public class Amenity {
 //--------------------------------------------- Getter & Setters -------------------------------------------------------
 
 
-    public @NotNull(message = "AmenityTitle cant be null") AmenityTitle getAmenityTitle() {
+    public @NotNull(message = "AmenityTitle can not be null") AmenityTitle getAmenityTitle() {
         return amenityTitle;
     }
 
-    public void setAmenityTitle(@NotNull(message = "AmenityTitle cant be null") AmenityTitle amenityTitle) {
+    public void setAmenityTitle(@NotNull(message = "AmenityTitle can not be null") AmenityTitle amenityTitle) {
         this.amenityTitle = amenityTitle;
     }
 
-    public @NotNull(message = "Description can not be null") @NotEmpty(message = "Description can not be empty") @Size(min = 1, max = 500, message = "Description has to be between 1-500 characters") String getDescription() {
+    public @NotEmpty(message = "Description can not be empty or null") @Size(min = 1, max = 500, message = "Description has to be between 1-500 characters") String getDescription() {
         return description;
     }
 
-    public void setDescription(@NotNull(message = "Description can not be null") @NotEmpty(message = "Description can not be empty") @Size(min = 1, max = 500, message = "Description has to be between 1-500 characters") String description) {
+    public void setDescription(@NotEmpty(message = "Description can not be empty or null") @Size(min = 1, max = 500, message = "Description has to be between 1-500 characters") String description) {
         this.description = description;
     }
 }
