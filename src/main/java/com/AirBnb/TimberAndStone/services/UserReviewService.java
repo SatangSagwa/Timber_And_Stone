@@ -21,20 +21,18 @@ import java.util.stream.Collectors;
 @Service
 public class UserReviewService {
     private final UserReviewRepository userReviewRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
-    private final BookingService bookingService;
     private final BookingRepository bookingRepository;
 
     private final String noReviewsYet = "There are no reviews yet!";
+    private final UserRepository userRepository;
 
 
-    public UserReviewService(UserReviewRepository userReviewRepository, UserRepository userRepository, UserService userService, BookingService bookingService, BookingRepository bookingRepository) {
+    public UserReviewService(UserReviewRepository userReviewRepository, UserService userService, BookingRepository bookingRepository, UserRepository userRepository) {
         this.userReviewRepository = userReviewRepository;
-        this.userRepository = userRepository;
         this.userService = userService;
-        this.bookingService = bookingService;
         this.bookingRepository = bookingRepository;
+        this.userRepository = userRepository;
     }
     public UserReviewResponse createUserReview(UserReviewRequest request) {
         validateUserReviewRequest(request);
@@ -71,10 +69,32 @@ public class UserReviewService {
 
     }
 
+
     public GetUserReviewResponse getUserReviewById(String id) {
         UserReview userReview = userReviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Userreview not found"));
         return convertToGetUserReviewResponse(userReview);
+    }
+
+    public Optional<?> getUserReviewsByBooking(String bookingId, Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        if(!booking.getRental().getHost().getId().equals(userService.getAuthenticated().getId())) {
+            throw new IllegalArgumentException("You are not authorized to view these reviews!");
+        }
+
+        List<UserReview> reviews = userReviewRepository.findByToUserId(booking.getUser().getId());
+
+        if(reviews.isEmpty()) {
+            return Optional.of(noReviewsYet);
+        }
+
+        List<UserReview> sortedReviews = sortReviews(reviews, ascending, descending, latest, oldest);
+
+        return Optional.of(sortedReviews.stream()
+                .map(this::convertToGetUserReviewResponse)
+                .collect(Collectors.toList()));
     }
 
     public Optional<?> getMyReviews(Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
@@ -183,7 +203,6 @@ public class UserReviewService {
         response.setDate(userReview.getCreatedAt());
         return response;
     }
-
 
     }
 

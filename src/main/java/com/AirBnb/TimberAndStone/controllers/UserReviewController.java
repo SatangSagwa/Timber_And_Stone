@@ -49,6 +49,16 @@ public class UserReviewController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/user/{bookingId}/{ascending}/{descending}/{latest}/{oldest}")
+    public ResponseEntity<Optional<?>> getUserReviewsByUserId(@Valid @PathVariable String bookingId,
+                                                              @Valid @PathVariable Boolean ascending,
+                                                              @Valid @PathVariable Boolean descending,
+                                                              @Valid @PathVariable Boolean latest,
+                                                              @Valid @PathVariable Boolean oldest) {
+        Optional<?> response = userReviewService.getUserReviewsByBooking(bookingId, ascending, descending, latest, oldest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     /*@PatchMapping("/{id}")
     public ResponseEntity<UserReviewResponse> updateUserReviewById(@Valid @PathVariable String id, @RequestBody UserReviewRequest userReviewRequest) {
             return new ResponseEntity<>(userReviewService.updateUserReviewById(id, userReviewRequest), HttpStatus.OK);
