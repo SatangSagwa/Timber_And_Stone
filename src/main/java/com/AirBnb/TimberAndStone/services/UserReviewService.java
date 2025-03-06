@@ -37,13 +37,16 @@ public class UserReviewService {
     public UserReviewResponse createUserReview(UserReviewRequest request) {
         validateUserReviewRequest(request);
 
-        UserReview userReview = new UserReview();
+
         Booking booking = bookingRepository.findById(request.getBookingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         if(booking.getReviewedByHost()) {
             throw new IllegalArgumentException("You have already left a review for this visit!");
         }
+
+        UserReview userReview = new UserReview();
+        User user = booking.getUser();
 
         //Set host to authenticated
         userReview.setFromHost(userService.getAuthenticated());
@@ -52,14 +55,20 @@ public class UserReviewService {
         userReview.setRating(request.getRating());
         userReview.setReview(request.getReview());
 
+        // add and update to the user rating
+        //ratingService.updateUserRating(request, user);
+
         booking.setReviewedByHost(true);
         bookingRepository.save(booking);
-
         userReviewRepository.save(userReview);
-        UserReviewResponse response = convertToUserReviewResponse(userReview, booking.getRental(), "User has been reviewed successfully");
 
-        return response;
+        return convertToUserReviewResponse(userReview, booking.getRental(), "User has been reviewed successfully");
     }
+
+
+
+
+
 
     public List<GetUserReviewResponse> getAllUserReviews() {
         List<UserReview> userReviews = userReviewRepository.findAll();
@@ -110,12 +119,10 @@ public class UserReviewService {
                 .collect(Collectors.toList()));
     }
 
-    /* we currently dont have rating in user, after fixing this we need to implement patch method to
-    have rating for user update when a user review is updated
 
-    public UserReviewResponse updateUserReviewById(String id, UserReviewRequest request) {
-    }*/
 
+
+    // ------------------------------ HELPERS --------------------------------------------------------------------------
     private void validateUserReviewRequest(UserReviewRequest request) {
         Booking booking = bookingRepository.findById(request.getBookingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
