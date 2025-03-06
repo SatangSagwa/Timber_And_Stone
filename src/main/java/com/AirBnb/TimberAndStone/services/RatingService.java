@@ -2,32 +2,21 @@ package com.AirBnb.TimberAndStone.services;
 
 import com.AirBnb.TimberAndStone.models.Rental;
 import com.AirBnb.TimberAndStone.models.RentalReview;
-import com.AirBnb.TimberAndStone.repositories.BookingRepository;
-import com.AirBnb.TimberAndStone.repositories.RentalRepository;
-import com.AirBnb.TimberAndStone.repositories.RentalReviewRepository;
-import com.AirBnb.TimberAndStone.repositories.UserRepository;
+import com.AirBnb.TimberAndStone.repositories.*;
 import com.AirBnb.TimberAndStone.requests.rentalReview.PatchRentalReviewRequest;
 import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RatingService {
-    private final RentalReviewRepository rentalReviewRepository;
+
     private final RentalRepository rentalRepository;
-    private final UserService userService;
-    private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
 
-    public RatingService(RentalReviewRepository rentalReviewRepository, RentalRepository rentalRepository, UserService userService, BookingRepository bookingRepository, UserRepository userRepository) {
-        this.rentalReviewRepository = rentalReviewRepository;
+    public RatingService(RentalRepository rentalRepository, UserRepository userRepository) {
         this.rentalRepository = rentalRepository;
-        this.userService = userService;
-        this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
     }
-
-
-
 
 
     //For create - adds to numberOfRatings & updates avgRating

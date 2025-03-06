@@ -56,8 +56,6 @@ public class RentalReviewService {
         RentalReview rentalReview = new RentalReview();
         Rental rental = booking.getRental();
 
-        // add and update to the rentals rating
-        //updateRentalRating(request, rental);
 
         //Set user to authenticated
         rentalReview.setFromUser(userService.getAuthenticated());
@@ -68,6 +66,9 @@ public class RentalReviewService {
 
         rentalReview.setRating(request.getRating());
         rentalReview.setReview(request.getReview());
+
+        // Adds the new rating to rental.rating.avgRating and +1 to rental.rating.avgRating.numbOfRating
+        ratingService.updateRentalRating(request, rental);
 
         booking.setReviewedByUser(true);
         bookingRepository.save(booking);
@@ -90,7 +91,6 @@ public class RentalReviewService {
         return convertToRentalReviewResponse(rentalReview, "Review: ");
     }
 
-
     public RentalReviewResponse updateRentalReviewById(String id, PatchRentalReviewRequest request) {
         // Check if the review exists
         RentalReview existingRentalReview = rentalReviewRepository.findById(id)
@@ -103,8 +103,7 @@ public class RentalReviewService {
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
         System.out.println("Rental title: " + booking.getRental().getTitle());
 
-        // Use the booking.getRental, id and existingRentalReview to update rating in rental
-        ratingService.updateRentalRating(existingRentalReview, request, booking.getRental());
+
 
         if (request.getRating() != null) {
             existingRentalReview.setRating(request.getRating());
@@ -113,11 +112,13 @@ public class RentalReviewService {
             existingRentalReview.setReview(request.getReview());
         }
 
+        // Use the booking.getRental, request and existingRentalReview to update rating in rental
+        ratingService.updateRentalRating(existingRentalReview, request, booking.getRental());
+
         rentalReviewRepository.save(existingRentalReview);
 
         return convertToRentalReviewResponse(existingRentalReview, "The review has been updated successfully");
     }
-
 
     public List<RentalReviewsResponse> getRentalReviewByRentalId(String id) {
 
