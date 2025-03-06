@@ -30,13 +30,15 @@ public class RentalReviewService {
     private final UserService userService;
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
+    private final RatingService ratingService;
 
-    public RentalReviewService(RentalReviewRepository rentalReviewRepository, RentalRepository rentalRepository, UserService userService, BookingRepository bookingRepository, UserRepository userRepository) {
+    public RentalReviewService(RentalReviewRepository rentalReviewRepository, RentalRepository rentalRepository, UserService userService, BookingRepository bookingRepository, UserRepository userRepository, RatingService ratingService) {
         this.rentalReviewRepository = rentalReviewRepository;
         this.rentalRepository = rentalRepository;
         this.userService = userService;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
+        this.ratingService = ratingService;
     }
 
     public RentalReviewResponse createRentalReview(RentalReviewRequest request) {
@@ -88,33 +90,6 @@ public class RentalReviewService {
         return convertToRentalReviewResponse(rentalReview, "Review: ");
     }
 
-    /*
-    public RentalReviewResponse updateRentalReviewById(String id, PatchRentalReviewRequest request) {
-        // check to see if the review exists
-        RentalReview existingRentalReview = rentalReviewRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rental review not found"));
-        // validate rentalReviewRequest
-        validateRentalReviewRequest(new RentalReviewRequest(existingRentalReview.getBooking().getId(), request.getRating(), request.getReview()));
-
-        Booking booking = bookingRepository.findByBookingNumberAndUserAndRental(existingRentalReview.getBooking().getBookingNumber(), existingRentalReview.getFromUser(), existingRentalReview.getToRental())
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
-        Rental rental = booking.getRental();
-        updateRentalRating(
-                new RentalReviewRequest(existingRentalReview.getBooking().getId(), existingRentalReview.getRating(), existingRentalReview.getReview()),
-                rental,
-                id);
-
-        if (request.getRating() != null) {
-          existingRentalReview.setRating(request.getRating());
-        }
-        if (request.getReview() != null) {
-            existingRentalReview.setReview(request.getReview());
-        }
-updateRentalRating
-        rentalReviewRepository.save(existingRentalReview);
-        return convertToRentalReviewResponse(existingRentalReview, "The review has been updated successfully");
-    }
-     */
 
     public RentalReviewResponse updateRentalReviewById(String id, PatchRentalReviewRequest request) {
         // Check if the review exists
@@ -123,12 +98,13 @@ updateRentalRating
 
         // Validate the rating and review inputs before proceeding
         validateRentalReviewRequest(request, existingRentalReview);
+
         Booking booking = bookingRepository.findById(existingRentalReview.getBooking().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
         System.out.println("Rental title: " + booking.getRental().getTitle());
 
         // Use the booking.getRental, id and existingRentalReview to update rating in rental
-        //updateRentalRating(existingRentalReview, booking.getRental(), id);
+        ratingService.updateRentalRating(existingRentalReview, request, booking.getRental());
 
         if (request.getRating() != null) {
             existingRentalReview.setRating(request.getRating());
@@ -268,49 +244,13 @@ updateRentalRating
         return response;
     }
 
+
+
+
+
+
+
     /*
-    //For create - adds to numberOfRatings
-    private void updateRentalRating(RentalReviewRequest rentalReviewRequest, Rental rental) {
-
-        Integer numberOfRatings = rental.getRating().getNumberOfRatings();
-        Double averageRating = rental.getRating().getAverageRating();
-        Integer rating = rentalReviewRequest.getRating();
-
-        averageRating = averageRating * numberOfRatings + rating;
-        numberOfRatings = numberOfRatings + 1;
-        averageRating = averageRating / numberOfRatings;
-
-        rental.getRating().setNumberOfRatings(numberOfRatings);
-        rental.getRating().setAverageRating(averageRating);
-        rental.setRating(rental.getRating());
-
-        rentalRepository.save(rental);
-
-    }
-
-
-    //For update - finds by id
-    private void updateRentalRating(RentalReview rentalReview, Rental rental, String id) {
-        RentalReview existingRentalReview = rentalReviewRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Rental review not found"));
-        System.out.println("existingRATING: " + existingRentalReview.getRating());
-        Integer numberOfRatings = rental.getRating().getNumberOfRatings();
-        Double averageRating = rental.getRating().getAverageRating();
-        Integer rating = rentalReview.getRating();
-        System.out.println("newRating = " + rentalReview.getRating());
-        System.out.println("averageRating = " + averageRating);
-        System.out.println("numberOfRatings = " + numberOfRatings);
-
-        averageRating = averageRating * numberOfRatings - existingRentalReview.getRating() + rating;
-        averageRating = averageRating / numberOfRatings;
-
-        rental.getRating().setNumberOfRatings(numberOfRatings);
-        rental.getRating().setAverageRating(averageRating);
-        rental.setRating(rental.getRating());
-        System.out.println("Rating :" + rental.getRating().getAverageRating() + "numb: " + rental.getRating().getNumberOfRatings());
-        rentalRepository.save(rental);
-
-    }
     private GetRentalReviewResponse convertToGetRentalReviewResponse(RentalReview rentalReview) {
         Rental rental = rentalReview.getToRental();
         User host = rental.getHost();
@@ -322,8 +262,6 @@ updateRentalRating
         getRentalReviewResponse.setReview(rentalReview.getReview());
         return getRentalReviewResponse;
     }
-
-
      */
 
 }
