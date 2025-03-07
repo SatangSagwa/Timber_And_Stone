@@ -1,15 +1,17 @@
 package com.AirBnb.TimberAndStone.services;
 
 
-import com.AirBnb.TimberAndStone.responses.user.ActivateDeactivateResponse;
-import com.AirBnb.TimberAndStone.responses.rental.ContactResponse;
-import com.AirBnb.TimberAndStone.requests.authentication.RegisterRequest;
-import com.AirBnb.TimberAndStone.responses.authentication.RegisterResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
+import com.AirBnb.TimberAndStone.requests.authentication.RegisterRequest;
+import com.AirBnb.TimberAndStone.responses.authentication.RegisterResponse;
+import com.AirBnb.TimberAndStone.responses.rental.ContactResponse;
+import com.AirBnb.TimberAndStone.responses.rental.GetRentalsResponse;
+import com.AirBnb.TimberAndStone.responses.user.ActivateDeactivateResponse;
+import com.AirBnb.TimberAndStone.responses.user.UserResponse;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -109,8 +112,13 @@ public class UserService {
 
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(this::convertToUserResponse)
+                .collect(Collectors.toList());
+
     }
 
     public User getUserById(String id) {
@@ -159,5 +167,13 @@ public class UserService {
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return findByUsername(userDetails.getUsername());
+    }
+    // ---------------------------- HELP METHODS ---------------------------------------------
+    private UserResponse convertToUserResponse(User user) {
+        return new UserResponse(
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail());
     }
 }

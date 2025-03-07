@@ -3,6 +3,7 @@ package com.AirBnb.TimberAndStone.controllers;
 import com.AirBnb.TimberAndStone.responses.user.ActivateDeactivateResponse;
 import com.AirBnb.TimberAndStone.responses.rental.ContactResponse;
 import com.AirBnb.TimberAndStone.models.User;
+import com.AirBnb.TimberAndStone.responses.user.UserResponse;
 import com.AirBnb.TimberAndStone.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        List<UserResponse> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
