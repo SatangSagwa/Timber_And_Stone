@@ -62,7 +62,7 @@ public class UserReviewService {
         userReview.setBooking(booking);
 
         // add and update to the user rating
-        ratingService.updateUserRating(request, user);
+        //ratingService.updateUserRating(request, user);
 
         booking.setReviewedByHost(true);
         bookingRepository.save(booking);
@@ -92,7 +92,8 @@ public class UserReviewService {
             existingUserReview.setReview(request.getReview());
         }
 
-
+        // Use the booking.getUser, request and existingRentalReview to update rating in rental
+        //ratingService.updateRentalRating(existingUserReview, request, booking.getUser());
 
         userReviewRepository.save(existingUserReview);
 
