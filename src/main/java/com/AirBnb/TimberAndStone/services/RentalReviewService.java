@@ -104,6 +104,8 @@ public class RentalReviewService {
         System.out.println("Rental title: " + booking.getRental().getTitle());
 
 
+        // Use the booking.getRental, request and existingRentalReview to update rating in rental
+        ratingService.updateRentalRating(existingRentalReview, request, booking.getRental());
 
         if (request.getRating() != null) {
             existingRentalReview.setRating(request.getRating());
@@ -112,8 +114,7 @@ public class RentalReviewService {
             existingRentalReview.setReview(request.getReview());
         }
 
-        // Use the booking.getRental, request and existingRentalReview to update rating in rental
-        ratingService.updateRentalRating(existingRentalReview, request, booking.getRental());
+
 
         rentalReviewRepository.save(existingRentalReview);
 
