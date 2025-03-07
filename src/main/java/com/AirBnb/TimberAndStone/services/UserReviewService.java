@@ -81,6 +81,8 @@ public class UserReviewService {
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
 
+        // Use the booking.getUser, request and existingRentalReview to update rating in rental
+        ratingService.updateRentalRating(existingUserReview, request, booking.getUser());
 
         if (request.getRating() != null) {
             existingUserReview.setRating(request.getRating());
@@ -89,8 +91,7 @@ public class UserReviewService {
             existingUserReview.setReview(request.getReview());
         }
 
-        // Use the booking.getUser, request and existingRentalReview to update rating in rental
-        //ratingService.updateRentalRating(existingUserReview, request, booking.getUser());
+
 
         userReviewRepository.save(existingUserReview);
 
