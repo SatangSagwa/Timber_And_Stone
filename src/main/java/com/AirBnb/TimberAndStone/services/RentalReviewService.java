@@ -145,7 +145,7 @@ updateRentalRating
 
     public List<RentalReviewsResponse> getRentalReviewByRentalId(String id) {
         if (id == null || id.isEmpty() || "null".equals(id)) {
-            throw new IllegalArgumentException("Rental id cannot be 'null' or empty");
+            throw new IllegalArgumentException("Rental id can not be 'null' or empty");
         }
         if (!rentalRepository.existsById(id)) {
             throw new ResourceNotFoundException("Rental not found");
@@ -159,6 +159,9 @@ updateRentalRating
     }
 
     public List<RentalReviewsResponse> getRentalReviewByHostId(String id) {
+        if (id == null || id.isEmpty() || "null".equals(id)) {
+            throw new IllegalArgumentException("Host id can not be 'null' or empty");
+        }
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("Host not found");
         }
