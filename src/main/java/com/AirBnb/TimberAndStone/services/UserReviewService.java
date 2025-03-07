@@ -27,13 +27,15 @@ public class UserReviewService {
 
     private final String noReviewsYet = "There are no reviews yet!";
     private final UserRepository userRepository;
+    private final RatingService ratingService;
 
 
-    public UserReviewService(UserReviewRepository userReviewRepository, UserService userService, BookingRepository bookingRepository, UserRepository userRepository) {
+    public UserReviewService(UserReviewRepository userReviewRepository, UserService userService, BookingRepository bookingRepository, UserRepository userRepository, RatingService ratingService) {
         this.userReviewRepository = userReviewRepository;
         this.userService = userService;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
+        this.ratingService = ratingService;
     }
     public UserReviewResponse createUserReview(UserReviewRequest request) {
         validateUserReviewRequest(request);
@@ -80,9 +82,8 @@ public class UserReviewService {
         Booking booking = bookingRepository.findById(existingUserReview.getBooking().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
-
         // Use the booking.getUser, request and existingRentalReview to update rating in rental
-        ratingService.updateRentalRating(existingUserReview, request, booking.getUser());
+        ratingService.updateUserRating(existingUserReview, request, booking.getUser());
 
         if (request.getRating() != null) {
             existingUserReview.setRating(request.getRating());
@@ -91,7 +92,8 @@ public class UserReviewService {
             existingUserReview.setReview(request.getReview());
         }
 
-
+        // Use the booking.getUser, request and existingRentalReview to update rating in rental
+        //ratingService.updateRentalRating(existingUserReview, request, booking.getUser());
 
         userReviewRepository.save(existingUserReview);
 
