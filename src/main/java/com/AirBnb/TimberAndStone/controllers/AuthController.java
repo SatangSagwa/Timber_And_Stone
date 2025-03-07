@@ -87,4 +87,31 @@ public class AuthController {
         }
     }
 
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        // skapa en utgången cookie för att ersätta den befintliga jwt cookien
+        ResponseCookie jwtCookie = ResponseCookie.from("jwt", "")
+                .httpOnly(true)
+                .secure(false) // VIKTIGT! ändra i production
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        // response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+
+        // rensa securitykontexten
+        SecurityContextHolder.clearContext();
+
+        // returnera svar med utgången cookie
+        return ResponseEntity.ok()
+                // hade kunnat ta bort denna raden och använda rad 134
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .body("Logout successful!");
+    }
+
+
+
+
+
 }
