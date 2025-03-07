@@ -28,11 +28,13 @@ public class RentalService {
     private final RentalRepository rentalRepository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final PeriodService periodService;
 
-    public RentalService(RentalRepository rentalRepository, UserRepository userRepository, UserService userService) {
+    public RentalService(RentalRepository rentalRepository, UserRepository userRepository, UserService userService, PeriodService periodService) {
         this.rentalRepository = rentalRepository;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.periodService = periodService;
     }
 
 
@@ -270,13 +272,13 @@ public class RentalService {
         }
         List<Rental> matchingRentals = rentals.stream()
                 .filter(rental -> rental.getAvailablePeriods().stream()
-                        .anyMatch(period -> isPeriodMatching(period, startDate, endDate))
+                        .anyMatch(period -> periodService.isPeriodMatching(period, startDate, endDate))
                 )
                 .collect(Collectors.toList());
         return matchingRentals.stream()
                 .map(rental -> {
                     List<Period> matchingPeriods = rental.getAvailablePeriods().stream()
-                            .filter(period -> isPeriodMatching(period, startDate, endDate))
+                            .filter(period -> periodService.isPeriodMatching(period, startDate, endDate))
                             .collect(Collectors.toList());
                     GetRentalsResponse response = convertToGetRentalsResponse(rental);
                     //response.setPeriods(matchingPeriods);
@@ -427,15 +429,6 @@ public class RentalService {
             return "Default policy txt";
         }
     }
-
-
-    // https://chatgpt.com/share/67b4a4fb-a588-800b-9894-16722dd3a37d
-    private boolean isPeriodMatching(Period period, LocalDate startDate, LocalDate endDate) {
-        boolean overlap = (startDate.isEqual(period.getStartDate()) || startDate.isAfter(period.getStartDate())) &&
-                (endDate.isEqual(period.getEndDate()) || endDate.isBefore(period.getEndDate()));
-        return overlap;
-    }
-
 
     private boolean isAmenitiesMatching(List<Amenity> amenitiesRental, List<Amenity> amenitiesDTO) {
         Boolean match = false;
