@@ -1,10 +1,10 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 
-import com.AirBnb.TimberAndStone.requests.userReview.PatchUserReviewRequest;
-import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
-import com.AirBnb.TimberAndStone.responses.userReview.GetUserReviewResponse;
-import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
+import com.AirBnb.TimberAndStone.dtos.requests.userReview.PatchUserReviewRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.userReview.UserReviewRequest;
+import com.AirBnb.TimberAndStone.dtos.responses.userReview.GetUserReviewResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.userReview.UserReviewResponse;
 import com.AirBnb.TimberAndStone.services.UserReviewService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

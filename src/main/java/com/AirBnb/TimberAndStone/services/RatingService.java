@@ -6,10 +6,10 @@ import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.models.UserReview;
 import com.AirBnb.TimberAndStone.repositories.RentalRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
-import com.AirBnb.TimberAndStone.requests.rentalReview.PatchRentalReviewRequest;
-import com.AirBnb.TimberAndStone.requests.rentalReview.RentalReviewRequest;
-import com.AirBnb.TimberAndStone.requests.userReview.PatchUserReviewRequest;
-import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.rentalReview.PatchRentalReviewRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.rentalReview.RentalReviewRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.userReview.PatchUserReviewRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.userReview.UserReviewRequest;
 import org.springframework.stereotype.Service;
 
 @Service
