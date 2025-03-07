@@ -1,9 +1,9 @@
 package com.AirBnb.TimberAndStone.controllers;
 
-import com.AirBnb.TimberAndStone.requests.authentication.AuthRequest;
-import com.AirBnb.TimberAndStone.responses.authentication.AuthResponse;
-import com.AirBnb.TimberAndStone.requests.authentication.RegisterRequest;
-import com.AirBnb.TimberAndStone.responses.authentication.RegisterResponse;
+import com.AirBnb.TimberAndStone.dtos.requests.authentication.AuthRequest;
+import com.AirBnb.TimberAndStone.dtos.responses.authentication.AuthResponse;
+import com.AirBnb.TimberAndStone.dtos.requests.authentication.RegisterRequest;
+import com.AirBnb.TimberAndStone.dtos.responses.authentication.RegisterResponse;
 import com.AirBnb.TimberAndStone.services.UserService;
 import com.AirBnb.TimberAndStone.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;

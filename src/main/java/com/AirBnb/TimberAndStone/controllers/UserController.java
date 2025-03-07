@@ -1,7 +1,7 @@
 package com.AirBnb.TimberAndStone.controllers;
 
-import com.AirBnb.TimberAndStone.responses.user.ActivateDeactivateResponse;
-import com.AirBnb.TimberAndStone.responses.rental.ContactResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.ActivateDeactivateResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.rental.ContactResponse;
 import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.services.UserService;
 import jakarta.validation.Valid;

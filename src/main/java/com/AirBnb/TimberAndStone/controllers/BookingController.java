@@ -1,11 +1,11 @@
 package com.AirBnb.TimberAndStone.controllers;
 
-import com.AirBnb.TimberAndStone.requests.booking.BookingRequest;
-import com.AirBnb.TimberAndStone.requests.booking.PatchBookingRequest;
-import com.AirBnb.TimberAndStone.responses.booking.AllBookingsResponse;
-import com.AirBnb.TimberAndStone.responses.booking.BookingResponse;
-import com.AirBnb.TimberAndStone.responses.booking.PatchBookingResponse;
-import com.AirBnb.TimberAndStone.responses.booking.PostBookingResponse;
+import com.AirBnb.TimberAndStone.dtos.requests.booking.BookingRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.booking.PatchBookingRequest;
+import com.AirBnb.TimberAndStone.dtos.responses.booking.AllBookingsResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.booking.BookingResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.booking.PatchBookingResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.booking.PostBookingResponse;
 import com.AirBnb.TimberAndStone.services.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
