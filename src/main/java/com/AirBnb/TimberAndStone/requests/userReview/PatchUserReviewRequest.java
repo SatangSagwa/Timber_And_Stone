@@ -16,4 +16,3 @@ public class PatchUserReviewRequest {
         return review;
     }
 }
-

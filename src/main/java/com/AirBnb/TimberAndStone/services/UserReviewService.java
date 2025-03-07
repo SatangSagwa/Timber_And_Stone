@@ -7,6 +7,7 @@ import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
+import com.AirBnb.TimberAndStone.requests.userReview.PatchUserReviewRequest;
 import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
 import com.AirBnb.TimberAndStone.responses.userReview.GetUserReviewResponse;
 import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
@@ -21,31 +22,32 @@ import java.util.stream.Collectors;
 @Service
 public class UserReviewService {
     private final UserReviewRepository userReviewRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
-    private final BookingService bookingService;
     private final BookingRepository bookingRepository;
 
     private final String noReviewsYet = "There are no reviews yet!";
+    private final UserRepository userRepository;
 
 
-    public UserReviewService(UserReviewRepository userReviewRepository, UserRepository userRepository, UserService userService, BookingService bookingService, BookingRepository bookingRepository) {
+    public UserReviewService(UserReviewRepository userReviewRepository, UserService userService, BookingRepository bookingRepository, UserRepository userRepository) {
         this.userReviewRepository = userReviewRepository;
-        this.userRepository = userRepository;
         this.userService = userService;
-        this.bookingService = bookingService;
         this.bookingRepository = bookingRepository;
+        this.userRepository = userRepository;
     }
     public UserReviewResponse createUserReview(UserReviewRequest request) {
         validateUserReviewRequest(request);
 
-        UserReview userReview = new UserReview();
+
         Booking booking = bookingRepository.findById(request.getBookingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         if(booking.getReviewedByHost()) {
             throw new IllegalArgumentException("You have already left a review for this visit!");
         }
+
+        UserReview userReview = new UserReview();
+        User user = booking.getUser();
 
         //Set host to authenticated
         userReview.setFromHost(userService.getAuthenticated());
@@ -54,14 +56,49 @@ public class UserReviewService {
         userReview.setRating(request.getRating());
         userReview.setReview(request.getReview());
 
+        //Set booking to found booking.
+        userReview.setBooking(booking);
+
+        // add and update to the user rating
+        //ratingService.updateUserRating(request, user);
+
         booking.setReviewedByHost(true);
         bookingRepository.save(booking);
-
         userReviewRepository.save(userReview);
-        UserReviewResponse response = convertToUserReviewResponse(userReview, booking.getRental(), "User has been reviewed successfully");
 
-        return response;
+        return convertToUserReviewResponse(userReview, booking.getRental(), "User has been reviewed successfully");
     }
+
+    public UserReviewResponse updateUserReviewById(String id, PatchUserReviewRequest request) {
+        // Check if the review exists
+        UserReview existingUserReview = userReviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User review not found"));
+
+        // Validate the rating and review inputs before proceeding
+        validateUserReviewRequest(request, existingUserReview);
+
+        Booking booking = bookingRepository.findById(existingUserReview.getBooking().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+
+
+        if (request.getRating() != null) {
+            existingUserReview.setRating(request.getRating());
+        }
+        if (request.getReview() != null) {
+            existingUserReview.setReview(request.getReview());
+        }
+
+        // Use the booking.getUser, request and existingRentalReview to update rating in rental
+        //ratingService.updateRentalRating(existingUserReview, request, booking.getUser());
+
+        userReviewRepository.save(existingUserReview);
+
+        return convertToUserReviewResponse(existingUserReview, booking.getRental(), "The review has been updated successfully");
+    }
+
+
+
 
     public List<GetUserReviewResponse> getAllUserReviews() {
         List<UserReview> userReviews = userReviewRepository.findAll();
@@ -71,10 +108,32 @@ public class UserReviewService {
 
     }
 
+
     public GetUserReviewResponse getUserReviewById(String id) {
         UserReview userReview = userReviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Userreview not found"));
         return convertToGetUserReviewResponse(userReview);
+    }
+
+    public Optional<?> getUserReviewsByBooking(String bookingId, Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        if(!booking.getRental().getHost().getId().equals(userService.getAuthenticated().getId())) {
+            throw new IllegalArgumentException("You are not authorized to view these reviews!");
+        }
+
+        List<UserReview> reviews = userReviewRepository.findByToUserId(booking.getUser().getId());
+
+        if(reviews.isEmpty()) {
+            return Optional.of(noReviewsYet);
+        }
+
+        List<UserReview> sortedReviews = sortReviews(reviews, ascending, descending, latest, oldest);
+
+        return Optional.of(sortedReviews.stream()
+                .map(this::convertToGetUserReviewResponse)
+                .collect(Collectors.toList()));
     }
 
     public Optional<?> getMyReviews(Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
@@ -90,12 +149,10 @@ public class UserReviewService {
                 .collect(Collectors.toList()));
     }
 
-    /* we currently dont have rating in user, after fixing this we need to implement patch method to
-    have rating for user update when a user review is updated
 
-    public UserReviewResponse updateUserReviewById(String id, UserReviewRequest request) {
-    }*/
 
+
+    // ------------------------------ HELPERS --------------------------------------------------------------------------
     private void validateUserReviewRequest(UserReviewRequest request) {
         Booking booking = bookingRepository.findById(request.getBookingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
@@ -134,6 +191,33 @@ public class UserReviewService {
         }
          */
 
+    }
+
+    private void validateUserReviewRequest(PatchUserReviewRequest request, UserReview review) {
+
+        /*
+        RentalReview review = rentalReviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found2"));
+
+         */
+        if (!userService.getAuthenticated().getId().equals(review.getFromHost().getId())) {
+            throw new UnauthorizedException("You are not the owner of this review!");
+        }
+
+        if(request.getRating() != null) {
+            if(request.getRating() < 1 || request.getRating() > 5) {
+                throw new IllegalArgumentException("Rating has to be between 1 and 5");
+            }
+        }
+
+        //Check so loggedin user is the user
+        if(!userService.getAuthenticated().getId().equals(review.getFromHost().getId())) {
+            throw new UnauthorizedException("You are not the user of this booking!");
+        }
+        //Check so the booking is confirmed (and therefore, also paid)
+        if(!review.getBooking().getBookingStatus().equals(BookingStatus.CONFIRMED)) {
+            throw new IllegalArgumentException("Booking status must be confirmed before it can be reviewed.");
+        }
     }
 
     private List<UserReview> sortReviews(List<UserReview> reviews, Boolean ascending, Boolean descending, Boolean latest, Boolean oldest) {
@@ -183,7 +267,6 @@ public class UserReviewService {
         response.setDate(userReview.getCreatedAt());
         return response;
     }
-
 
     }
 
