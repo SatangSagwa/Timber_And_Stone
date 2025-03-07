@@ -5,6 +5,7 @@ import com.AirBnb.TimberAndStone.models.Amenity;
 import com.AirBnb.TimberAndStone.models.Category;
 import com.AirBnb.TimberAndStone.models.Period;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 
 import java.util.List;
 
@@ -13,12 +14,14 @@ public class RentalRequest {
 
     private String title;
     private List<String> photos;
+    @Min(value = 1, message = "Price has to be a positive number")
     private Double pricePerNight;
     @Valid
     private Address address;
     private Category category;
     @Valid
     private List<Amenity> amenities;
+    @Min(value = 1, message = "Capacity has to be a positive number")
     private Integer capacity;
     @Valid
     private List<Period> availablePeriods;

@@ -27,10 +27,12 @@ public class RentalService {
 
     private final RentalRepository rentalRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public RentalService(RentalRepository rentalRepository, UserRepository userRepository) {
+    public RentalService(RentalRepository rentalRepository, UserRepository userRepository, UserService userService) {
         this.rentalRepository = rentalRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
 
@@ -149,53 +151,48 @@ public class RentalService {
     }
 
     // kolla igenom vad som faktiskt bör ligga i patch och se hur det fungarar med @annotation createdat and updatedAt
-    public Rental patchRentalById(String id, Rental rental) {
+    public GetRentalsResponse patchRentalById(String id, RentalRequest request) {
         Rental existingRental = rentalRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
 
-        if (rental.getTitle() != null) {
-            existingRental.setTitle(rental.getTitle());
+        if(!userService.getAuthenticated().getId().equals(existingRental.getHost().getId())) {
+            throw new UnauthorizedException("You are not permitted to change this rental!");
         }
-        if (rental.getPhotos() != null) {
-            existingRental.setPhotos(rental.getPhotos());
+
+        if (request.getTitle() != null) {
+            existingRental.setTitle(request.getTitle());
         }
-        if (rental.getPricePerNight() != null) {
-            existingRental.setPricePerNight(rental.getPricePerNight());
+        if (request.getPhotos() != null) {
+            existingRental.setPhotos(request.getPhotos());
         }
-        if (rental.getRating() != null) {
-            existingRental.setRating(rental.getRating());
+        if (request.getPricePerNight() != null) {
+            existingRental.setPricePerNight(request.getPricePerNight());
         }
-        if (rental.getHost() != null) {
-            existingRental.setHost(rental.getHost());
+        if (request.getAddress() != null) {
+            existingRental.setAddress(request.getAddress());
         }
-        if (rental.getAddress() != null) {
-            existingRental.setAddress(rental.getAddress());
+        if (request.getCategory() != null) {
+            existingRental.setCategory(request.getCategory());
         }
-        if (rental.getCategory() != null) {
-            existingRental.setCategory(rental.getCategory());
+        if (request.getAmenities() != null) {
+            existingRental.setAmenities(request.getAmenities());
         }
-        if (rental.getAmenities() != null) {
-            existingRental.setAmenities(rental.getAmenities());
+        if (request.getCapacity() != null) {
+            existingRental.setCapacity(request.getCapacity());
         }
-        if (rental.getCapacity() != null) {
-            existingRental.setCapacity(rental.getCapacity());
+        if (request.getAvailablePeriods() != null) {
+            existingRental.setAvailablePeriods(request.getAvailablePeriods());
         }
-        if (rental.getAvailablePeriods() != null) {
-            existingRental.setAvailablePeriods(rental.getAvailablePeriods());
+        if (request.getDescription() != null) {
+            existingRental.setDescription(request.getDescription());
         }
-        if (rental.getDescription() != null) {
-            existingRental.setDescription(rental.getDescription());
+        if (request.getPolicy() != null) {
+            existingRental.setPolicy(getValidatedPolicy(request.getPolicy()));
         }
-        if (rental.getPolicy() != null) {
-            existingRental.setPolicy(getValidatedPolicy(rental.getPolicy()));
-        }
-        if (rental.getCreatedAt() != null) {
-            existingRental.setCreatedAt(rental.getCreatedAt());
-        }
-        if (rental.getUpdatedAt() != null) {
-            existingRental.setUpdatedAt(rental.getUpdatedAt());
-        }
-        return rentalRepository.save(existingRental);
+
+        convertToGetRentalsResponse(existingRental);
+        rentalRepository.save(existingRental);
+        return convertToGetRentalsResponse(existingRental);
     }
 
     public void deleteRental(String id) {
