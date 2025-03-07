@@ -164,7 +164,6 @@ updateRentalRating
         }
         List<Rental> rentals = rentalRepository.findByHostId(id);
 
-        System.out.println("Found Rentals: " + rentals);
         if (rentals.isEmpty()) {
             throw new ResourceNotFoundException("No rentals found for this host");
         }
@@ -174,7 +173,6 @@ updateRentalRating
             List<RentalReview> reviewsForRental = rentalReviewRepository.findByToRentalId(rental.getId());
             rentalReviews.addAll(reviewsForRental);
         }
-        System.out.println("Found Reviews: " + rentalReviews);
         return rentalReviews.stream()
                 .map(this::convertToRentalReviewsResponse)
                 .collect(Collectors.toList());
