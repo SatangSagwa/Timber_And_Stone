@@ -3,6 +3,7 @@ package com.AirBnb.TimberAndStone.services;
 
 import com.AirBnb.TimberAndStone.dtos.requests.authentication.RegisterRequest;
 import com.AirBnb.TimberAndStone.dtos.responses.authentication.RegisterResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.rental.ContactResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.user.GetSingleUserResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
@@ -144,13 +145,13 @@ public class UserService {
     return matchingUsers;
 
     }
-    /*public ContactResponse getUserContacts(String id) {
-        User user = getUserById(id);
+    public ContactResponse getUserContacts(String id) {
+        GetSingleUserResponse user = getUserById(id);
         return new ContactResponse("Contact Info:", user.getUsername(), user.getPhoneNumber(), user.getEmail());
     }
 
     //Activates deactivated users, deactivates activated users.
-    public ActivateDeactivateResponse activateDeactivateUser(String id) {
+    /*public ActivateDeactivateResponse activateDeactivateUser(String id) {
         User user = getUserById(id);
 
         //If user is active, set to false and return deactivated
@@ -185,7 +186,6 @@ public class UserService {
     }
     private GetSingleUserResponse convertToGetSingleUserResponse(User user) {
         return new GetSingleUserResponse(
-                user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),

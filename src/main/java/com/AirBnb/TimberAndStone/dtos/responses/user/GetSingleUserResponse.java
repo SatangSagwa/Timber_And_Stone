@@ -12,8 +12,8 @@ public class GetSingleUserResponse {
     private String city;
     private Rating rating;
 
-    public GetSingleUserResponse(String username, String firstName, String lastName, String email, String phoneNumber, String country, String city, Rating rating) {
-    this.username = username;
+    public GetSingleUserResponse(String username, String firstName, String lastName, String email, String phoneNumber, String country, Rating rating) {
+        this.username = username;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
