@@ -2,7 +2,7 @@ package com.AirBnb.TimberAndStone.services;
 
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.models.Period;
-import com.AirBnb.TimberAndStone.requests.booking.BookingRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.booking.BookingRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
