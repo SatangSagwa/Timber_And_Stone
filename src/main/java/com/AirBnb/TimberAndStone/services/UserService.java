@@ -1,16 +1,14 @@
 package com.AirBnb.TimberAndStone.services;
 
 
+import com.AirBnb.TimberAndStone.dtos.requests.authentication.RegisterRequest;
+import com.AirBnb.TimberAndStone.dtos.responses.authentication.RegisterResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.GetSingleUserResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
-import com.AirBnb.TimberAndStone.requests.authentication.RegisterRequest;
-import com.AirBnb.TimberAndStone.responses.authentication.RegisterResponse;
-import com.AirBnb.TimberAndStone.responses.rental.ContactResponse;
-import com.AirBnb.TimberAndStone.responses.rental.GetRentalsResponse;
-import com.AirBnb.TimberAndStone.responses.user.ActivateDeactivateResponse;
 import com.AirBnb.TimberAndStone.responses.user.UserResponse;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -120,25 +118,33 @@ public class UserService {
                 .collect(Collectors.toList());
 
     }
-
-    public User getUserById(String id) {
+    public GetSingleUserResponse getUserById(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        return user;
+        return convertToGetSingleUserResponse(user);
     }
 
-    public User getUserByEmail(String email) {
-        List<User> users = getAllUsers();
-        for (User user : users) {
+    public List<UserResponse> getUserByEmail(String email) {
+        List<UserResponse> userResponses = getAllUsers();
+        List<UserResponse> matchingUsers = new ArrayList<>();
+        for (UserResponse userResponse : userResponses) {
+            User user = new User();
+            user.setUsername(userResponse.getUsername());
+            user.setFirstName(userResponse.getFirstName());
+            user.setLastName(userResponse.getLastName());
+            user.setEmail(userResponse.getEmail());
             if (user.getEmail().equals(email)) {
-                return user;
+                matchingUsers.add(userResponse);
             }
         }
-        throw new ResourceNotFoundException("User with email " + email + " not found.");
+        if (matchingUsers.isEmpty()) {
+            throw new ResourceNotFoundException("User with email " + email + " not found.");
     }
+    return matchingUsers;
 
-    public ContactResponse getUserContacts(String id) {
+    }
+    /*public ContactResponse getUserContacts(String id) {
         User user = getUserById(id);
         return new ContactResponse("Contact Info:", user.getUsername(), user.getPhoneNumber(), user.getEmail());
     }
@@ -158,7 +164,7 @@ public class UserService {
         user.setActive(true);
         userRepository.save(user);
         return new ActivateDeactivateResponse("User has been activated", user.getUsername(), user.getActive());
-    }
+    }*/
 
     public User getAuthenticated(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -169,11 +175,24 @@ public class UserService {
         return findByUsername(userDetails.getUsername());
     }
     // ---------------------------- HELP METHODS ---------------------------------------------
+
     private UserResponse convertToUserResponse(User user) {
         return new UserResponse(
+        user.getUsername(),
+        user.getFirstName(),
+        user.getLastName(),
+        user.getEmail());
+    }
+    private GetSingleUserResponse convertToGetSingleUserResponse(User user) {
+        return new GetSingleUserResponse(
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail());
-    }
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getAddress().getCountry(),
+                user.getAddress().getCity(),
+                user.getRating());
+
+}
 }

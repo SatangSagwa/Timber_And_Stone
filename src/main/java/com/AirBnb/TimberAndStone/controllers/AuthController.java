@@ -1,9 +1,9 @@
 package com.AirBnb.TimberAndStone.controllers;
 
-import com.AirBnb.TimberAndStone.requests.authentication.AuthRequest;
-import com.AirBnb.TimberAndStone.responses.authentication.AuthResponse;
-import com.AirBnb.TimberAndStone.requests.authentication.RegisterRequest;
-import com.AirBnb.TimberAndStone.responses.authentication.RegisterResponse;
+import com.AirBnb.TimberAndStone.dtos.requests.authentication.AuthRequest;
+import com.AirBnb.TimberAndStone.dtos.responses.authentication.AuthResponse;
+import com.AirBnb.TimberAndStone.dtos.requests.authentication.RegisterRequest;
+import com.AirBnb.TimberAndStone.dtos.responses.authentication.RegisterResponse;
 import com.AirBnb.TimberAndStone.services.UserService;
 import com.AirBnb.TimberAndStone.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -86,5 +86,32 @@ public class AuthController {
                     .body("Incorrect username or password");
         }
     }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        // skapa en utgången cookie för att ersätta den befintliga jwt cookien
+        ResponseCookie jwtCookie = ResponseCookie.from("jwt", "")
+                .httpOnly(true)
+                .secure(false) // VIKTIGT! ändra i production
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        // response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+
+        // rensa securitykontexten
+        SecurityContextHolder.clearContext();
+
+        // returnera svar med utgången cookie
+        return ResponseEntity.ok()
+                // hade kunnat ta bort denna raden och använda rad 134
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .body("Logout successful!");
+    }
+
+
+
+
 
 }

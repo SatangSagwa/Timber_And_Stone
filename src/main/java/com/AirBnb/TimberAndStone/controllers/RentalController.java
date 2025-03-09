@@ -1,10 +1,10 @@
 package com.AirBnb.TimberAndStone.controllers;
 
+import com.AirBnb.TimberAndStone.dtos.responses.rental.GetRentalsResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.rental.RentalResponse;
 import com.AirBnb.TimberAndStone.models.Category;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.requests.rental.RentalAmenitiesRequest;
-import com.AirBnb.TimberAndStone.requests.rental.RentalRequest;
-import com.AirBnb.TimberAndStone.responses.rental.*;
+import com.AirBnb.TimberAndStone.dtos.requests.rental.RentalAmenitiesRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.rental.RentalRequest;
 import com.AirBnb.TimberAndStone.services.RentalService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -93,8 +93,8 @@ public class RentalController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Rental> patchRentalById(@PathVariable String id, @RequestBody Rental rental) {
-        return new ResponseEntity<>(rentalService.patchRentalById(id, rental), HttpStatus.OK);
+    public ResponseEntity<GetRentalsResponse> patchRentalById(@PathVariable String id, @Valid @RequestBody RentalRequest request) {
+        return new ResponseEntity<>(rentalService.patchRentalById(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
