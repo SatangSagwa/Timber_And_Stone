@@ -7,10 +7,10 @@ import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.BookingRepository;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
 import com.AirBnb.TimberAndStone.repositories.UserReviewRepository;
-import com.AirBnb.TimberAndStone.requests.userReview.PatchUserReviewRequest;
-import com.AirBnb.TimberAndStone.requests.userReview.UserReviewRequest;
-import com.AirBnb.TimberAndStone.responses.userReview.GetUserReviewResponse;
-import com.AirBnb.TimberAndStone.responses.userReview.UserReviewResponse;
+import com.AirBnb.TimberAndStone.dtos.requests.userReview.PatchUserReviewRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.userReview.UserReviewRequest;
+import com.AirBnb.TimberAndStone.dtos.responses.userReview.GetUserReviewResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.userReview.UserReviewResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

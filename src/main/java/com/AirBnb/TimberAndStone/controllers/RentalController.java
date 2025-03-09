@@ -1,10 +1,10 @@
 package com.AirBnb.TimberAndStone.controllers;
 
+import com.AirBnb.TimberAndStone.dtos.responses.rental.GetRentalsResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.rental.RentalResponse;
 import com.AirBnb.TimberAndStone.models.Category;
-import com.AirBnb.TimberAndStone.models.Rental;
-import com.AirBnb.TimberAndStone.requests.rental.RentalAmenitiesRequest;
-import com.AirBnb.TimberAndStone.requests.rental.RentalRequest;
-import com.AirBnb.TimberAndStone.responses.rental.*;
+import com.AirBnb.TimberAndStone.dtos.requests.rental.RentalAmenitiesRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.rental.RentalRequest;
 import com.AirBnb.TimberAndStone.services.RentalService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
