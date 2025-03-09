@@ -1,7 +1,9 @@
 package com.AirBnb.TimberAndStone.controllers;
 
-import com.AirBnb.TimberAndStone.dtos.responses.user.ActivateDeactivateResponse;
+import com.AirBnb.TimberAndStone.dtos.requests.user.PatchUserRequest;
 import com.AirBnb.TimberAndStone.dtos.responses.rental.ContactResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.ActivateDeactivateResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.PatchUserResponse;
 import com.AirBnb.TimberAndStone.models.User;
 import com.AirBnb.TimberAndStone.services.UserService;
 import jakarta.validation.Valid;
@@ -49,5 +51,10 @@ public class UserController {
     public ResponseEntity<?> activateOrDeactivateUser(@PathVariable String id) {
         ActivateDeactivateResponse response = userService.activateDeactivateUser(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<PatchUserResponse> patchUser(@PathVariable String id, @RequestBody PatchUserRequest request) {
+        PatchUserResponse response = userService.patchUser(id, request);
+        return ResponseEntity.ok(response);
     }
 }
