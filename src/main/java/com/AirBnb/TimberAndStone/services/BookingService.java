@@ -49,6 +49,13 @@ public class BookingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Rental not found"));
         booking.setRental(rental);
 
+        /*
+        Gets all the available periods for the rental you want to book and checks the dates you want to book vs the ->
+        available dates in rental and send an error if none of the dates match
+         */
+        List<Period> periods = rental.getAvailablePeriods();
+        periodService.isPeriodMatching(periods, bookingRequest);
+
         //DTO values
         Period period = new Period();
         period.setStartDate(bookingRequest.getStartDate());
