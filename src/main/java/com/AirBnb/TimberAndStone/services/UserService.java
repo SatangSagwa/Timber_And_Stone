@@ -127,9 +127,8 @@ public class UserService {
         return convertToGetSingleUserResponse(user);
     }
 
-    public List<UserResponse> getUserByEmail(String email) {
+    public UserResponse getUserByEmail(String email) {
         List<UserResponse> userResponses = getAllUsers();
-        List<UserResponse> matchingUsers = new ArrayList<>();
         for (UserResponse userResponse : userResponses) {
             User user = new User();
             user.setUsername(userResponse.getUsername());
@@ -137,13 +136,11 @@ public class UserService {
             user.setLastName(userResponse.getLastName());
             user.setEmail(userResponse.getEmail());
             if (user.getEmail().equals(email)) {
-                matchingUsers.add(userResponse);
+                return userResponse;
             }
         }
-        if (matchingUsers.isEmpty()) {
+        // if no email is found
             throw new ResourceNotFoundException("User with email " + email + " not found.");
-    }
-    return matchingUsers;
 
     }
     public ContactResponse getUserContacts(String id) {
