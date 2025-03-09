@@ -4,6 +4,7 @@ package com.AirBnb.TimberAndStone.services;
 import com.AirBnb.TimberAndStone.dtos.requests.authentication.RegisterRequest;
 import com.AirBnb.TimberAndStone.dtos.responses.authentication.RegisterResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.rental.ContactResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.ActivateDeactivateResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.user.GetSingleUserResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
@@ -151,8 +152,9 @@ public class UserService {
     }
 
     //Activates deactivated users, deactivates activated users.
-    /*public ActivateDeactivateResponse activateDeactivateUser(String id) {
-        User user = getUserById(id);
+    public ActivateDeactivateResponse activateDeactivateUser(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         //If user is active, set to false and return deactivated
         if(user.getActive()) {
@@ -165,7 +167,7 @@ public class UserService {
         user.setActive(true);
         userRepository.save(user);
         return new ActivateDeactivateResponse("User has been activated", user.getUsername(), user.getActive());
-    }*/
+    }
 
     public User getAuthenticated(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

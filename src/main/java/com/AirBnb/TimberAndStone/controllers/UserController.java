@@ -1,16 +1,14 @@
 package com.AirBnb.TimberAndStone.controllers;
 
 import com.AirBnb.TimberAndStone.dtos.responses.rental.ContactResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.ActivateDeactivateResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.user.GetSingleUserResponse;
 import com.AirBnb.TimberAndStone.responses.user.UserResponse;
 import com.AirBnb.TimberAndStone.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,9 +48,9 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*@PatchMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?> activateOrDeactivateUser(@PathVariable String id) {
         ActivateDeactivateResponse response = userService.activateDeactivateUser(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }*/
+    }
 }
