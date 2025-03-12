@@ -185,6 +185,7 @@ public class UserService {
     }
     private GetSingleUserResponse convertToGetSingleUserResponse(User user) {
         return new GetSingleUserResponse(
+                user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
