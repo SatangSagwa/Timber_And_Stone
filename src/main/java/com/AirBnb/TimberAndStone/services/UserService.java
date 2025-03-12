@@ -11,7 +11,7 @@ import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
-import com.AirBnb.TimberAndStone.responses.user.UserResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.UserResponse;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +39,10 @@ public class UserService {
         // check if username already exists
         if (existsByUsername(registerRequest.getUsername())) {
             throw new ConflictException("Username already exists");
+        }
+        // check if email already exists
+        if (existsByEmail(registerRequest.getEmail())) {
+            throw new ConflictException("Email already exists");
         }
 
         // map the authRequest to a User entity
@@ -110,6 +114,9 @@ public class UserService {
     public boolean existsByUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
 
+    }
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
     public List<UserResponse> getAllUsers() {

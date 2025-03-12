@@ -122,7 +122,9 @@ public class RentalReviewService {
     }
 
     public List<RentalReviewsResponse> getRentalReviewByRentalId(String id) {
-
+        if (id == null || id.isEmpty() || "null".equals(id)) {
+            throw new IllegalArgumentException("Rental id can not be 'null' or empty");
+        }
         if (!rentalRepository.existsById(id)) {
             throw new ResourceNotFoundException("Rental not found");
         }
@@ -135,12 +137,14 @@ public class RentalReviewService {
     }
 
     public List<RentalReviewsResponse> getRentalReviewByHostId(String id) {
+        if (id == null || id.isEmpty() || "null".equals(id)) {
+            throw new IllegalArgumentException("Host id can not be 'null' or empty");
+        }
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("Host not found");
         }
         List<Rental> rentals = rentalRepository.findByHostId(id);
 
-        System.out.println("Found Rentals: " + rentals);
         if (rentals.isEmpty()) {
             throw new ResourceNotFoundException("No rentals found for this host");
         }
@@ -150,7 +154,6 @@ public class RentalReviewService {
             List<RentalReview> reviewsForRental = rentalReviewRepository.findByToRentalId(rental.getId());
             rentalReviews.addAll(reviewsForRental);
         }
-        System.out.println("Found Reviews: " + rentalReviews);
         return rentalReviews.stream()
                 .map(this::convertToRentalReviewsResponse)
                 .collect(Collectors.toList());

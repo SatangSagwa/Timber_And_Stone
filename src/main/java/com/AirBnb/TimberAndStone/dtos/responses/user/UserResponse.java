@@ -1,4 +1,4 @@
-package com.AirBnb.TimberAndStone.responses.user;
+package com.AirBnb.TimberAndStone.dtos.responses.user;
 
 public class UserResponse {
     private String username;

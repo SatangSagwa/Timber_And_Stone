@@ -3,7 +3,7 @@ package com.AirBnb.TimberAndStone.controllers;
 import com.AirBnb.TimberAndStone.dtos.responses.rental.ContactResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.user.ActivateDeactivateResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.user.GetSingleUserResponse;
-import com.AirBnb.TimberAndStone.responses.user.UserResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.UserResponse;
 import com.AirBnb.TimberAndStone.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
