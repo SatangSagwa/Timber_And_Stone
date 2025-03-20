@@ -2,10 +2,11 @@ package com.AirBnb.TimberAndStone.services;
 
 
 import com.AirBnb.TimberAndStone.dtos.requests.authentication.RegisterRequest;
+import com.AirBnb.TimberAndStone.dtos.requests.user.PatchUserRequest;
 import com.AirBnb.TimberAndStone.dtos.responses.authentication.RegisterResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.rental.ContactResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.user.ActivateDeactivateResponse;
-import com.AirBnb.TimberAndStone.dtos.responses.user.GetSingleUserResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.PatchUserResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
@@ -19,10 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import java.util.*;
 
 @Service
 public class UserService {
@@ -181,6 +180,61 @@ public class UserService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return findByUsername(userDetails.getUsername());
     }
+
+    private UserService userService;
+    public PatchUserResponse patchUser(String id, PatchUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        User currentUser = getAuthenticated();
+
+        if (!currentUser.getId().equals(user.getId())) {
+            throw new UnauthorizedException("You do not have permission to change this user!");
+        }
+        if(request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+
+        if(request.getUsername() != null) {
+            user.setUsername(request.getUsername());
+        }
+        if(request.getFirstName() != null) {
+            user.setFirstName(request.getFirstName());
+        }
+        if(request.getLastName() != null) {
+            user.setLastName(request.getLastName());
+        }
+        if(request.getPhoneNumber() != null) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
+        if(request.getAddress() != null) {
+            user.setAddress(request.getAddress());
+        }
+        if(request.getProfilePhoto() != null) {
+            user.setProfilePhoto(request.getProfilePhoto());
+        }
+        if(request.getFavouriteRentals() != null) {
+            user.setFavouriteRentals(request.getFavouriteRentals());
+        }
+        userRepository.save(user);
+        return convertToPatchUserResponse("The user has been updated successfully", user);
+    }
+    private PatchUserResponse convertToPatchUserResponse(String message, User user) {
+        return new PatchUserResponse(
+                message,
+                user.getEmail(),
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhoneNumber(),
+                user.getAddress(),
+                user.getRating(),
+                user.getProfilePhoto(),
+                user.getFavouriteRentals()
+        );
+    }
+}
+
     // ---------------------------- HELP METHODS ---------------------------------------------
 
     private UserResponse convertToUserResponse(User user) {
@@ -203,3 +257,4 @@ public class UserService {
 
 }
 }
+
