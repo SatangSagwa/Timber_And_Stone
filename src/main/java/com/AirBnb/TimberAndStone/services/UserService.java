@@ -6,13 +6,14 @@ import com.AirBnb.TimberAndStone.dtos.requests.user.PatchUserRequest;
 import com.AirBnb.TimberAndStone.dtos.responses.authentication.RegisterResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.rental.ContactResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.user.ActivateDeactivateResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.GetSingleUserResponse;
 import com.AirBnb.TimberAndStone.dtos.responses.user.PatchUserResponse;
+import com.AirBnb.TimberAndStone.dtos.responses.user.UserResponse;
 import com.AirBnb.TimberAndStone.exceptions.ConflictException;
 import com.AirBnb.TimberAndStone.exceptions.ResourceNotFoundException;
 import com.AirBnb.TimberAndStone.exceptions.UnauthorizedException;
 import com.AirBnb.TimberAndStone.models.*;
 import com.AirBnb.TimberAndStone.repositories.UserRepository;
-import com.AirBnb.TimberAndStone.dtos.responses.user.UserResponse;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,8 +21,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -233,7 +236,7 @@ public class UserService {
                 user.getFavouriteRentals()
         );
     }
-}
+
 
     // ---------------------------- HELP METHODS ---------------------------------------------
 
