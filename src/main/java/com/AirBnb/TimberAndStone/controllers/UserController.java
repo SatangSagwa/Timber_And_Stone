@@ -24,21 +24,23 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        List<UserResponse> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@Valid @PathVariable String id) {
-        User user = userService.getUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<GetSingleUserResponse> getUserById(@Valid @PathVariable String id) {
+        GetSingleUserResponse getSingleUserResponse = userService.getUserById(id);
+
+        // Return the map in the response body
+        return new ResponseEntity<>(getSingleUserResponse, HttpStatus.OK);
     }
 
     @GetMapping("email/{email}")
-    public ResponseEntity<User> getUserByEmail(@Valid @PathVariable String email) {
-        User user = userService.getUserByEmail(email);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserResponse> getUserByEmail(@Valid @PathVariable String email) {
+        UserResponse users = userService.getUserByEmail(email);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("contact/{id}")
